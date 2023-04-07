@@ -1,0 +1,87 @@
+{
+  "format": 1,
+  "restore": {
+    "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\Appjedrez\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {}
+  },
+  "projects": {
+    "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\Appjedrez\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\Appjedrez\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "projectName": "AuthApi",
+        "projectPath": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\Appjedrez\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "packagesPath": "D:\\Users\\augus\\.nuget\\packages\\",
+        "outputPath": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\Appjedrez\\AppjedrezApi\\AuthApi\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "D:\\Users\\augus\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.15, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
