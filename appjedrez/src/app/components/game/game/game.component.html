@@ -1,0 +1,39 @@
+<div class="container-fluid bg-dark p-2 mb-2 text-white">
+  <h1 class="display-3">Appjedrez</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 offset-md-4 bg-dark">
+      <app-chess-board [cargado]="cargado" [move]="move"></app-chess-board>
+    </div>
+    <div class="col-md-4">
+      <app-pgn-viewer (cargar)="cargar()"></app-pgn-viewer>
+    </div>
+  </div>
+  <app-chess-game (moveChange)="moveChange($event)"></app-chess-game>
+</div>
+
+<div class="row z-3 text-dark" [hidden]="cargarPgnFlag">
+  <div
+    class="col-4 bg-light rounded-1 position-fixed top-50 start-50 border border-dark p-2 translate-middle"
+  >
+    <form class="row form" #formulario="ngForm" (ngSubmit)="cargarPgn()">
+      <div class="col-12 my-1">
+        <textarea
+          class="form-control w-100"
+          name="textPgn"
+          id="pgn"
+          cols="30"
+          rows="10"
+          [(ngModel)]="pgn"
+        ></textarea>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-dark w-100 my-1">Cargar</button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-dark w-100 my-1">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
