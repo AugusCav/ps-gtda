@@ -22,9 +22,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<RolUsuario> RolUsuarios { get; set; }
 
-    public virtual DbSet<Round> Rounds { get; set; }
-
-    public virtual DbSet<TipoDni> TipoDnis { get; set; }
+    public virtual DbSet<Rondum> Ronda { get; set; }
 
     public virtual DbSet<TipoTorneo> TipoTorneos { get; set; }
 
@@ -60,12 +58,11 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PkPartida_Id");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Fecha).HasColumnType("date");
-            entity.Property(e => e.Pgn).IsUnicode(false);
+            entity.Property(e => e.Fecha).HasColumnType("datetime");
 
-            entity.HasOne(d => d.IdRoundNavigation).WithMany(p => p.Partida)
-                .HasForeignKey(d => d.IdRound)
-                .HasConstraintName("FkPartida_IdRound");
+            entity.HasOne(d => d.IdRondaNavigation).WithMany(p => p.Partida)
+                .HasForeignKey(d => d.IdRonda)
+                .HasConstraintName("FkPartida_IdRonda");
 
             entity.HasOne(d => d.JugadorBlancasNavigation).WithMany(p => p.PartidumJugadorBlancasNavigations)
                 .HasForeignKey(d => d.JugadorBlancas)
@@ -83,34 +80,21 @@ public partial class AppDbContext : DbContext
             entity.ToTable("RolUsuario");
 
             entity.Property(e => e.Rol)
-                .HasMaxLength(25)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Round>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PkRound_Id");
-
-            entity.ToTable("Round");
-
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.IdTorneoNavigation).WithMany(p => p.Rounds)
-                .HasForeignKey(d => d.IdTorneo)
-                .HasConstraintName("FkRound_IdTorneo");
-        });
-
-        modelBuilder.Entity<TipoDni>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PkTipoDni_Id");
-
-            entity.ToTable("TipoDni");
-
-            entity.Property(e => e.Tipo)
                 .HasMaxLength(75)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Rondum>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PkRonda_Id");
+
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdTorneoNavigation).WithMany(p => p.Ronda)
+                .HasForeignKey(d => d.IdTorneo)
+                .HasConstraintName("FkRonda_IdTorneo");
         });
 
         modelBuilder.Entity<TipoTorneo>(entity =>
@@ -140,7 +124,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.FechaFinal).HasColumnType("datetime");
             entity.Property(e => e.FechaInicio).HasColumnType("datetime");
             entity.Property(e => e.Localidad)
-                .HasMaxLength(75)
+                .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .HasMaxLength(75)
@@ -159,33 +143,30 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Apellido)
-                .HasMaxLength(75)
+                .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Clave)
                 .HasMaxLength(75)
                 .IsUnicode(false);
-            entity.Property(e => e.Dni)
-                .HasMaxLength(11)
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
                 .IsUnicode(false);
-            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.NombreUsuario)
+                .HasMaxLength(75)
+                .IsUnicode(false);
             entity.Property(e => e.Nombres)
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Telefono)
                 .HasMaxLength(15)
                 .IsUnicode(false);
-            entity.Property(e => e.Usuario1)
-                .HasMaxLength(75)
-                .IsUnicode(false)
-                .HasColumnName("Usuario");
+            entity.Property(e => e.Token)
+                .HasMaxLength(128)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.IdRolUsuarioNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.IdRolUsuario)
-                .HasConstraintName("FkUsuario_IdRolUsuario");
-
-            entity.HasOne(d => d.IdTipoDniNavigation).WithMany(p => p.Usuarios)
-                .HasForeignKey(d => d.IdTipoDni)
-                .HasConstraintName("FkUsuario_IdTipoDni");
+                .HasConstraintName("FkUsuario_RolUsuario");
         });
 
         OnModelCreatingPartial(modelBuilder);

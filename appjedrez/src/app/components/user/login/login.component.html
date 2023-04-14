@@ -14,8 +14,8 @@
                 <div
                   class="input-field"
                   [class.error]="
-                    loginForm.controls['username'].dirty &&
-                    loginForm.hasError('required', 'username')
+                    loginForm.controls['nombreUsuario'].dirty &&
+                    loginForm.hasError('required', 'nombreUsuario')
                   "
                 >
                   <i class="bi bi-person-fill p-2"></i>
@@ -23,14 +23,14 @@
                     class="form-control text-dark"
                     type="text"
                     placeholder="Usuario"
-                    formControlName="username"
+                    formControlName="nombreUsuario"
                   />
                 </div>
               </div>
               <small
                 *ngIf="
-                  loginForm.controls['username'].dirty &&
-                  loginForm.hasError('required', 'username')
+                  loginForm.controls['nombreUsuario'].dirty &&
+                  loginForm.hasError('required', 'nombreUsuario')
                 "
                 class="text-danger"
               >
@@ -40,15 +40,15 @@
                 <div
                   class="input-field"
                   [class.error]="
-                    loginForm.controls['password'].dirty &&
-                    loginForm.hasError('required', 'password')
+                    loginForm.controls['clave'].dirty &&
+                    loginForm.hasError('required', 'clave')
                   "
                 >
                   <i class="bi bi-lock-fill p-2"></i>
                   <input
                     class="form-control text-dark"
                     [type]="type"
-                    formControlName="password"
+                    formControlName="clave"
                     placeholder="Contraseña"
                   />
                   <i
@@ -59,8 +59,8 @@
               </div>
               <small
                 *ngIf="
-                  loginForm.controls['password'].dirty &&
-                  loginForm.hasError('required', 'password')
+                  loginForm.controls['clave'].dirty &&
+                  loginForm.hasError('required', 'clave')
                 "
                 class="text-danger"
               >
@@ -72,7 +72,7 @@
                 </a>
               </div>
               <button
-                (click)="onSubmit()"
+                (click)="onLogin()"
                 type="submit"
                 class="btn btn-primary btn-block mt-4 w-100"
               >

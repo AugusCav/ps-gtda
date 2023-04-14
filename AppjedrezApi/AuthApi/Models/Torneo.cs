@@ -25,5 +25,5 @@ public partial class Torneo
 
     public virtual ICollection<Inscripcion> Inscripcions { get; } = new List<Inscripcion>();
 
-    public virtual ICollection<Round> Rounds { get; } = new List<Round>();
+    public virtual ICollection<Rondum> Ronda { get; } = new List<Rondum>();
 }

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,12 +15,16 @@ export class LoginComponent implements OnInit {
   eyeIcon: string = 'bi bi-eye-slash-fill';
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+      nombreUsuario: ['', Validators.required],
+      clave: ['', Validators.required],
     });
   }
 
@@ -36,13 +38,20 @@ export class LoginComponent implements OnInit {
     this.isText ? (this.type = 'text') : (this.type = 'password');
   }
 
-  onSubmit() {
+  onLogin() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      // Send obj to database
+      //enviar obj a la bd
+      this.auth.login(this.loginForm.value).subscribe({
+        next: (res) => {
+          alert(res.message);
+          this.loginForm.reset();
+          this.router.navigate(['user/dashboard'])
+        },
+        error: (err) => {
+          alert(err.message);
+        },
+      });
     } else {
-      console.log('El form no es válido');
-
       //tirar error usando un toast y con campos requeridos
       ValidateForm.validateAllFormFields(this.loginForm);
       alert('Tu form es inválido');

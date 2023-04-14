@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AuthApi.Models;
 
-public partial class Round
+public partial class Rondum
 {
     public int Id { get; set; }
 

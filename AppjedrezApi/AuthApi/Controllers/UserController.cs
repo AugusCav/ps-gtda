@@ -21,7 +21,7 @@ public class UserController : ControllerBase
             return BadRequest();
 
         var user = await _authContext.Usuarios
-            .FirstOrDefaultAsync(x => x.Usuario1 == userObj.Usuario1 && x.Clave == userObj.Clave);
+            .FirstOrDefaultAsync(x => x.NombreUsuario == userObj.NombreUsuario && x.Clave == userObj.Clave);
         if (user == null)
             return NotFound(new { Message = "User Not Found" });
 

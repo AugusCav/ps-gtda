@@ -21,9 +21,9 @@ public partial class Partidum
 
     public string Pgn { get; set; }
 
-    public int? IdRound { get; set; }
+    public int? IdRonda { get; set; }
 
-    public virtual Round IdRoundNavigation { get; set; }
+    public virtual Rondum IdRondaNavigation { get; set; }
 
     public virtual Usuario JugadorBlancasNavigation { get; set; }
 

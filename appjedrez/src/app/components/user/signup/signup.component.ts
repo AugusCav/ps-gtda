@@ -5,7 +5,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,15 +20,21 @@ export class SignupComponent implements OnInit {
   eyeIcon: string = 'bi bi-eye-slash-fill';
   signupForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      nombres: ['', Validators.required],
+      apellido: ['', Validators.required],
       email: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+      nombreUsuario: ['', Validators.required],
+      clave: ['', Validators.required],
+      telefono: ['', Validators.required],
+      idRolUsuario: [3],
     });
   }
 
@@ -42,9 +50,17 @@ export class SignupComponent implements OnInit {
 
   onSignup() {
     if (this.signupForm.valid) {
-      console.log(this.signupForm.value);
-
       //logica para el signup
+      this.auth.signUp(this.signupForm.value).subscribe({
+        next: (res) => {
+          alert(res.message);
+          this.signupForm.reset();
+          this.router.navigate(['user/login'])
+        },
+        error: (err) => {
+          alert(err.message);
+        },
+      });
     } else {
       console.log('El form no es válido');
 
