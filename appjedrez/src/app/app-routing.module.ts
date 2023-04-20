@@ -13,6 +13,11 @@ const routes: Routes = [
       import('./components/user/user.module').then((m) => m.UserModule),
   },
   {
+    path: 'torneo',
+    loadChildren: () =>
+      import('./components/torneo/torneo.module').then((m) => m.TorneoModule),
+  },
+  {
     path: '**',
     redirectTo: 'user',
   },

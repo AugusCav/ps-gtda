@@ -30,4 +30,6 @@ public partial class Usuario
     public virtual ICollection<Partidum> PartidumJugadorBlancasNavigations { get; } = new List<Partidum>();
 
     public virtual ICollection<Partidum> PartidumJugadorNegrasNavigations { get; } = new List<Partidum>();
+
+    public virtual ICollection<Torneo> Torneos { get; } = new List<Torneo>();
 }

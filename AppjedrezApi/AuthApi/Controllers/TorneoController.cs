@@ -45,8 +45,12 @@ public class TorneoController : ControllerBase
         torneo.Descripcion = torneoObj.Descripcion;
         torneo.FechaFinal = torneoObj.FechaFinal;
         torneo.FechaInicio = torneoObj.FechaInicio;
+        torneo.HoraFinal = torneoObj.HoraFinal;
+        torneo.HoraInicio = torneoObj.HoraInicio;
         torneo.Localidad = torneoObj.Localidad;
         torneo.IdTipoTorneo = torneoObj.IdTipoTorneo;
+        torneo.EloMaximo = torneoObj.EloMaximo;
+        torneo.EloMinimo = torneoObj.EloMinimo;
         torneo.CantidadParticipantes = torneoObj.CantidadParticipantes;
 
         _context.SaveChanges();
@@ -78,7 +82,19 @@ public class TorneoController : ControllerBase
     [HttpGet("get")]
     public async Task<ActionResult<IEnumerable<Torneo>>> GetAllTorneos()
     {
-        var torneos = await _context.Torneos.ToListAsync<Torneo>();
+        var torneos = await _context.Torneos
+            .Include(t => t.IdTipoTorneoNavigation).Select(t => new
+            {
+                Id = t.Id,
+                Nombre = t.Nombre,
+                FechaInicio = t.FechaInicio,
+                FechaFinal = t.FechaFinal,
+                TipoTorneo = new
+                {
+                    Nombre = t.IdTipoTorneoNavigation.Nombre
+                }
+            })
+            .ToListAsync();
 
         return Ok(torneos);
     }
@@ -92,5 +108,28 @@ public class TorneoController : ControllerBase
             return BadRequest();
 
         return Ok(torneo);
+    }
+
+    [HttpGet("getTipos")]
+    public async Task<ActionResult<IEnumerable<Torneo>>> GetAllTipos()
+    {
+        var tipos = await _context.TipoTorneos
+            .ToListAsync();
+
+        return Ok(tipos);
+    }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<ActionResult> DeleteTorneo(Guid id)
+    {
+        var torneo = await _context.Torneos.FindAsync(id);
+        if (torneo == null)
+        {
+            return NotFound();
+        }
+
+        _context.Torneos.Remove(torneo);
+        var result = await _context.SaveChangesAsync();
+        return Ok(result);
     }
 }

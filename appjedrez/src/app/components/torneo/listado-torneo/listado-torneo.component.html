@@ -1,0 +1,33 @@
+<div class="container mt-3">
+  <div class="row bg-white rounded">
+    <div class="col-12 p-3 bg-primary rounded-top border border-bottom-o">
+      <h1 class="display-4 text-white">Listado</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table text-dark">
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Inicia</th>
+            <th scope="col">Finaliza</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let torneo of torneos">
+            <td>{{ torneo.nombre }}</td>
+            <td>{{ torneo.tipoTorneo.nombre }}</td>
+            <td>{{ torneo.fechaInicio | date : "short" }}</td>
+            <td>{{ torneo.fechaFinal | date : "short" }}</td>
+            <td>
+              <a class="btn btn-sm btn-primary rounded-pill" (click)="goToTorneo(torneo.id)">
+                <i class="bi bi-caret-right-fill p-1 text-white"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

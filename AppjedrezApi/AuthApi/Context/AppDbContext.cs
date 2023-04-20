@@ -121,14 +121,18 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(150)
                 .IsUnicode(false);
-            entity.Property(e => e.FechaFinal).HasColumnType("datetime");
-            entity.Property(e => e.FechaInicio).HasColumnType("datetime");
+            entity.Property(e => e.FechaFinal).HasColumnType("date");
+            entity.Property(e => e.FechaInicio).HasColumnType("date");
             entity.Property(e => e.Localidad)
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .HasMaxLength(75)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.IdOrganizadorNavigation).WithMany(p => p.Torneos)
+                .HasForeignKey(d => d.IdOrganizador)
+                .HasConstraintName("FkTorneo_IdOrganizador");
 
             entity.HasOne(d => d.IdTipoTorneoNavigation).WithMany(p => p.Torneos)
                 .HasForeignKey(d => d.IdTipoTorneo)

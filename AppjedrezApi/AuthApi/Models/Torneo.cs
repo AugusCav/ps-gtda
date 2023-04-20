@@ -21,6 +21,18 @@ public partial class Torneo
 
     public int? CantidadParticipantes { get; set; }
 
+    public Guid? IdOrganizador { get; set; }
+
+    public int? EloMinimo { get; set; }
+
+    public int? EloMaximo { get; set; }
+
+    public TimeSpan? HoraInicio { get; set; }
+
+    public TimeSpan? HoraFinal { get; set; }
+
+    public virtual Usuario IdOrganizadorNavigation { get; set; }
+
     public virtual TipoTorneo IdTipoTorneoNavigation { get; set; }
 
     public virtual ICollection<Inscripcion> Inscripcions { get; } = new List<Inscripcion>();
