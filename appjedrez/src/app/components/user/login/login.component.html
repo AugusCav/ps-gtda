@@ -1,94 +1,83 @@
-<div class="container">
-  <div class="row">
-    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-5">
-      <div class="row bg-white rounded">
-        <div class="col-12 p-3">
-          <h3 class="display-6 text-dark">Iniciar Sesión</h3>
-        </div>
-        <div class="col-12 p-3">
-          <form class="container" [formGroup]="loginForm">
-            <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-person-fill text-primary"></i>
-                </span>
-                <input
-                  class="form-control text-dark"
-                  type="text"
-                  placeholder="Usuario"
-                  formControlName="nombreUsuario"
-                />
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container">
+    <div class="row">
+      <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-5">
+        <div class="row bg-white rounded">
+          <div class="col-12 p-3">
+            <h3 class="display-6 text-dark">Iniciar Sesión</h3>
+          </div>
+          <div class="col-12 p-3">
+            <form class="container" [formGroup]="loginForm">
+              <div class="row pt-3">
+                <div class="col-12 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person-fill text-primary"></i>
+                  </span>
+                  <input
+                    class="form-control text-dark"
+                    type="text"
+                    placeholder="Usuario"
+                    formControlName="nombreUsuario"
+                  />
+                </div>
               </div>
-            </div>
-            <small
-              *ngIf="
-                loginForm.controls['nombreUsuario'].dirty &&
-                loginForm.hasError('required', 'nombreUsuario')
-              "
-              class="text-danger"
-            >
-              *Usuario requerido
-            </small>
-            <div class="row pt-3">
-              <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-lock-fill text-primary"></i>
-                </span>
-                <input
-                  class="form-control text-dark"
-                  [type]="type"
-                  formControlName="clave"
-                  placeholder="Contraseña"
-                />
-                <span class="input-group-text bg-white">
-                  <i
-                    (click)="ocultarMostrarPass()"
-                    class="bi {{ eyeIcon }} text-primary ojo"
-                  ></i>
-                </span>
+              <small
+                *ngIf="
+                  loginForm.controls['nombreUsuario'].dirty &&
+                  loginForm.hasError('required', 'nombreUsuario')
+                "
+                class="text-danger"
+              >
+                *Usuario requerido
+              </small>
+              <div class="row pt-3">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                  </span>
+                  <input
+                    class="form-control text-dark"
+                    [type]="type"
+                    formControlName="clave"
+                    placeholder="Contraseña"
+                  />
+                  <span class="input-group-text bg-white">
+                    <i
+                      (click)="ocultarMostrarPass()"
+                      class="bi {{ eyeIcon }} text-primary ojo"
+                    ></i>
+                  </span>
+                </div>
               </div>
-            </div>
-            <small
-              *ngIf="
-                loginForm.controls['clave'].dirty &&
-                loginForm.hasError('required', 'clave')
-              "
-              class="text-danger"
-            >
-              *Contraseña requerida
-            </small>
-            <div class="mt-4">
-              <a id="forget" class="link-primary"> ¿Olvidó su contraseña? </a>
-            </div>
-            <button
-              (click)="onLogin()"
-              type="submit"
-              class="btn btn-primary mt-4 w-100"
-            >
-              Iniciar sesión
-            </button>
-            <div class="text-center pt-4 text-muted">
-              ¿No tiene cuenta?
-              <a id="forget" routerLink="/user/signup" class="link-primary">
-                Registrese.
-              </a>
-            </div>
-          </form>
+              <small
+                *ngIf="
+                  loginForm.controls['clave'].dirty &&
+                  loginForm.hasError('required', 'clave')
+                "
+                class="text-danger"
+              >
+                *Contraseña requerida
+              </small>
+              <div class="mt-4">
+                <a id="forget" class="link-primary"> ¿Olvidó su contraseña? </a>
+              </div>
+              <button
+                (click)="onLogin()"
+                type="submit"
+                class="btn btn-primary mt-4 w-100"
+              >
+                Iniciar sesión
+              </button>
+              <div class="text-center pt-4 text-muted">
+                ¿No tiene cuenta?
+                <a id="forget" routerLink="/user/signup" class="link-primary">
+                  Registrese.
+                </a>
+              </div>
+            </form>
+          </div>
         </div>
-        <!-- <div class="mx-3 my-2 py-2 border-top">
-            <div class="text-center text-dark py-3">
-              <p class="lead">
-                <em><small>O conectese con:</small></em>
-              </p>
-              <a href="https://www.facebook.com" target="_blank" class="px-2">
-                <i class="bi bi-facebook text-dark" style="font-size: 2rem"></i>
-              </a>
-              <a href="https://www.google.com" target="_blank" class="px-2">
-                <i class="bi bi-google text-dark" style="font-size: 2rem"></i>
-              </a>
-            </div>
-          </div> -->
       </div>
     </div>
   </div>
-</div>
+</body>

@@ -1,3 +1,8 @@
+import { Inscripcion } from './inscripcion';
+import { Partida } from './partida';
+import { RolUsuario } from './rol-usuario';
+import { Torneo } from './torneo';
+
 export interface Usuario {
   id: string;
   nombreUsuario: string;
@@ -8,4 +13,10 @@ export interface Usuario {
   telefono: string;
   idRolUsuario: number;
   token: string;
+  rolUsuario: RolUsuario;
+  inscripciones: Inscripcion[];
+  notificaciones: Notification[];
+  partidasJugadorBlancas: Partida[];
+  partidasJugadorNegras: Partida[];
+  torneos: Torneo[];
 }

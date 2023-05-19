@@ -1,33 +1,51 @@
-<div class="container mt-3">
-  <div class="row bg-white rounded">
-    <div class="col-12 p-3 bg-primary rounded-top border border-bottom-o">
-      <h1 class="display-4 text-white">Listado</h1>
-    </div>
-    <div class="table-responsive">
-      <table class="table text-dark">
-        <thead>
-          <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Inicia</th>
-            <th scope="col">Finaliza</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let torneo of torneos">
-            <td>{{ torneo.nombre }}</td>
-            <td>{{ torneo.tipoTorneo.nombre }}</td>
-            <td>{{ torneo.fechaInicio | date : "short" }}</td>
-            <td>{{ torneo.fechaFinal | date : "short" }}</td>
-            <td>
-              <a class="btn btn-sm btn-primary rounded-pill" (click)="goToTorneo(torneo.id)">
-                <i class="bi bi-caret-right-fill p-1 text-white"></i>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container-fluid bg-secondary p-5">
+    <div class="container px-5">
+      <div class="row justify-content-center">
+        <div class="col-4 text-center">
+          <h3 class="text-light">Encontrar torneos</h3>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+  <div class="container-fluid bg-secondary p-2 border-top border-dark">
+    <div class="container px-5"></div>
+  </div>
+  <div class="container-fluid">
+    <div class="container bg-light mt-2 rounded px-5">
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table text-dark">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Inicia</th>
+                  <th scope="col">Finaliza</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let torneo of torneos">
+                  <td>{{ torneo.nombre }}</td>
+                  <td>{{ torneo.tipoTorneo.nombre }}</td>
+                  <td>{{ torneo.fechaInicio | date : "short" }}</td>
+                  <td>{{ torneo.fechaFinal | date : "short" }}</td>
+                  <td>
+                    <a
+                      class="btn btn-sm btn-primary rounded-pill"
+                      (click)="goToTorneo(torneo.id)"
+                    >
+                      <i class="bi bi-caret-right-fill p-1 text-white"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

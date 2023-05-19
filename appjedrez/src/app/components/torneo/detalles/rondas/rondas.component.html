@@ -1,0 +1,222 @@
+<div class="container">
+  <div *ngIf="esOrganizador" class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12">
+          <h4>Agregar ronda</h4>
+        </div>
+      </div>
+      <!-- FORM PARTIDA -->
+      <form class="container mt-3" [formGroup]="partidaForm">
+        <h5>Partida</h5>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="
+            jugadoresIguales() &&
+            partidaForm.controls['jugadorBlancas'].dirty &&
+            partidaForm.controls['jugadorNegras'].dirty
+          "
+        >
+          Los jugadores deben ser distintos entre sí
+        </div>
+        <div class="row mt-3">
+          <div class="col-6">
+            <label for="jugadorBlancas">Piezas blancas:</label>
+            <select
+              id="jugadorBlancas"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="jugadorBlancas"
+            >
+              <option
+                *ngFor="let usuario of usuariosBlancas"
+                [ngValue]="usuario"
+              >
+                {{ usuario.nombres }} {{ usuario.apellido }}
+              </option>
+            </select>
+            <small
+              *ngIf="
+                partidaForm.controls['jugadorBlancas'].dirty &&
+                partidaForm.hasError('required', 'jugadorBlancas')
+              "
+              class="text-danger"
+            >
+              *Jugador de piezas blancas no seleccionado
+            </small>
+          </div>
+          <div class="col-6">
+            <label for="jugadorNegras">Piezas negras:</label>
+            <select
+              id="jugadorNegras"
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="jugadorNegras"
+            >
+              <option
+                *ngFor="let usuario of usuariosNegras"
+                [ngValue]="usuario"
+              >
+                {{ usuario.nombres }} {{ usuario.apellido }}
+              </option>
+            </select>
+            <small
+              *ngIf="
+                partidaForm.controls['jugadorNegras'].dirty &&
+                partidaForm.hasError('required', 'jugadorNegras')
+              "
+              class="text-danger"
+            >
+              *Jugador de piezas negras no seleccionado
+            </small>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-6">
+            <label for="fecha">Fecha:</label>
+            <input
+              id="fecha"
+              class="form-select"
+              type="date"
+              formControlName="fecha"
+            />
+            <small
+              *ngIf="
+                partidaForm.controls['fecha'].dirty &&
+                partidaForm.hasError('required', 'fecha')
+              "
+              class="text-danger"
+            >
+              *Fecha no ingresada o inválida
+            </small>
+          </div>
+          <div class="col-3">
+            <label for="horaInicio">Hora Inicio:</label>
+            <input
+              id="horaInicio"
+              class="form-control"
+              type="time"
+              formControlName="horaInicio"
+            />
+            <small
+              *ngIf="
+                partidaForm.controls['horaInicio'].dirty &&
+                partidaForm.hasError('required', 'horaInicio')
+              "
+              class="text-danger"
+            >
+              *Hora no ingresada o inválida
+            </small>
+          </div>
+
+          <div class="col-3 align-self-end">
+            <button
+              class="btn btn-success w-100 text-light"
+              (click)="agregar()"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+        <div class="row mt-3 justify-content-center">
+          <div class="col-10">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Blancas</th>
+                  <th scope="col">Negras</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Hora Inicio</th>
+                  <th scope="col">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let partida of partidas">
+                  <td>
+                    {{ partida.jugadorBlancasNavigation?.nombres }}
+                    {{ partida.jugadorBlancasNavigation?.apellido }}
+                  </td>
+                  <td>
+                    {{ partida.jugadorNegrasNavigation?.nombres }}
+                    {{ partida.jugadorNegrasNavigation?.apellido }}
+                  </td>
+                  <td>{{ partida.fecha | date : "shortDate" }}</td>
+                  <td>{{ partida.horaInicio }}</td>
+                  <td>
+                    <button
+                      class="btn btn-danger rounded-circle"
+                      (click)="eliminar(partida)"
+                    >
+                      <i class="bi bi-trash text-white"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+      <!-- FORM Ronda -->
+      <form class="container mt-3 border-top" [formGroup]="rondaForm">
+        <h5>Ronda</h5>
+        <div class="row my-3 justify-content-around">
+          <div class="col-4">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-hash text-primary"> </i
+              ></span>
+              <input
+                formControlName="numero"
+                class="form-control text-dark"
+                type="number"
+                placeholder="Número ronda"
+              />
+              <small
+                *ngIf="
+                  rondaForm.controls['numero'].dirty &&
+                  rondaForm.hasError('required', 'numero')
+                "
+                class="text-danger"
+              >
+                *Numero de ronda no ingresada o inválida
+              </small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-pencil-fill text-primary"> </i
+              ></span>
+              <input
+                formControlName="descripcion"
+                class="form-control text-dark"
+                type="text"
+                placeholder="Descripción ronda"
+              />
+              <small
+                *ngIf="
+                  rondaForm.controls['descripcion'].dirty &&
+                  rondaForm.hasError('required', 'descripcion')
+                "
+                class="text-danger"
+              >
+                *Descripcion no ingresada o inválida
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row my-3 justify-content-end">
+          <div class="col-2">
+            <button
+              class="btn btn-success btn-large w-100 text-light"
+              (click)="aceptar()"
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

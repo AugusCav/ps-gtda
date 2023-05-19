@@ -6,7 +6,9 @@ import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { TipoTorneo } from 'src/app/models/tipo-torneo';
 import { Torneo } from 'src/app/models/torneo';
+import { AuthService } from 'src/app/services/auth.service';
 import { TorneoService } from 'src/app/services/torneo.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-modificar-torneo',
@@ -20,17 +22,25 @@ export class ModificarTorneoComponent {
   horaInicio: NgbTime = { hour: 12, minute: 0, second: 0 } as NgbTime;
   horaFinal: NgbTime = { hour: 12, minute: 0, second: 0 } as NgbTime;
   id: string | null = '';
+  organizadorId: string = '';
 
   constructor(
     private fb: FormBuilder,
     private torneoService: TorneoService,
     private router: Router,
     private calendar: NgbCalendar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userStore: UserStoreService,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('torneoId');
+
+    this.userStore.getIdFromStore().subscribe((val) => {
+      let idFromToken = this.auth.getIdFromToken();
+      this.organizadorId = val || idFromToken;
+    });
 
     this.torneoForm = this.fb.group({
       id: [''],
@@ -43,7 +53,7 @@ export class ModificarTorneoComponent {
       localidad: ['', Validators.required],
       idTipoTorneo: [1, Validators.required],
       cantidadParticipantes: [0, Validators.required],
-      idOrganizador: [''],
+      idOrganizador: [this.organizadorId],
       eloMinimo: [0, Validators.required],
       eloMaximo: [0, Validators.required],
     });
@@ -51,6 +61,9 @@ export class ModificarTorneoComponent {
     if (this.id !== null) {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
+          if (this.organizadorId !== res.idOrganizador) {
+            this.router.navigate(['/app/torneo/listado']);
+          }
           this.torneoForm.patchValue(res);
           this.torneoForm.controls['fechaInicio'].setValue(
             this.formatearStringFecha(res.fechaInicio)
@@ -94,7 +107,7 @@ export class ModificarTorneoComponent {
         next: (res) => {
           alert(res.message);
           this.torneoForm.reset();
-          this.router.navigate(['torneo/detalles', this.id]);
+          this.router.navigate(['/app/torneo/detalles', this.id]);
         },
         error: (err) => {
           alert(err.message);

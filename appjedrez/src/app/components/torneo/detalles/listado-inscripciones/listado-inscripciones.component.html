@@ -1,0 +1,40 @@
+<div class="table-responsive">
+  <h3>Inscriptos</h3>
+  <table class="table text-dark">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let inscripcion of inscripciones">
+        <td>{{ inscripcion.participante.nombres }}</td>
+        <td>{{ inscripcion.participante.apellido }}</td>
+        <td>
+          <a
+            class="btn btn-sm btn-primary rounded-pill"
+            (click)="abrirParticipante(inscripcion.participante.id)"
+          >
+            <i class="bi bi-caret-right-fill p-1 text-white"></i>
+          </a>
+        </td>
+        <td>
+          <a class="btn btn-sm btn-success rounded-pill" (click)="aprobar(inscripcion)">
+            <i class="bi bi-check-circle-fill p-1 text-white"></i>
+          </a>
+        </td>
+        <td>
+          <a
+            class="btn btn-sm btn-danger rounded-pill"
+            (click)="openRechazar(inscripcion)"
+          >
+            <i class="bi bi-x-circle-fill p-1 text-white"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

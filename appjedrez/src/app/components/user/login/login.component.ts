@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
+    private userStore: UserStoreService
   ) {}
 
   ngOnInit(): void {
@@ -43,18 +47,25 @@ export class LoginComponent implements OnInit {
       //enviar obj a la bd
       this.auth.login(this.loginForm.value).subscribe({
         next: (res) => {
-          alert(res.message);
           this.loginForm.reset();
-          this.router.navigate(['user/dashboard'])
+          this.auth.storeToken(res.token);
+          const tokenPayLoad = this.auth.decodedToken();
+          this.userStore.setFullNameForStore(tokenPayLoad.name);
+          this.userStore.setRoleForStore(tokenPayLoad.role);
+          this.userStore.setIdForStore(tokenPayLoad.nameid);
+          this.toastr.success(res.message, 'Éxito', {
+            timeOut: 1500,
+          });
+          this.router.navigate(['user/dashboard']);
         },
         error: (err) => {
-          alert(err.message);
+          this.toastr.error(err.error.message, 'Error');
         },
       });
     } else {
       //tirar error usando un toast y con campos requeridos
       ValidateForm.validateAllFormFields(this.loginForm);
-      alert('Tu form es inválido');
+      this.toastr.error('Datos inválidos', 'Error');
     }
   }
 }

@@ -1,0 +1,106 @@
+<body class="bg-dark" style="min-height: 100vh">
+  <!-- DETALLE -->
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="row bg-light rounded my-3">
+          <div
+            class="container-fluid rounded-top"
+            style="
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-position: center;
+              height: 300px;
+            "
+            [ngStyle]="{ 'background-image': 'url(' + imgUrl + ')' }"
+          ></div>
+          <div *ngIf="esOrganizador" class="container-fluid">
+            <div
+              class="offset-md-9 col-md-3 text-center d-flex flex-row justify-content-end"
+            >
+              <button
+                class="btn btn-danger text-white m-1"
+                (click)="openBorrar()"
+              >
+                <i class="bi bi-trash"></i> Borrar
+              </button>
+              <button
+                class="btn btn-secondary text-white m-1"
+                (click)="editar()"
+              >
+                <i class="bi bi-pencil"></i> Editar
+              </button>
+            </div>
+          </div>
+          <div class="container-fluid border-bottom pb-1 mb-1">
+            <div
+              class="col-sm-2 offset-sm-10 d-flex flex-row justify-content-end"
+            >
+              <button
+                *ngIf="!inscripto"
+                class="btn btn-primary"
+                (click)="inscribirse()"
+              >
+                Inscribirse
+              </button>
+              <button
+                *ngIf="inscripto"
+                class="btn btn-primary"
+                (click)="borrarInscripcion()"
+              >
+                Borrar Inscripción
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLinkActive="active"
+                  [routerLink]="['/app/torneo/detalles', id, 'detalle']"
+                  >Detalles</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLinkActive="active"
+                  [routerLink]="['/app/torneo/detalles', id, 'participantes']"
+                  >Participantes</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLinkActive="active"
+                  [routerLink]="['/app/torneo/detalles', id, 'partidas']"
+                  >Partidas</a
+                >
+              </li>
+              <li class="nav-item" *ngIf="esOrganizador">
+                <a
+                  class="nav-link"
+                  routerLinkActive="active"
+                  [routerLink]="['/app/torneo/detalles', id, 'rondas']"
+                  >[Rondas]</a
+                >
+              </li>
+              <li class="nav-item" *ngIf="esOrganizador">
+                <a
+                  class="nav-link"
+                  routerLinkActive="active"
+                  [routerLink]="['/app/torneo/detalles', id, 'inscriptos']"
+                  >[Inscriptos]</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="row">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

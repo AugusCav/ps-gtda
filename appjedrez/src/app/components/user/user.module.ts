@@ -4,11 +4,30 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DashboardComponent } from './dash/dashboard/dashboard.component';
+import { SharedModule } from 'src/app/shared/shared-module/shared.module';
+import { ResumenComponent } from './dash/resumen/resumen.component';
+import { PartidasComponent } from './dash/partidas/partidas.component';
+import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, DashboardComponent],
-  imports: [CommonModule, UserRoutingModule, ReactiveFormsModule],
+  declarations: [
+    LoginComponent,
+    SignupComponent,
+    DashboardComponent,
+    ResumenComponent,
+    PartidasComponent,
+    ConfiguracionComponent,
+  ],
+  imports: [
+    CommonModule,
+    UserRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SharedModule,
+    NgChartsModule,
+  ],
 })
 export class UserModule {}

@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <h3>Seleccione ronda</h3>
+    <table class="table table-striped my-1">
+      <thead>
+        <tr>
+          <th scope="col">N° Ronda</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Cant. partidas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ronda of rondas">
+          <td>{{ ronda.numero }}</td>
+          <td>{{ ronda.descripcion }}</td>
+          <td>{{ ronda.partida.length }}</td>
+          <td>
+            <button class="btn btn-primary badge rounded-pill" (click)="verPartidas(ronda.partida)">
+              <i class="bi bi-caret-right-fill text-white"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

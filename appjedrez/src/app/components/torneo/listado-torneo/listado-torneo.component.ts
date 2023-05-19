@@ -28,6 +28,6 @@ export class ListadoTorneoComponent implements OnInit {
   }
 
   goToTorneo(torneoId: string) {
-    this.router.navigate(['/torneo/detalles', torneoId]);
+    this.router.navigate(['/app/torneo/detalles', torneoId]);
   }
 }

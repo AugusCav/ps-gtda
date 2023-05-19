@@ -18,6 +18,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Inscripcion> Inscripcions { get; set; }
 
+    public virtual DbSet<Notificacion> Notificacions { get; set; }
+
     public virtual DbSet<Partidum> Partida { get; set; }
 
     public virtual DbSet<RolUsuario> RolUsuarios { get; set; }
@@ -43,6 +45,9 @@ public partial class AppDbContext : DbContext
             entity.ToTable("Inscripcion");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Estado)
+                .HasMaxLength(20)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.IdParticipanteNavigation).WithMany(p => p.Inscripcions)
                 .HasForeignKey(d => d.IdParticipante)
@@ -51,6 +56,28 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdTorneoNavigation).WithMany(p => p.Inscripcions)
                 .HasForeignKey(d => d.IdTorneo)
                 .HasConstraintName("FkInscripcion_IdTorneo");
+        });
+
+        modelBuilder.Entity<Notificacion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PkNotificacion_Id");
+
+            entity.ToTable("Notificacion");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Estado)
+                .HasMaxLength(25)
+                .IsUnicode(false);
+            entity.Property(e => e.Fecha)
+                .HasColumnType("date")
+                .HasColumnName("fecha");
+            entity.Property(e => e.Mensaje)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Usuario).WithMany(p => p.Notificacions)
+                .HasForeignKey(d => d.UsuarioId)
+                .HasConstraintName("FkNotificacion_UsuarioId");
         });
 
         modelBuilder.Entity<Partidum>(entity =>
@@ -165,7 +192,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false);
             entity.Property(e => e.Token)
-                .HasMaxLength(128)
+                .HasMaxLength(4096)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.IdRolUsuarioNavigation).WithMany(p => p.Usuarios)

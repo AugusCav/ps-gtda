@@ -1,171 +1,187 @@
-<div class="container">
-  <div class="row">
-    <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-5">
-      <div class="row bg-white rounded">
-        <div class="col-12 p-3">
-          <h3 class="display-6 text-dark">Registrarse</h3>
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container">
+    <div class="row">
+      <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-5">
+        <div class="row bg-white rounded">
+          <div class="col-12 p-3">
+            <h3 class="display-6 text-dark">Registrarse</h3>
+          </div>
+          <div class="col-12 p-3">
+            <form class="container" [formGroup]="signupForm">
+              <div class="row pt-3">
+                <div class="col-12">
+                  <input
+                    formControlName="nombres"
+                    class="form-control text-dark"
+                    type="text"
+                    placeholder="Nombre"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['nombres'].dirty &&
+                  signupForm.hasError('required', 'nombres')
+                "
+                class="text-danger"
+              >
+                *Nombre requerido
+              </small>
+              <div class="row pt-3">
+                <div class="col-12">
+                  <input
+                    formControlName="apellido"
+                    class="form-control text-dark"
+                    type="text"
+                    placeholder="Apellido"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['apellido'].dirty &&
+                  signupForm.hasError('required', 'apellido')
+                "
+                class="text-danger"
+              >
+                *Apellido requerido
+              </small>
+              <div class="row pt-3">
+                <div class="col-12 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-telephone-fill text-primary"></i>
+                  </span>
+                  <input
+                    formControlName="telefono"
+                    class="form-control text-dark"
+                    type="text"
+                    placeholder="Teléfono"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['telefono'].dirty &&
+                  signupForm.hasError('required', 'telefono')
+                "
+                class="text-danger"
+              >
+                *Teléfono requerido
+              </small>
+              <div class="row pt-3">
+                <div class="col-12 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope-fill text-primary"></i>
+                  </span>
+                  <input
+                    formControlName="email"
+                    class="form-control text-dark"
+                    type="email"
+                    placeholder="E-mail"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['email'].dirty &&
+                  signupForm.hasError('required', 'email')
+                "
+                class="text-danger"
+              >
+                *E-mail requerido
+              </small>
+              <div class="row pt-3">
+                <div class="col-12 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person-fill text-primary"></i>
+                  </span>
+                  <input
+                    formControlName="nombreUsuario"
+                    class="form-control text-dark"
+                    type="text"
+                    placeholder="Usuario"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['nombreUsuario'].dirty &&
+                  signupForm.hasError('required', 'nombreUsuario')
+                "
+                class="text-danger"
+              >
+                *Usuario requerido
+              </small>
+              <div class="row pt-3">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                  </span>
+                  <input
+                    formControlName="clave"
+                    class="form-control text-dark"
+                    [type]="type1"
+                    placeholder="Contraseña"
+                  />
+                  <span class="input-group-text bg-white">
+                    <i
+                      (click)="ocultarMostrarPass1()"
+                      class="bi {{ eyeIcon }} text-primary ojo"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  signupForm.controls['clave'].dirty &&
+                  signupForm.hasError('required', 'clave')
+                "
+                class="text-danger"
+              >
+                *Contraseña requerida
+              </small>
+              <small *ngIf="passValidado" class="text-danger">
+                *Las contraseñas deben coinciden
+              </small>
+              <div class="row pt-3">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                  </span>
+                  <input
+                    name="torneo"
+                    [(ngModel)]="clave2"
+                    [ngModelOptions]="{ standalone: true }"
+                    class="form-control text-dark"
+                    [type]="type2"
+                    placeholder="Confirmar contraseña"
+                  />
+                  <span class="input-group-text bg-white">
+                    <i
+                      (click)="ocultarMostrarPass2()"
+                      class="bi {{ eyeIcon2 }} text-primary ojo"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <small *ngIf="passValidado" class="text-danger">
+                *Las contraseñas deben coinciden
+              </small>
+              <button
+                (click)="onSignup()"
+                type="submit"
+                class="btn btn-primary btn-block mt-4 w-100"
+              >
+                Registrarse
+              </button>
+              <div class="text-center pt-4 text-muted">
+                ¿Ya tiene cuenta?
+                <a id="forget" routerLink="/user/login"> Inicie sesión. </a>
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="col-12 p-3">
-          <form class="container" [formGroup]="signupForm">
-            <div class="row pt-3">
-              <div class="col-12">
-                <input
-                  formControlName="nombres"
-                  class="form-control text-dark"
-                  type="text"
-                  placeholder="Nombre"
-                />
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['nombres'].dirty &&
-                signupForm.hasError('required', 'nombres')
-              "
-              class="text-danger"
-            >
-              *Nombre requerido
-            </small>
-            <div class="row pt-3">
-              <div class="col-12">
-                <input
-                  formControlName="apellido"
-                  class="form-control text-dark"
-                  type="text"
-                  placeholder="Apellido"
-                />
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['apellido'].dirty &&
-                signupForm.hasError('required', 'apellido')
-              "
-              class="text-danger"
-            >
-              *Apellido requerido
-            </small>
-            <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-telephone-fill text-primary"></i>
-                </span>
-                <input
-                  formControlName="telefono"
-                  class="form-control text-dark"
-                  type="text"
-                  placeholder="Teléfono"
-                />
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['telefono'].dirty &&
-                signupForm.hasError('required', 'telefono')
-              "
-              class="text-danger"
-            >
-              *Teléfono requerido
-            </small>
-            <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-envelope-fill text-primary"></i>
-                </span>
-                <input
-                  formControlName="email"
-                  class="form-control text-dark"
-                  type="email"
-                  placeholder="E-mail"
-                />
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['email'].dirty &&
-                signupForm.hasError('required', 'email')
-              "
-              class="text-danger"
-            >
-              *E-mail requerido
-            </small>
-            <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-person-fill text-primary"></i>
-                </span>
-                <input
-                  formControlName="nombreUsuario"
-                  class="form-control text-dark"
-                  type="text"
-                  placeholder="Usuario"
-                />
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['nombreUsuario'].dirty &&
-                signupForm.hasError('required', 'nombreUsuario')
-              "
-              class="text-danger"
-            >
-              *Usuario requerido
-            </small>
-            <div class="row pt-3">
-              <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bi bi-lock-fill text-primary"></i>
-                </span>
-                <input
-                  formControlName="clave"
-                  class="form-control text-dark"
-                  [type]="type"
-                  placeholder="Contraseña"
-                />
-                <span class="input-group-text bg-white">
-                  <i
-                    (click)="ocultarMostrarPass()"
-                    class="bi {{ eyeIcon }} text-primary ojo"
-                  ></i>
-                </span>
-              </div>
-            </div>
-            <small
-              *ngIf="
-                signupForm.controls['clave'].dirty &&
-                signupForm.hasError('required', 'clave')
-              "
-              class="text-danger"
-            >
-              *Contraseña requerida
-            </small>
-            <button
-              (click)="onSignup()"
-              type="submit"
-              class="btn btn-primary btn-block mt-4 w-100"
-            >
-              Registrarse
-            </button>
-            <div class="text-center pt-4 text-muted">
-              ¿Ya tiene cuenta?
-              <a id="forget" routerLink="/user/login"> Inicie sesión. </a>
-            </div>
-          </form>
-        </div>
-        <!-- <div class="mx-3 my-2 py-2 border-top">
-            <div class="text-center text-dark py-3">
-              <p class="lead">
-                <em><small>O conectese con:</small></em>
-              </p>
-              <a href="https://www.facebook.com" target="_blank" class="px-2">
-                <i class="bi bi-facebook text-dark" style="font-size: 2rem"></i>
-              </a>
-              <a href="https://www.google.com" target="_blank" class="px-2">
-                <i class="bi bi-google text-dark" style="font-size: 2rem"></i>
-              </a>
-            </div>
-          </div> -->
       </div>
     </div>
   </div>
-</div>
+</body>

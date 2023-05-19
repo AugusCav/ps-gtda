@@ -2,11 +2,18 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Inscripcion } from 'src/app/models/inscripcion';
+import { Notificacion } from 'src/app/models/notificacion';
 import { Torneo } from 'src/app/models/torneo';
+import { Usuario } from 'src/app/models/usuario';
+import { AuthService } from 'src/app/services/auth.service';
 import { InscripcionService } from 'src/app/services/inscripcion.service';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 import { TorneoService } from 'src/app/services/torneo.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
+//MODAL BORRAR TORNEO
 @Component({
   selector: 'ngbd-modal-confirm-autofocus',
   standalone: true,
@@ -77,6 +84,74 @@ export class NgbdModalConfirmAutofocus {
   }
 }
 
+//MODAL BORRAR INSCRIPCION
+
+@Component({
+  selector: 'ngbd-modal-inscripcion',
+  standalone: true,
+  template: `
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">Eliminar inscripción</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close button"
+        aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <p>
+        <strong
+          >¿Estás seguro que deseas eliminar tu inscripción a este torneo?
+        </strong>
+      </p>
+      <p class="text-danger">No podrás participar del mismo.</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="modal.dismiss('cancel click')"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        ngbAutofocus
+        class="btn btn-danger text-white"
+        (click)="borrar()"
+      >
+        Borrar
+      </button>
+    </div>
+  `,
+})
+export class NgbModalInscripcion {
+  constructor(
+    public modal: NgbActiveModal,
+    @Inject('DATA') public data: any,
+    private router: Router,
+    private inscripcionService: InscripcionService,
+    private toastr: ToastrService
+  ) {}
+
+  borrar() {
+    this.inscripcionService.deleteInscripto(this.data).subscribe({
+      next: () => {
+        this.toastr.success('Torneo eliminado con éxito');
+        this.modal.close('Ok click');
+        window.location.reload();
+      },
+      error: () => {
+        console.log('error');
+        this.modal.close('Ok click');
+      },
+    });
+  }
+}
+
+//COMPONENTE PRINCIPAL
 @Component({
   selector: 'app-detalles-torneo',
   templateUrl: './detalles-torneo.component.html',
@@ -89,7 +164,10 @@ export class DetallesTorneoComponent implements OnInit {
   imgUrl: string = 'https://via.placeholder.com/1450x500';
   withAutofocus = `<button type="button" ngbAutofocus class="btn btn-danger"
       (click)="modal.close('Ok click')">Ok</button>`;
-  inscripciones: Inscripcion[] = [];
+  esOrganizador: boolean = false;
+  idUser: string = '';
+  usuario: Usuario = {} as Usuario;
+  inscripto: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -97,33 +175,42 @@ export class DetallesTorneoComponent implements OnInit {
     private router: Router,
     private _modalService: NgbModal,
     private datePipe: DatePipe,
-    private inscripcionService: InscripcionService
+    private inscripcionService: InscripcionService,
+    private userStore: UserStoreService,
+    private auth: AuthService,
+    private toastr: ToastrService,
+    private notificacionService: NotificacionService
   ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('torneoId');
+    this.torneoService.torneoId = this.id!;
+
+    this.userStore.getIdFromStore().subscribe((val) => {
+      let idFromToken = this.auth.getIdFromToken();
+      this.idUser = val || idFromToken;
+    });
 
     if (this.id !== null) {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
           this.torneo = res;
-          console.table(this.torneo);
+          if (this.torneo.idOrganizador === this.idUser) {
+            this.esOrganizador = true;
+          } else {
+            this.esOrganizador = false;
+          }
         },
         error: () => {
           alert('Error al intentar cargar el torneo');
         },
       });
 
-      this.inscripcionService.getAll().subscribe({
+      this.inscripcionService.isInscripto(this.idUser, this.id).subscribe({
         next: (res) => {
-          this.inscripciones = res;
-        },
-        error: () => {
-          alert('Error al intentar cargar los inscriptos');
+          this.inscripto = res;
         },
       });
-    } else {
-      alert('Ningún torneo seleccionado');
     }
   }
 
@@ -135,25 +222,22 @@ export class DetallesTorneoComponent implements OnInit {
     this._modalService.open(NgbdModalConfirmAutofocus, { injector });
   }
 
-  borrar() {
-    this.torneoService.deleteTorneo(this.torneo.id).subscribe({
-      next: () => {
-        alert('Torneo eliminado con éxito');
-        this.router.navigate(['torneo/listado']);
-      },
-      error: () => {
-        console.log('error');
-      },
+  borrarInscripcion() {
+    console.log(this.idUser);
+    const data = this.idUser;
+    const injector = Injector.create({
+      providers: [{ provide: 'DATA', useValue: data }],
     });
+    this._modalService.open(NgbModalInscripcion, { injector });
   }
 
   editar() {
-    this.router.navigate(['/torneo/modificar', this.id]);
+    this.router.navigate(['/app/torneo/modificar', this.id]);
   }
 
   inscribirse() {
     var inscripcion: Inscripcion = {} as Inscripcion;
-    inscripcion.idParticipante = '35C21397-A33D-4FE5-85D5-DEBF641F596B';
+    inscripcion.idParticipante = this.idUser;
     inscripcion.horaInscripcion = this.datePipe.transform(
       new Date(),
       'HH:mm:ss'
@@ -161,19 +245,22 @@ export class DetallesTorneoComponent implements OnInit {
     inscripcion.idTorneo = this.id!;
     this.inscripcionService.registerInscripcion(inscripcion).subscribe({
       next: () => {
-        alert('Inscripción realizada con éxito');
+        var notificacion = {
+          usuarioId: this.torneo.idOrganizador,
+          mensaje: 'Nueva solicitud de inscripción',
+        } as Notificacion;
+        this.notificacionService.register(notificacion).subscribe({
+          next: (res) => {
+            window.location.reload();
+            this.toastr.success('Inscripción realizada con éxito');
+          },
+          error: (err) => {
+            this.toastr.error(err.error.message, 'Error');
+          },
+        });
       },
       error: () => {
-        alert('Ocurrió un error inesperado');
-      },
-    });
-  }
-
-  eliminar(id: string) {
-    this.inscripcionService.deleteTorneo(id).subscribe({
-      next: () => {
-        alert('Inscripción eliminada con éxito');
-        this.inscripciones = this.inscripciones.filter((i) => i.id !== id);
+        this.toastr.error('Ocurrió un error inesperado');
       },
     });
   }

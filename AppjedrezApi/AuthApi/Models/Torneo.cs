@@ -31,6 +31,8 @@ public partial class Torneo
 
     public TimeSpan? HoraFinal { get; set; }
 
+    public bool? Borrado { get; set; }
+
     public virtual Usuario IdOrganizadorNavigation { get; set; }
 
     public virtual TipoTorneo IdTipoTorneoNavigation { get; set; }

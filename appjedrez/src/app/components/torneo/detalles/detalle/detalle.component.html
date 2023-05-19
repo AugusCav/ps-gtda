@@ -1,0 +1,39 @@
+<div class="col-12 p-2">
+    <h1 class="display-3 col-12">
+      {{ torneo.nombre }}
+    </h1>
+    <div class="col-12 rounded bg-white p-2 text-dark bg-gradient">
+      <p class="lead">{{ torneo.descripcion }}</p>
+      <hr />
+      <div class="row m-2">
+        <span>Detalles:</span>
+        <div class="col-md-6 p-2">
+          <ul class="list-group">
+            <li class="list-group-item">
+              Empieza: {{ torneo.fechaInicio | date : "short" }}
+            </li>
+            <li class="list-group-item">
+              Termina: {{ torneo.fechaFinal | date : "short" }}
+            </li>
+            <li class="list-group-item">
+              Se juega en: {{ torneo.localidad }}
+            </li>
+            <li class="list-group-item">Organizador:</li>
+          </ul>
+        </div>
+        <div class="col-md-6 p-2">
+          <ul class="list-group">
+            <li class="list-group-item">
+              Tipo de torneo: {{ torneo.idTipoTorneo }}
+            </li>
+            <li class="list-group-item">
+              Cantidad máxima de participantes:
+              {{ torneo.cantidadParticipantes }}
+            </li>
+            <li class="list-group-item">Elo minimo:</li>
+            <li class="list-group-item">Elo Máximo:</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

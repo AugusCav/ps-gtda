@@ -13,6 +13,8 @@ public partial class Inscripcion
 
     public TimeSpan? HoraInscripcion { get; set; }
 
+    public string Estado { get; set; }
+
     public virtual Usuario IdParticipanteNavigation { get; set; }
 
     public virtual Torneo IdTorneoNavigation { get; set; }

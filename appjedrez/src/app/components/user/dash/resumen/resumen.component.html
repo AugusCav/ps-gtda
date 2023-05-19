@@ -1,0 +1,89 @@
+<div class="container-fluid mt-2">
+  <div class="container px-5">
+    <div class="row gx-0">
+      <!-- Columna izquierda -->
+      <div class="col-md-4">
+        <div class="row mx-1 gx-1 gy-2">
+          <div class="col">
+            <div class="rounded bg-light p-5"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Columna Derecha -->
+      <div class="col-md-8">
+        <div class="row mx-1 gx-1 gy-2">
+          <div class="col-12">
+            <div class="rounded bg-light p-5">
+              <h3>Estadísticas - Graficos - etc</h3>
+              <!-- <div class="row">
+                <div class="col-4">
+                  Ejemplo:
+                  <canvas
+                    baseChart
+                    [type]="'pie'"
+                    [datasets]="pieChartDatasets"
+                    [options]="pieChartOptions"
+                    [plugins]="pieChartPlugins"
+                    [legend]="pieChartLegend"
+                    style="height: 100%"
+                  >
+                  </canvas>
+                </div>
+                <div class="col-8">Ganados: 2 : 8</div>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-12" *ngFor="let torneo of torneos">
+            <div class="rounded bg-light p-3">
+              <div class="row">
+                <div class="col-7 border-end">
+                  <div class="row">
+                    <div class="col-5 border-end">
+                      <h5>{{ torneo.torneo.nombre }}</h5>
+
+                      <span>{{ torneo.torneo.localidad }}</span> -
+                      <span>
+                        {{ torneo.torneo.fechaInicio | date : "shortDate" }}
+                      </span>
+                    </div>
+                    <div class="col-7 position-relative">
+                      <span class="position-absolute bottom-0"
+                        >Organizador:
+                        <a class="text-link">{{ torneo.torneo.organizador }}</a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <span
+                    *ngIf="torneo.estado === 'aprobado'"
+                    class="badge bg-success"
+                    >Aprobado</span
+                  >
+                  <span
+                    *ngIf="torneo.estado === 'espera'"
+                    class="badge bg-warning"
+                    >En espera</span
+                  >
+                </div>
+                <div class="col-1">
+                  <a
+                    [routerLink]="['/app/torneo/detalles', torneo.torneo.id]"
+                    class="btn btn-outline-primary rounded-circle"
+                  >
+                    <i class="bi bi-chevron-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="torneos.length == 0">
+            <div class="rounded bg-danger p-3">
+              <h3 class="text-light">No hay torneos que mostrar</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

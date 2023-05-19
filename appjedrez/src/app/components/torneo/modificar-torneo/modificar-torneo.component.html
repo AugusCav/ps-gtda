@@ -1,168 +1,172 @@
-<div class="container">
-    <div class="row">
-      <div class="offset-md-1 col-md-10 offset-lg-2 col-lg-8">
-        <div class="row bg-white my-3 rounded">
-          <div class="col-12">
-            <h3 class="display-6 pt-3 font-weight-bold text-dark">
-              Modificar Torneo
-            </h3>
+<body class="bg-dark pb-1" style="min-height: 100vh">
+  <div class="container-fluid bg-secondary p-5">
+    <div class="container px-5">
+      <div class="row justify-content-center">
+        <div class="col-4 text-center">
+          <h3 class="text-light">Registrar Torneo</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="container bg-light mt-2 rounded px-5 py-2">
+      <div class="row">
+        <form class="container" [formGroup]="torneoForm">
+          <div class="row pt-3">
+            <div class="col-12 input-group">
+              <span class="input-group-text">
+                <i class="bi bi-pencil-fill text-primary"> </i
+              ></span>
+              <input
+                formControlName="nombre"
+                class="form-control text-dark"
+                type="text"
+                placeholder="Nombre"
+              />
+            </div>
           </div>
-          <div class="col-12 p-3">
-            <form class="container" [formGroup]="torneoForm">
-              <div class="row pt-3">
-                <div class="col-12 input-group">
-                  <span class="input-group-text">
-                    <i class="bi bi-pencil-fill text-primary"> </i
-                  ></span>
-                  <input
-                    formControlName="nombre"
-                    class="form-control text-dark"
-                    type="text"
-                    placeholder="Nombre"
-                  />
-                </div>
-              </div>
-              <small
-                *ngIf="
-                  torneoForm.controls['nombre'].dirty &&
-                  torneoForm.hasError('required', 'nombre')
-                "
-                class="text-danger"
+          <small
+            *ngIf="
+              torneoForm.controls['nombre'].dirty &&
+              torneoForm.hasError('required', 'nombre')
+            "
+            class="text-danger"
+          >
+            *Nombre requerido
+          </small>
+
+          <div class="row pt-3">
+            <div class="col-12">
+              <textarea
+                formControlName="descripcion"
+                class="form-control"
+                placeholder="Descripción o detalles sobre el torneo..."
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+            </div>
+          </div>
+          <small
+            *ngIf="
+              torneoForm.controls['descripcion'].dirty &&
+              torneoForm.hasError('required', 'descripcion')
+            "
+            class="text-danger"
+          >
+            *Descripcion requerido
+          </small>
+
+          <div class="row pt-3">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <label class="lead d-flex m-1" for="dInicio"
+                >Fecha de Inicio:</label
               >
-                *Nombre requerido
-              </small>
-  
-              <div class="row pt-3">
-                <div class="col-12">
-                  <textarea
-                    formControlName="descripcion"
-                    class="form-control"
-                    placeholder="Descripción o detalles sobre el torneo..."
-                    id=""
-                    cols="30"
-                    rows="10"
-                  ></textarea>
-                </div>
-              </div>
-              <small
-                *ngIf="
-                  torneoForm.controls['descripcion'].dirty &&
-                  torneoForm.hasError('required', 'descripcion')
-                "
-                class="text-danger"
+              <ngb-datepicker
+                formControlName="fechaInicio"
+                #dInicio
+              ></ngb-datepicker>
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <label class="lead d-flex m-1" for="dInicio"
+                >Fecha de finalización:</label
               >
-                *Descripcion requerido
-              </small>
-  
-              <div class="row pt-3">
-                <div class="col-md-6 d-flex flex-column align-items-center">
-                  <label class="lead d-flex m-1" for="dInicio"
-                    >Fecha de Inicio:</label
-                  >
-                  <ngb-datepicker
-                    formControlName="fechaInicio"
-                    
-                    #dInicio
-                  ></ngb-datepicker>
-                </div>
-                <div class="col-md-6 d-flex flex-column align-items-center">
-                  <label class="lead d-flex m-1" for="dInicio"
-                    >Fecha de finalización:</label
-                  >
-                  <ngb-datepicker
-                    formControlName="fechaFinal"
-                    
-                    #dInicio
-                  ></ngb-datepicker>
-                </div>
-              </div>
-              <small *ngIf="false" class="text-danger">
-                *Fecha de inicio requerida
-              </small>
-  
-              <div class="row pt-3">
-                <div class="col-md-6 d-flex flex-column align-items-center">
-                  <label class="lead d-flex m-1" for="dInicio"
-                    >Hora de Inicio:</label
-                  >
-                  <ngb-timepicker
-                    [(ngModel)]="horaInicio"
-                    [ngModelOptions]="{ standalone: true }"
-                  ></ngb-timepicker>
-                </div>
-                <div class="col-md-6 d-flex flex-column align-items-center">
-                  <label class="lead d-flex m-1" for="dInicio"
-                    >Hora de finalización:</label
-                  >
-                  <ngb-timepicker
-                    [(ngModel)]="horaFinal"
-                    [ngModelOptions]="{ standalone: true }"
-                  ></ngb-timepicker>
-                </div>
-              </div>
-  
-              <div class="row pt-3">
-                <div class="col-12 input-group">
-                  <span class="input-group-text">
-                    <i class="bi bi-geo-alt-fill text-primary"> </i
-                  ></span>
-                  <input
-                    formControlName="localidad"
-                    class="form-control text-dark"
-                    type="text"
-                    placeholder="Localidad"
-                  />
-                </div>
-              </div>
-  
-              <div class="row pt-3">
-                <div class="col-12">
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    formControlName="idTipoTorneo"
-                  >
-                    <option *ngFor="let tipo of tipos" [value]="tipo.id">
-                      {{ tipo.nombre }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-  
-              <div class="row pt-3">
-                <div class="col-sm-6">
-                  <label for="eloMinimoInput">Elo mínimo:</label>
-                  <input
-                    class="form-control"
-                    formControlName="eloMinimo"
-                    type="number"
-                    id="eloMinimoInput"
-                  />
-                </div>
-                <div class="col-sm-6">
-                  <label for="eloMaximoInput">Elo máximo:</label>
-                  <input
-                    class="form-control"
-                    formControlName="eloMaximo"
-                    type="number"
-                    id="eloMaximoInput"
-                  />
-                </div>
-              </div>
-  
-              <div class="row pt-3">
-                <div class="col-12">
-                  <label for="cantidadParticipantesInput">Cantidad máxima de participantes:</label>
-                  <input
-                    class="form-control"
-                    formControlName="cantidadParticipantes"
-                    type="number"
-                    id="cantidadParticipantesInput"
-                  />
-                </div>
-              </div>
-  
-  
+              <ngb-datepicker
+                formControlName="fechaFinal"
+                #dInicio
+              ></ngb-datepicker>
+            </div>
+          </div>
+          <small *ngIf="false" class="text-danger">
+            *Fecha de inicio requerida
+          </small>
+
+          <div class="row pt-3">
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <label class="lead d-flex m-1" for="dInicio"
+                >Hora de Inicio:</label
+              >
+              <ngb-timepicker
+                [(ngModel)]="horaInicio"
+                [ngModelOptions]="{ standalone: true }"
+              ></ngb-timepicker>
+            </div>
+            <div class="col-md-6 d-flex flex-column align-items-center">
+              <label class="lead d-flex m-1" for="dInicio"
+                >Hora de finalización:</label
+              >
+              <ngb-timepicker
+                [(ngModel)]="horaFinal"
+                [ngModelOptions]="{ standalone: true }"
+              ></ngb-timepicker>
+            </div>
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-12 input-group">
+              <span class="input-group-text">
+                <i class="bi bi-geo-alt-fill text-primary"> </i
+              ></span>
+              <input
+                formControlName="localidad"
+                class="form-control text-dark"
+                type="text"
+                placeholder="Localidad"
+              />
+            </div>
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-12">
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                formControlName="idTipoTorneo"
+              >
+                <option *ngFor="let tipo of tipos" [value]="tipo.id">
+                  {{ tipo.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-sm-6">
+              <label for="eloMinimoInput">Elo mínimo:</label>
+              <input
+                class="form-control"
+                formControlName="eloMinimo"
+                type="number"
+                id="eloMinimoInput"
+              />
+            </div>
+            <div class="col-sm-6">
+              <label for="eloMaximoInput">Elo máximo:</label>
+              <input
+                class="form-control"
+                formControlName="eloMaximo"
+                type="number"
+                id="eloMaximoInput"
+              />
+            </div>
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-12">
+              <label for="cantidadParticipantesInput"
+                >Cantidad máxima de participantes:</label
+              >
+              <input
+                class="form-control"
+                formControlName="cantidadParticipantes"
+                type="number"
+                id="cantidadParticipantesInput"
+              />
+            </div>
+          </div>
+
+          <div class="row pt-3 justify-content-center">
+            <div class="col-4">
               <button
                 (click)="actualizar()"
                 type="submit"
@@ -170,10 +174,10 @@
               >
                 Modificar
               </button>
-            </form>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
-  
+</body>

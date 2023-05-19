@@ -1,37 +1,42 @@
-import { Component } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { TipoTorneo } from 'src/app/models/tipo-torneo';
+import { AuthService } from 'src/app/services/auth.service';
 import { TorneoService } from 'src/app/services/torneo.service';
+import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-registro-torneo',
   templateUrl: './registro-torneo.component.html',
   styleUrls: ['./registro-torneo.component.css'],
 })
-export class RegistroTorneoComponent {
+export class RegistroTorneoComponent implements OnInit {
   torneoForm!: FormGroup;
   tipos: TipoTorneo[] = [];
   horaInicio: NgbTime = { hour: 12, minute: 0, second: 0 } as NgbTime;
   horaFinal: NgbTime = { hour: 12, minute: 0, second: 0 } as NgbTime;
+  organizadorId: string = '';
 
   constructor(
     private fb: FormBuilder,
     private torneoService: TorneoService,
     private router: Router,
-    private calendar: NgbCalendar
+    private calendar: NgbCalendar,
+    private userStore: UserStoreService,
+    private auth: AuthService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.userStore.getIdFromStore().subscribe((val) => {
+      let idFromToken = this.auth.getIdFromToken();
+      this.organizadorId = val || idFromToken;
+    });
+
+
     this.torneoForm = this.fb.group({
       nombre: ['', Validators.required],
       fechaInicio: [
@@ -48,7 +53,7 @@ export class RegistroTorneoComponent {
       localidad: ['', Validators.required],
       idTipoTorneo: [1, Validators.required],
       cantidadParticipantes: [0, Validators.required],
-      idOrganizador: ['35C21397-A33D-4FE5-85D5-DEBF641F596B'],
+      idOrganizador: [this.organizadorId],
       eloMinimo: [0, Validators.required],
       eloMaximo: [0, Validators.required],
     });
@@ -61,6 +66,7 @@ export class RegistroTorneoComponent {
   }
 
   registrar() {
+    console.log(this.organizadorId);
     if (this.torneoForm.valid) {
       // logica para el registro
       this.torneoForm.controls['horaInicio'].setValue(
@@ -77,7 +83,7 @@ export class RegistroTorneoComponent {
         next: (res) => {
           alert(res.message);
           this.torneoForm.reset();
-          this.router.navigate(['torneo/listado']);
+          this.router.navigate(['/app/torneo/listado']);
         },
         error: (err) => {
           alert(err.message);

@@ -1,29 +1,46 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GameModule } from './components/game/game.module';
 import { UserModule } from './components/user/user.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TorneoModule } from './components/torneo/torneo.module';
+import { ToastrModule } from 'ngx-toastr';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { InicioComponent } from './components/inicio/inicio.component';
+import { AplicacionModule } from './components/aplicacion/aplicacion.module';
+import { SharedModule } from './shared/shared-module/shared.module';
+import { TerminosCondicionesComponent } from './components/extra/terminos-condiciones/terminos-condiciones.component';
+import { FaqComponent } from './components/extra/faq/faq.component';
 
 registerLocaleData(localeEs);
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    InicioComponent,
+    TerminosCondicionesComponent,
+    FaqComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GameModule,
     UserModule,
     NgbModule,
     HttpClientModule,
-    TorneoModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    AplicacionModule,
+    SharedModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'es-ES' }],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es-ES' },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
+  exports: [],
 })
 export class AppModule {}

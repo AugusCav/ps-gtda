@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <h3>Seleccione ronda</h3>
+    <table class="table table-striped my-1">
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Blancas</th>
+          <th scope="col">Negras</th>
+          <th scope="col">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let partida of partidas">
+          <td>{{ partida.fecha | date : "shortDate" }}</td>
+          <td>{{ partida.horaInicio }}</td>
+          <td>
+            {{ partida.jugadorBlancasNavigation?.nombres }}
+            {{ partida.jugadorBlancasNavigation?.apellido }}
+          </td>
+          <td>
+            {{ partida.jugadorNegrasNavigation?.nombres }}
+            {{ partida.jugadorNegrasNavigation?.apellido }}
+          </td>
+          <td>{{ partida.resultado | partida }}</td>
+          <td>
+            <button class="btn btn-primary badge rounded-pill">
+              <i class="bi bi-caret-right-fill text-white"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

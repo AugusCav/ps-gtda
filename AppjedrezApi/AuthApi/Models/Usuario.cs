@@ -27,6 +27,8 @@ public partial class Usuario
 
     public virtual ICollection<Inscripcion> Inscripcions { get; } = new List<Inscripcion>();
 
+    public virtual ICollection<Notificacion> Notificacions { get; } = new List<Notificacion>();
+
     public virtual ICollection<Partidum> PartidumJugadorBlancasNavigations { get; } = new List<Partidum>();
 
     public virtual ICollection<Partidum> PartidumJugadorNegrasNavigations { get; } = new List<Partidum>();

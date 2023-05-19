@@ -1,25 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { InicioComponent } from './components/inicio/inicio.component';
+import { TerminosCondicionesComponent } from './components/extra/terminos-condiciones/terminos-condiciones.component';
+import { FaqComponent } from './components/extra/faq/faq.component';
 
 const routes: Routes = [
-  {
-    path: 'game',
-    loadChildren: () =>
-      import('./components/game/game.module').then((m) => m.GameModule),
-  },
   {
     path: 'user',
     loadChildren: () =>
       import('./components/user/user.module').then((m) => m.UserModule),
   },
+  { path: 'inicio', component: InicioComponent },
   {
-    path: 'torneo',
+    path: 'app',
     loadChildren: () =>
-      import('./components/torneo/torneo.module').then((m) => m.TorneoModule),
+      import('./components/aplicacion/aplicacion.module').then(
+        (m) => m.AplicacionModule
+      ),
   },
+  { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
+  { path: 'faq', component: FaqComponent },
   {
     path: '**',
-    redirectTo: 'user',
+    redirectTo: 'inicio',
   },
 ];
 

@@ -1,7 +1,16 @@
-body {
-  background-color: hsl(210, 10%, 30%);
-}
-
 .ojo:hover {
   cursor: pointer;
+}
+
+.toast-success {
+  background-color: #589910 !important;
+}
+.toast-error {
+  background-color: #ec0864 !important;
+}
+.toast-info {
+  background-color: #4a9948 !important;
+}
+.toast-warning {
+  background-color: #febc5d !important;
 }
