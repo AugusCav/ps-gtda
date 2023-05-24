@@ -36,7 +36,6 @@ export class RegistroTorneoComponent implements OnInit {
       this.organizadorId = val || idFromToken;
     });
 
-
     this.torneoForm = this.fb.group({
       nombre: ['', Validators.required],
       fechaInicio: [
@@ -47,8 +46,7 @@ export class RegistroTorneoComponent implements OnInit {
         this.formatearFecha(this.calendar.getToday()),
         Validators.required,
       ],
-      horaInicio: [this.formatearHora(this.horaInicio), Validators.required],
-      horaFinal: [this.formatearHora(this.horaFinal), Validators.required],
+      horaInicio: [, Validators.required],
       descripcion: ['', Validators.required],
       localidad: ['', Validators.required],
       idTipoTorneo: [1, Validators.required],
@@ -66,18 +64,12 @@ export class RegistroTorneoComponent implements OnInit {
   }
 
   registrar() {
-    console.log(this.organizadorId);
     if (this.torneoForm.valid) {
       // logica para el registro
-      this.torneoForm.controls['horaInicio'].setValue(
-        this.formatearHora(this.horaInicio)
-      );
-      this.torneoForm.controls['horaFinal'].setValue(
-        this.formatearHora(this.horaFinal)
-      );
+      const time = this.torneoForm.get('horaInicio')?.value;
+      const formattedTime = time + ':00';
+      this.torneoForm.controls['horaInicio'].setValue(formattedTime);
       var torneo = this.torneoForm.value;
-      torneo.fechaInicio = this.formatearFecha(torneo.fechaInicio);
-      torneo.fechaFinal = this.formatearFecha(torneo.fechaFinal);
 
       this.torneoService.registerTorneo(torneo).subscribe({
         next: (res) => {
@@ -104,13 +96,5 @@ export class RegistroTorneoComponent implements OnInit {
     const year = model.year;
 
     return `${year}-${month}-${day}`;
-  }
-
-  formatearHora(model: NgbTime): string {
-    const hours = model.hour.toString().padStart(2, '0');
-    const minutes = model.minute.toString().padStart(2, '0');
-    const seconds = model.second.toString().padStart(2, '0');
-
-    return `${hours}:${minutes}:${seconds}`;
   }
 }

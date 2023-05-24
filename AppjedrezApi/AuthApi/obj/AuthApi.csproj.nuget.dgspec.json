@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {}
+    "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {}
   },
   "projects": {
-    "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {
+    "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "projectUniqueName": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
         "projectName": "AuthApi",
-        "projectPath": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
-        "packagesPath": "D:\\Users\\augus\\.nuget\\packages\\",
-        "outputPath": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
+        "projectPath": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "packagesPath": "C:\\Users\\larap\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "D:\\Users\\augus\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\larap\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -67,7 +67,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -79,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
         }
       }
     }

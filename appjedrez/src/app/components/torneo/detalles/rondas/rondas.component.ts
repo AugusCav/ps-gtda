@@ -34,9 +34,6 @@ export class RondasComponent implements OnInit {
     private torneoService: TorneoService,
     private userStore: UserStoreService,
     private auth: AuthService,
-    private datePipe: DatePipe,
-    private router: Router,
-    private _modalService: NgbModal,
     private fb: FormBuilder,
     private toastr: ToastrService
   ) {}

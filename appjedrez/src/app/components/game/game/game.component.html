@@ -1,39 +1,45 @@
-<div class="container-fluid bg-dark p-2 mb-2 text-white">
-  <h1 class="display-3">Appjedrez</h1>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-4 offset-md-4 bg-dark">
-      <app-chess-board [cargado]="cargado" [move]="move"></app-chess-board>
-    </div>
-    <div class="col-md-4">
-      <app-pgn-viewer (cargar)="cargar()"></app-pgn-viewer>
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container-fluid bg-secondary p-5">
+    <div class="container px-5">
+      <div class="row text-white justify-content-center">
+        <div class="col-12 text-center">
+          <h5 class="display-6">Partida:</h5>
+          <h3>
+            <span class="badge text-bg-light">{{
+              partida.jugadorBlancasNavigation?.nombreUsuario
+            }}</span>
+            VS.
+            <span class="badge text-bg-dark">{{
+              partida.jugadorNegrasNavigation?.nombreUsuario
+            }}</span>
+          </h3>
+        </div>
+      </div>
     </div>
   </div>
-  <app-chess-game (moveChange)="moveChange($event)"></app-chess-game>
-</div>
-
-<div class="row z-3 text-dark" [hidden]="cargarPgnFlag">
-  <div
-    class="col-4 bg-light rounded-1 position-fixed top-50 start-50 border border-dark p-2 translate-middle"
-  >
-    <form class="row form" #formulario="ngForm" (ngSubmit)="cargarPgn()">
-      <div class="col-12 my-1">
-        <textarea
-          class="form-control w-100"
-          name="textPgn"
-          id="pgn"
-          cols="30"
-          rows="10"
-          [(ngModel)]="pgn"
-        ></textarea>
+  <div class="container-fluid bg-secondary p-2 border-top border-dark">
+    <div class="container px-5">
+      <div class="row">
+        <ul class="nav">
+          <li class="nav-item">
+            <a
+              class="btn btn-secondary"
+              [routerLink]="['/app/game/', idPartida, 'detalles']"
+              routerLinkActive="active"
+              >Detalles</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="btn btn-secondary"
+              [routerLink]="['/app/game/', idPartida, 'ver']"
+              routerLinkActive="active"
+              >Ver</a
+            >
+          </li>
+        </ul>
       </div>
-      <div class="col-md-6">
-        <button class="btn btn-dark w-100 my-1">Cargar</button>
-      </div>
-      <div class="col-md-6">
-        <button class="btn btn-dark w-100 my-1">Cancelar</button>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
+  <router-outlet></router-outlet>
+</body>

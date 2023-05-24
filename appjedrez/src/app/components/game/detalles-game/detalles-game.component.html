@@ -1,0 +1,42 @@
+<div class="container my-2">
+  <div class="row">
+    <div class="col-12 bg-light rounded py-2 text-dark">
+      <p>
+        En esta partida de ajedrez, se enfrentan dos jugadores:
+        <strong
+          >{{ partida.jugadorBlancasNavigation?.nombres }}
+          {{ partida.jugadorBlancasNavigation?.apellido }} ({{
+            partida.jugadorBlancasNavigation?.nombreUsuario
+          }})</strong
+        >, con las piezas blancas, y
+        <strong
+          >{{ partida.jugadorNegrasNavigation?.nombres }}
+          {{ partida.jugadorNegrasNavigation?.apellido }} ({{
+            partida.jugadorNegrasNavigation?.nombreUsuario
+          }})</strong
+        >
+        con las piezas negras.
+      </p>
+      <div>
+        <ul>
+          <li>
+            <span class="text-bg-info text-light badge">Fecha:</span>
+            {{ partida.fecha | date : "shortDate" }}
+          </li>
+          <li>
+            <span class="text-bg-info text-light badge">Hora:</span>
+            {{ partida.horaInicio }}
+          </li>
+          <li *ngIf="partida.pgn == null">
+            <span class="text-bg-info text-light badge"> Estado: </span>
+            {{ partida.pgn | partida }}
+          </li>
+          <li *ngIf="partida.pgn != null">
+            <span class="text-bg-info text-light badge"> Estado: </span>
+            Terminada
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

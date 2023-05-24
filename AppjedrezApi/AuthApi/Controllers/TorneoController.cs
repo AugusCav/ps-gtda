@@ -42,7 +42,6 @@ public class TorneoController : ControllerBase
         torneo.Descripcion = torneoObj.Descripcion;
         torneo.FechaFinal = torneoObj.FechaFinal;
         torneo.FechaInicio = torneoObj.FechaInicio;
-        torneo.HoraFinal = torneoObj.HoraFinal;
         torneo.HoraInicio = torneoObj.HoraInicio;
         torneo.Localidad = torneoObj.Localidad;
         torneo.IdTipoTorneo = torneoObj.IdTipoTorneo;
@@ -101,7 +100,38 @@ public class TorneoController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Torneo>> GetTorneo(Guid id)
     {
-        var torneo = await _context.Torneos.FindAsync(id);
+        var torneo = await _context.Torneos
+        .Include(t => t.IdTipoTorneoNavigation)
+        .Include(t => t.IdOrganizadorNavigation)
+        .Where(t => t.Id == id)
+        .Select(t => new
+        {
+            Id = t.Id,
+            Nombre = t.Nombre,
+            FechaInicio = t.FechaInicio,
+            FechaFinal = t.FechaFinal,
+            Descripcion = t.Descripcion,
+            Localidad = t.Localidad,
+            IdTIpoTorneo = t.IdTipoTorneo,
+            IdOrgnanizador = t.IdOrganizador,
+            EloMinimo = t.EloMinimo,
+            EloMaximo = t.EloMaximo,
+            HoraInicio = t.HoraInicio,
+            Borrado = t.Borrado,
+            CantidadParticipantes = t.CantidadParticipantes,
+            Portada = t.Portada,
+            Organizador = new
+            {
+                Nombres = t.IdOrganizadorNavigation.Nombres,
+                Apellido = t.IdOrganizadorNavigation.Apellido,
+                NombreUsuario = t.IdOrganizadorNavigation.NombreUsuario
+            },
+            TipoTorneo = new
+            {
+                Nombre = t.IdTipoTorneoNavigation.Nombre
+            }
+        })
+        .FirstOrDefaultAsync();
 
         if (torneo == null)
             return BadRequest();
@@ -236,5 +266,66 @@ public class TorneoController : ControllerBase
             .ToListAsync();
 
         return Ok(partidas);
+    }
+
+    [HttpGet("getPartida/{idPartida}")]
+    public async Task<ActionResult<Partidum>> GetPartida(Guid idPartida)
+    {
+        var partida = await _context.Partida
+            .Include(p => p.JugadorBlancasNavigation)
+            .Include(p => p.JugadorNegrasNavigation)
+            .Where(p => p.Id == idPartida)
+            .Select(p => new
+            {
+                Id = p.Id,
+                JugadorBlancas = p.JugadorBlancas,
+                JugadorNegras = p.JugadorNegras,
+                Fecha = p.Fecha,
+                HoraInicio = p.HoraInicio,
+                Resultado = p.Resultado,
+                Pgn = p.Pgn,
+                IdRonda = p.IdRonda,
+                JugadorBlancasNavigation = new
+                {
+                    Id = p.JugadorBlancasNavigation.Id,
+                    NombreUsuario = p.JugadorBlancasNavigation.NombreUsuario,
+                    Nombres = p.JugadorBlancasNavigation.Nombres,
+                    Apellido = p.JugadorBlancasNavigation.Apellido
+                },
+                JugadorNegrasNavigation = new
+                {
+                    Id = p.JugadorNegrasNavigation.Id,
+                    NombreUsuario = p.JugadorNegrasNavigation.NombreUsuario,
+                    Nombres = p.JugadorNegrasNavigation.Nombres,
+                    Apellido = p.JugadorNegrasNavigation.Apellido
+                },
+            })
+            .FirstOrDefaultAsync();
+
+        return Ok(partida);
+    }
+
+    public class CargarPgnRequest
+    {
+        public String pgn { get; set; }
+        public Guid IdPartida { get; set; }
+    }
+
+    [HttpPut("cargarPgn")]
+    public async Task<IActionResult> CargarPgn([FromBody] CargarPgnRequest pgn)
+    {
+        if (pgn == null)
+            return BadRequest();
+        var partida = await _context.Partida.FindAsync(pgn.IdPartida);
+
+        if (partida == null)
+            return BadRequest();
+
+        partida.Pgn = pgn.pgn;
+        _context.SaveChanges();
+        return Ok(new
+        {
+            Message = "Partida Update Success"
+        });
     }
 }

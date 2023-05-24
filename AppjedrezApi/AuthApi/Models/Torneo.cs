@@ -11,8 +11,6 @@ public partial class Torneo
 
     public DateTime? FechaInicio { get; set; }
 
-    public DateTime? FechaFinal { get; set; }
-
     public string Descripcion { get; set; }
 
     public string Localidad { get; set; }
@@ -29,9 +27,11 @@ public partial class Torneo
 
     public TimeSpan? HoraInicio { get; set; }
 
-    public TimeSpan? HoraFinal { get; set; }
-
     public bool? Borrado { get; set; }
+
+    public byte[] Portada { get; set; }
+
+    public DateTime? FechaFinal { get; set; }
 
     public virtual Usuario IdOrganizadorNavigation { get; set; }
 

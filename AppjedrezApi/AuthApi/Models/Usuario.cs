@@ -23,6 +23,8 @@ public partial class Usuario
 
     public string Token { get; set; }
 
+    public byte[] FotoPerfil { get; set; }
+
     public virtual RolUsuario IdRolUsuarioNavigation { get; set; }
 
     public virtual ICollection<Inscripcion> Inscripcions { get; } = new List<Inscripcion>();

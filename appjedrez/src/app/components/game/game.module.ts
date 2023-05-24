@@ -6,9 +6,19 @@ import { GameRoutingModule } from './game-routing.module';
 import { ChessBoardComponent } from './chess-board/chess-board.component';
 import { PgnViewerComponent } from './pgn-viewer/pgn-viewer.component';
 import { FormsModule } from '@angular/forms';
+import { DetallesGameComponent } from './detalles-game/detalles-game.component';
+import { VerComponent } from './ver/ver.component';
+import { SharedModule } from 'src/app/shared/shared-module/shared.module';
 
 @NgModule({
-  declarations: [ChessGameComponent, GameComponent, ChessBoardComponent, PgnViewerComponent],
-  imports: [CommonModule, GameRoutingModule, FormsModule],
+  declarations: [
+    ChessGameComponent,
+    GameComponent,
+    ChessBoardComponent,
+    PgnViewerComponent,
+    DetallesGameComponent,
+    VerComponent,
+  ],
+  imports: [CommonModule, GameRoutingModule, FormsModule, SharedModule],
 })
 export class GameModule {}

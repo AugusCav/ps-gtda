@@ -16,7 +16,6 @@ export interface Torneo {
   eloMinimo: number;
   eloMaximo: number;
   horaInicio: string;
-  horaFinal: string;
   borrado: boolean;
   organizador: Usuario;
   tipoTorneo: TipoTorneo;

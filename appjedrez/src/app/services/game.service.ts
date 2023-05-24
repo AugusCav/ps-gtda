@@ -11,6 +11,7 @@ export class GameService {
   private _pgn: string = '';
   private _moves: Array<string> = new Array();
   private _indexMoves: Array<number> = [-1, -1, -1];
+  private _idPartida: string | null = '';
 
   public get game() {
     return this._game;
@@ -32,6 +33,12 @@ export class GameService {
   }
   public get indexMoves() {
     return this._indexMoves;
+  }
+  public get idPartida() {
+    return this._idPartida;
+  }
+  public set idPartida(id: string | null) {
+    this._idPartida = id;
   }
 
   constructor() {}

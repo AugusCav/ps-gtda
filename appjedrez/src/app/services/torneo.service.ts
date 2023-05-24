@@ -13,6 +13,7 @@ export class TorneoService {
   private baseUrl: string = 'https://localhost:7274/api/Torneo/';
   torneoId: string = '';
   partidas: Partida[] = [];
+  idPartida: string | null = '';
 
   constructor(private http: HttpClient) {}
 
@@ -53,5 +54,16 @@ export class TorneoService {
 
   getPartidasJugador(idUsuario: string) {
     return this.http.get<Partida[]>(`${this.baseUrl}getPartidas/${idUsuario}`);
+  }
+
+  getPartida(idPartida: string) {
+    return this.http.get<Partida>(`${this.baseUrl}getPartida/${idPartida}`);
+  }
+
+  cargarPgn(idPartida: string | null, pgn: string) {
+    return this.http.put(`${this.baseUrl}cargarPgn`, {
+      pgn: pgn,
+      idPartida: idPartida,
+    });
   }
 }

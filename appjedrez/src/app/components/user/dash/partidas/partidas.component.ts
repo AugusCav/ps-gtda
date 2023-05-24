@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Partida } from 'src/app/models/partida';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,7 +19,8 @@ export class PartidasComponent implements OnInit {
     private torneoService: TorneoService,
     private userStore: UserStoreService,
     private auth: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,5 +43,9 @@ export class PartidasComponent implements OnInit {
       let idFromToken = this.auth.getIdFromToken();
       this.idUser = val || idFromToken;
     });
+  }
+
+  irGame(partidaId: string) {
+    this.router.navigate(['/app/game', partidaId]);
   }
 }

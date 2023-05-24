@@ -62,19 +62,21 @@
               <label class="lead d-flex m-1" for="dInicio"
                 >Fecha de Inicio:</label
               >
-              <ngb-datepicker
+              <input
                 formControlName="fechaInicio"
-                #dInicio
-              ></ngb-datepicker>
+                type="date"
+                class="form-control"
+              />
             </div>
             <div class="col-md-6 d-flex flex-column align-items-center">
               <label class="lead d-flex m-1" for="dInicio"
                 >Fecha de finalización:</label
               >
-              <ngb-datepicker
+              <input
                 formControlName="fechaFinal"
-                #dInicio
-              ></ngb-datepicker>
+                type="date"
+                class="form-control"
+              />
             </div>
           </div>
           <small *ngIf="false" class="text-danger">
@@ -86,19 +88,11 @@
               <label class="lead d-flex m-1" for="dInicio"
                 >Hora de Inicio:</label
               >
-              <ngb-timepicker
-                [(ngModel)]="horaInicio"
-                [ngModelOptions]="{ standalone: true }"
-              ></ngb-timepicker>
-            </div>
-            <div class="col-md-6 d-flex flex-column align-items-center">
-              <label class="lead d-flex m-1" for="dInicio"
-                >Hora de finalización:</label
-              >
-              <ngb-timepicker
-                [(ngModel)]="horaFinal"
-                [ngModelOptions]="{ standalone: true }"
-              ></ngb-timepicker>
+              <input
+                formControlName="horaInicio"
+                type="time"
+                class="form-control"
+              />
             </div>
           </div>
 

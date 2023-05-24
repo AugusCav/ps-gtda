@@ -48,7 +48,6 @@ export class ModificarTorneoComponent {
       fechaInicio: ['', Validators.required],
       fechaFinal: ['', Validators.required],
       horaInicio: ['', Validators.required],
-      horaFinal: ['', Validators.required],
       descripcion: ['', Validators.required],
       localidad: ['', Validators.required],
       idTipoTorneo: [1, Validators.required],
@@ -65,14 +64,6 @@ export class ModificarTorneoComponent {
             this.router.navigate(['/app/torneo/listado']);
           }
           this.torneoForm.patchValue(res);
-          this.torneoForm.controls['fechaInicio'].setValue(
-            this.formatearStringFecha(res.fechaInicio)
-          );
-          this.torneoForm.controls['fechaFinal'].setValue(
-            this.formatearStringFecha(res.fechaFinal)
-          );
-          this.horaInicio = this.formatearStringHora(res.horaInicio);
-          this.horaFinal = this.formatearStringHora(res.horaFinal);
         },
         error: () => {
           alert('Error al intentar cargar el torneo');
@@ -90,18 +81,17 @@ export class ModificarTorneoComponent {
   }
 
   actualizar() {
-    console.table(this.torneoForm.value);
-    this.torneoForm.controls['horaInicio'].setValue(
-      this.formatearHora(this.horaInicio)
-    );
-    this.torneoForm.controls['horaFinal'].setValue(
-      this.formatearHora(this.horaFinal)
-    );
     if (this.torneoForm.valid) {
-      // logica para el registro
+      if (
+        this.torneoForm.get('horaInicio')?.touched ||
+        this.torneoForm.get('horaInicio')?.dirty
+      ) {
+        const time = this.torneoForm.get('horaInicio')?.value;
+        const formattedTime = time + ':00';
+        this.torneoForm.controls['horaInicio'].setValue(formattedTime);
+      }
+
       var torneo = this.torneoForm.value;
-      torneo.fechaInicio = this.formatearFecha(torneo.fechaInicio);
-      torneo.fechaFinal = this.formatearFecha(torneo.fechaFinal);
 
       this.torneoService.updateTorneo(torneo).subscribe({
         next: (res) => {
@@ -120,31 +110,5 @@ export class ModificarTorneoComponent {
       ValidateForm.validateAllFormFields(this.torneoForm);
       alert('Tu form es inválido');
     }
-  }
-
-  formatearFecha(model: NgbDate): string {
-    const day = model.day.toString().padStart(2, '0');
-    const month = model.month.toString().padStart(2, '0');
-    const year = model.year;
-
-    return `${year}-${month}-${day}`;
-  }
-
-  formatearHora(model: NgbTime): string {
-    const hours = model.hour.toString().padStart(2, '0');
-    const minutes = model.minute.toString().padStart(2, '0');
-    const seconds = model.second.toString().padStart(2, '0');
-
-    return `${hours}:${minutes}:${seconds}`;
-  }
-
-  formatearStringFecha(fecha: string) {
-    const PARTES = fecha.split('-').map((parte) => parseInt(parte));
-    return { year: PARTES[0], month: PARTES[1], day: PARTES[2] };
-  }
-
-  formatearStringHora(hora: string): NgbTime {
-    const PARTES = hora.split(':').map((parte) => parseInt(parte));
-    return { hour: PARTES[0], minute: PARTES[1], second: PARTES[2] } as NgbTime;
   }
 }

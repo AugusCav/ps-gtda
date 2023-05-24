@@ -16,6 +16,8 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Analisi> Analises { get; set; }
+
     public virtual DbSet<Inscripcion> Inscripcions { get; set; }
 
     public virtual DbSet<Notificacion> Notificacions { get; set; }
@@ -38,6 +40,23 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Analisi>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PkAnalisis_Id");
+
+            entity.ToTable("Analisis");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Fecha)
+                .HasColumnType("date")
+                .HasColumnName("fecha");
+            entity.Property(e => e.Partida).HasColumnName("partida");
+
+            entity.HasOne(d => d.PartidaNavigation).WithMany(p => p.Analisis)
+                .HasForeignKey(d => d.Partida)
+                .HasConstraintName("FkAnalisis_Partida");
+        });
+
         modelBuilder.Entity<Inscripcion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PkInscripcion_Id");

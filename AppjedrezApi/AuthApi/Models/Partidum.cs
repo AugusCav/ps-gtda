@@ -23,6 +23,8 @@ public partial class Partidum
 
     public int? IdRonda { get; set; }
 
+    public virtual ICollection<Analisi> Analisis { get; } = new List<Analisi>();
+
     public virtual Rondum IdRondaNavigation { get; set; }
 
     public virtual Usuario JugadorBlancasNavigation { get; set; }
