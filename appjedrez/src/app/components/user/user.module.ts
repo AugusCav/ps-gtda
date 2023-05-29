@@ -11,6 +11,7 @@ import { ResumenComponent } from './dash/resumen/resumen.component';
 import { PartidasComponent } from './dash/partidas/partidas.component';
 import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { NgChartsModule } from 'ng2-charts';
     ResumenComponent,
     PartidasComponent,
     ConfiguracionComponent,
+    ConfigOrganizadoresComponent,
   ],
   imports: [
     CommonModule,

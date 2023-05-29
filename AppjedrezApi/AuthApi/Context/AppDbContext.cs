@@ -20,6 +20,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Inscripcion> Inscripcions { get; set; }
 
+    public virtual DbSet<InscripcionOrganizador> InscripcionOrganizadors { get; set; }
+
     public virtual DbSet<Notificacion> Notificacions { get; set; }
 
     public virtual DbSet<Partidum> Partida { get; set; }
@@ -75,6 +77,24 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdTorneoNavigation).WithMany(p => p.Inscripcions)
                 .HasForeignKey(d => d.IdTorneo)
                 .HasConstraintName("FkInscripcion_IdTorneo");
+        });
+
+        modelBuilder.Entity<InscripcionOrganizador>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PkInsOrg_Id");
+
+            entity.ToTable("InscripcionOrganizador");
+
+            entity.Property(e => e.EstadoPedido)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.FechaPedido).HasColumnType("date");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.InscripcionOrganizadors)
+                .HasForeignKey(d => d.IdUsuario)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FkInsOrg_IdUsuario");
         });
 
         modelBuilder.Entity<Notificacion>(entity =>

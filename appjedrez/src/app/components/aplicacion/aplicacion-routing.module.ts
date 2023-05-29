@@ -1,6 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AplicacionComponent } from './aplicacion/aplicacion.component';
+import { InscripcionOrgComponent } from './inscripcion-org/inscripcion-org.component';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -16,6 +18,11 @@ const routes: Routes = [
         path: 'game',
         loadChildren: () =>
           import('../game/game.module').then((m) => m.GameModule),
+      },
+      {
+        path: 'organizadores',
+        component: InscripcionOrgComponent,
+        canActivate: [() => inject(AuthGuard).canActivate()],
       },
       {
         path: '',

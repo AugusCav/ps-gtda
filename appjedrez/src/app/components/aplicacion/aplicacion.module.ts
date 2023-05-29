@@ -6,9 +6,10 @@ import { AplicacionRoutingModule } from './aplicacion-routing.module';
 import { TorneoModule } from '../torneo/torneo.module';
 import { NavbarComponent } from '../../shared/shared-module/navbar/navbar.component';
 import { SharedModule } from 'src/app/shared/shared-module/shared.module';
+import { InscripcionOrgComponent } from './inscripcion-org/inscripcion-org.component';
 
 @NgModule({
-  declarations: [AplicacionComponent],
+  declarations: [AplicacionComponent, InscripcionOrgComponent],
   imports: [
     CommonModule,
     AplicacionRoutingModule,

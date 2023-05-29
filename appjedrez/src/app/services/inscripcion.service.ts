@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Inscripcion } from '../models/inscripcion';
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/usuario';
+import { InscripcionOrganizador } from '../models/inscripcion-organizador';
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +65,11 @@ export class InscripcionService {
     return this.http.put<any>(`${this.baseUrl}aprobar`, inscripcion);
   }
 
-  getInscripciones(idUser: string){
-    return this.http.get<any>(`${this.baseUrl}getInscripciones/${idUser}`)
+  getInscripciones(idUser: string) {
+    return this.http.get<any>(`${this.baseUrl}getInscripciones/${idUser}`);
+  }
+
+  inscribirOrg(inscripcion: InscripcionOrganizador) {
+    return this.http.post(`${this.baseUrl}inscribirOrg`, inscripcion);
   }
 }

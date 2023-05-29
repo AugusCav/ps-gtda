@@ -27,6 +27,8 @@ public partial class Usuario
 
     public virtual RolUsuario IdRolUsuarioNavigation { get; set; }
 
+    public virtual ICollection<InscripcionOrganizador> InscripcionOrganizadors { get; } = new List<InscripcionOrganizador>();
+
     public virtual ICollection<Inscripcion> Inscripcions { get; } = new List<Inscripcion>();
 
     public virtual ICollection<Notificacion> Notificacions { get; } = new List<Notificacion>();

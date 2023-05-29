@@ -206,4 +206,82 @@ public class InscripcionController : ControllerBase
 
         return Ok(inscripciones);
     }
+
+    [HttpPost("inscribirOrg")]
+    public async Task<IActionResult> InscribirOrganizador([FromBody] InscripcionOrganizador inscripcionObj)
+    {
+        if (inscripcionObj == null)
+            return BadRequest();
+
+        var inscripto = await _context.Usuarios.FirstOrDefaultAsync(i => i.Id == inscripcionObj.IdUsuario && i.IdRolUsuario == 2);
+
+        var inscripcion = await _context.InscripcionOrganizadors.FirstOrDefaultAsync(i => i.IdUsuario == inscripcionObj.IdUsuario && (i.EstadoPedido == "aprobado" || i.EstadoPedido == "espera"));
+
+        if (inscripto != null)
+            return BadRequest(new { Message = "Ya es organizador" });
+
+        if (inscripcion != null)
+            return BadRequest(new { Message = "Ya hay una inscripción de este usuario" });
+
+        inscripcionObj.EstadoPedido = "espera";
+        inscripcionObj.FechaPedido = DateTime.Today;
+        await _context.InscripcionOrganizadors.AddAsync(inscripcionObj);
+        await _context.SaveChangesAsync();
+        return Ok(new
+        {
+            Message = "Inscripcion Register Success"
+        });
+    }
+
+    [HttpPut("aprobarInscripcionOrg")]
+    public async Task<IActionResult> AprobarInscripcionOrg([FromBody] InscripcionOrganizador inscripcion)
+    {
+        var ins = await _context.InscripcionOrganizadors.FindAsync(inscripcion.Id);
+
+        if (ins == null)
+            return BadRequest(new { Message = "Inscripción no encontrada" });
+
+        ins.EstadoPedido = "aprobado";
+        _context.SaveChanges();
+
+        return Ok(new { Message = "Solicitud aprobada" });
+    }
+
+    [HttpGet("getInscripcionesOrg")]
+    public async Task<ActionResult<IEnumerable<InscripcionOrganizador>>> GetInscripcionesOrg()
+    {
+        var inscripciones = await _context.InscripcionOrganizadors
+            .Include(i => i.IdUsuarioNavigation)
+            .Where(i => i.EstadoPedido == "espera" || i.EstadoPedido == "aprobado")
+            .Select(i => new
+            {
+                Id = i.Id,
+                IdUsuario = i.IdUsuario,
+                EstadoPedido = i.EstadoPedido,
+                FechaPedido = i.FechaPedido,
+                IdUsuarioNavigation = new
+                {
+                    Nombres = i.IdUsuarioNavigation.Nombres,
+                    Apellido = i.IdUsuarioNavigation.Apellido,
+                    NombreUsuario = i.IdUsuarioNavigation.NombreUsuario
+                }
+            })
+            .ToListAsync();
+
+        return Ok(inscripciones);
+    }
+
+    [HttpPut("aprobarOrg")]
+    public async Task<IActionResult> AprobarOrg([FromBody] Usuario usuario)
+    {
+        var org = await _context.Usuarios.FindAsync(usuario.Id);
+
+        if (org == null)
+            return BadRequest(new { Message = "Usuario no encontrado" });
+
+        org.IdRolUsuario = 2;
+        _context.SaveChanges();
+
+        return Ok(new { Message = "Organizador aprobado" });
+    }
 }

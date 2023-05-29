@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/app/guards/auth.guard';
 import { ResumenComponent } from './dash/resumen/resumen.component';
 import { PartidasComponent } from './dash/partidas/partidas.component';
 import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
+import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
       { path: 'resumen', component: ResumenComponent },
       { path: 'partidas', component: PartidasComponent },
       { path: 'configuracion', component: ConfiguracionComponent },
-      { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+      { path: 'config-organizadores', component: ConfigOrganizadoresComponent },
+      { path: '', redirectTo: 'configuracion', pathMatch: 'full' },
     ],
   },
   {

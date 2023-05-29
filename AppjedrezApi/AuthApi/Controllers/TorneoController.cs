@@ -113,7 +113,7 @@ public class TorneoController : ControllerBase
             Descripcion = t.Descripcion,
             Localidad = t.Localidad,
             IdTIpoTorneo = t.IdTipoTorneo,
-            IdOrgnanizador = t.IdOrganizador,
+            IdOrganizador = t.IdOrganizador,
             EloMinimo = t.EloMinimo,
             EloMaximo = t.EloMaximo,
             HoraInicio = t.HoraInicio,

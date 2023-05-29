@@ -194,6 +194,7 @@ export class DetallesTorneoComponent implements OnInit {
     if (this.id !== null) {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
+          console.log(res);
           this.torneo = res;
           if (this.torneo.idOrganizador === this.idUser) {
             this.esOrganizador = true;
