@@ -5,6 +5,8 @@ import { Torneo } from '../models/torneo';
 import { TipoTorneo } from '../models/tipo-torneo';
 import { Ronda } from '../models/ronda';
 import { Partida } from '../models/partida';
+import { Analisis } from '../models/analisis';
+import { Movimiento } from '../models/movimiento';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +66,21 @@ export class TorneoService {
     return this.http.put(`${this.baseUrl}cargarPgn`, {
       pgn: pgn,
       idPartida: idPartida,
+    });
+  }
+
+  getAnalisis(idPartida: string | null) {
+    return this.http.get<Analisis>(`${this.baseUrl}getAnalisis/${idPartida}`);
+  }
+
+  registrarAnalisis(analisis: Analisis) {
+    return this.http.post(`${this.baseUrl}registrarAnalisis`, analisis);
+  }
+
+  registrarMovimientos(movimientos: Movimiento[], idAnalisis: number) {
+    this.http.patch(`${this.baseUrl}RegistrarMovimientos`, {
+      idAnalisis: idAnalisis,
+      movimientos: movimientos,
     });
   }
 }

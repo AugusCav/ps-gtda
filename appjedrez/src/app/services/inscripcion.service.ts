@@ -72,4 +72,20 @@ export class InscripcionService {
   inscribirOrg(inscripcion: InscripcionOrganizador) {
     return this.http.post(`${this.baseUrl}inscribirOrg`, inscripcion);
   }
+
+  aprobarInscripcionOrg(inscripcion: InscripcionOrganizador) {
+    return this.http.put(`${this.baseUrl}aprobarInscripcionOrg`, inscripcion);
+  }
+
+  rechazarInscripcionOrg(inscripcion: InscripcionOrganizador) {
+    return this.http.put(`${this.baseUrl}rechazarInscripcionOrg`, inscripcion);
+  }
+
+  getInscripcionesOrg() {
+    return this.http.get<any>(`${this.baseUrl}getInscripcionesOrg`);
+  }
+
+  aprobarOrg(usuario: Usuario) {
+    return this.http.put(`${this.baseUrl}aprobarOrg`, usuario);
+  }
 }

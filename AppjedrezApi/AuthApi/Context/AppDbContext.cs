@@ -22,6 +22,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<InscripcionOrganizador> InscripcionOrganizadors { get; set; }
 
+    public virtual DbSet<Movimiento> Movimientos { get; set; }
+
     public virtual DbSet<Notificacion> Notificacions { get; set; }
 
     public virtual DbSet<Partidum> Partida { get; set; }
@@ -48,15 +50,11 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("Analisis");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Fecha)
-                .HasColumnType("date")
-                .HasColumnName("fecha");
-            entity.Property(e => e.Partida).HasColumnName("partida");
+            entity.Property(e => e.PromedioEvaluacion).HasColumnType("decimal(10, 2)");
 
-            entity.HasOne(d => d.PartidaNavigation).WithMany(p => p.Analisis)
-                .HasForeignKey(d => d.Partida)
-                .HasConstraintName("FkAnalisis_Partida");
+            entity.HasOne(d => d.IdPartidaNavigation).WithMany(p => p.Analisis)
+                .HasForeignKey(d => d.IdPartida)
+                .HasConstraintName("FkAnalisis_IdPartida");
         });
 
         modelBuilder.Entity<Inscripcion>(entity =>
@@ -81,20 +79,48 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<InscripcionOrganizador>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PkInsOrg_Id");
+            entity.HasKey(e => e.Id).HasName("PkInscripcionOrg_Id");
 
             entity.ToTable("InscripcionOrganizador");
 
             entity.Property(e => e.EstadoPedido)
-                .IsRequired()
-                .HasMaxLength(20)
+                .HasMaxLength(75)
                 .IsUnicode(false);
             entity.Property(e => e.FechaPedido).HasColumnType("date");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.InscripcionOrganizadors)
                 .HasForeignKey(d => d.IdUsuario)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FkInsOrg_IdUsuario");
+                .HasConstraintName("FkInscripcionOrg_IdUsuario");
+        });
+
+        modelBuilder.Entity<Movimiento>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PkMovimiento_Id");
+
+            entity.ToTable("Movimiento");
+
+            entity.Property(e => e.BestMove)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.Color)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.Evaluacion).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.MoveFrom)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.MoveTo)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+            entity.Property(e => e.Pieza)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
+
+            entity.HasOne(d => d.IdAnalisisNavigation).WithMany(p => p.Movimientos)
+                .HasForeignKey(d => d.IdAnalisis)
+                .HasConstraintName("FkMovimiento_IdAnalisis");
         });
 
         modelBuilder.Entity<Notificacion>(entity =>

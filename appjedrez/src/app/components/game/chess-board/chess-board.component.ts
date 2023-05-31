@@ -21,7 +21,6 @@ export class ChessBoardComponent implements OnInit, OnChanges {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.iniciar();
 
     var config = {
       pieceTheme: '../../../../assets/img/chesspieces/wikipedia/{piece}.png',

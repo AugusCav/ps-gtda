@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Chess } from 'chess.js';
+import { Movimiento } from '../models/movimiento';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +14,7 @@ export class GameService {
   private _moves: Array<string> = new Array();
   private _indexMoves: Array<number> = [-1, -1, -1];
   private _idPartida: string | null = '';
+  movimientos: Movimiento[] = [];
 
   public get game() {
     return this._game;
@@ -128,5 +131,22 @@ export class GameService {
 
     this.setIndexMoves(this.moves.length - 2, this.moves.length - 1, -1);
     this.updateStatus();
+  }
+
+  generarMoves(idAnalisis: number) {
+    var currentMoves = this.game.history({ verbose: true });
+
+    currentMoves.forEach((currentMove) => {
+      var move = {
+        idAnalisis: idAnalisis,
+        color: currentMove.color,
+        moveFrom: currentMove.from,
+        moveTo: currentMove.to,
+        pieza: currentMove.piece,
+      } as Movimiento;
+      this.movimientos.push(move);
+    });
+
+    return this.movimientos;
   }
 }

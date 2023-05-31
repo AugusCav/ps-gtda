@@ -1,8 +1,10 @@
+import { Movimiento } from './movimiento';
 import { Partida } from './partida';
 
 export interface Analisis {
   id: number;
-  partida: string;
-  fecha: string;
-  partidaNavigation: Partida;
+  idPartida: string | null;
+  promedioEvaluacion: number;
+  idPartidaNavigation: Partida;
+  movimientos: Movimiento[];
 }

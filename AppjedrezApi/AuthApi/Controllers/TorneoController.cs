@@ -274,6 +274,7 @@ public class TorneoController : ControllerBase
         var partida = await _context.Partida
             .Include(p => p.JugadorBlancasNavigation)
             .Include(p => p.JugadorNegrasNavigation)
+            .Include(p => p.IdRondaNavigation).ThenInclude(r => r.IdTorneoNavigation)
             .Where(p => p.Id == idPartida)
             .Select(p => new
             {
@@ -299,6 +300,14 @@ public class TorneoController : ControllerBase
                     Nombres = p.JugadorNegrasNavigation.Nombres,
                     Apellido = p.JugadorNegrasNavigation.Apellido
                 },
+                IdRondaNavigation = new
+                {
+                    IdTorneo = p.IdRondaNavigation.IdTorneo,
+                    Torneo = new
+                    {
+                        IdOrganizador = p.IdRondaNavigation.IdTorneoNavigation.IdOrganizador
+                    }
+                }
             })
             .FirstOrDefaultAsync();
 
@@ -327,5 +336,59 @@ public class TorneoController : ControllerBase
         {
             Message = "Partida Update Success"
         });
+    }
+
+    [HttpGet("getAnalisis/{idPartida}")]
+    public async Task<ActionResult<Analisi>> GetAnalisis(Guid idPartida)
+    {
+        if (idPartida == null)
+            BadRequest(new { Message = "No IdPartida" });
+
+        var analisis = await _context.Analises
+            .Include(a => a.Movimientos)
+            .Where(a => a.IdPartida == idPartida)
+            .Select(a => new
+            {
+                Id = a.Id,
+                IdPartida = a.IdPartida,
+                PromedioEvaluacion = a.PromedioEvaluacion,
+                Movimientos = a.Movimientos.Select(m => new
+                {
+                    Id = m.Id,
+                    Color = m.Color,
+                    MoveFrom = m.MoveFrom,
+                    MoveTo = m.MoveTo,
+                    Pieza = m.Pieza,
+                    Evaluacion = m.Evaluacion,
+                    BestMove = m.BestMove,
+                })
+            })
+            .FirstOrDefaultAsync();
+
+        if (analisis == null)
+            NotFound(new { Message = "Partida no encontrada" });
+
+        return Ok(analisis);
+    }
+
+    [HttpPost("registrarAnalisis")]
+    public async Task<IActionResult> RegistrarAnalisis([FromBody] Analisi analisisObj)
+    {
+        if (analisisObj == null)
+            return BadRequest();
+
+        var analisis = await _context.Analises.Where(a => a.IdPartida == analisisObj.IdPartida).FirstOrDefaultAsync();
+
+        if (analisis == null)
+        {
+            await _context.Analises.AddAsync(analisisObj);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            return BadRequest(new { Message = "Analisis ya existe" });
+        }
+
+        return Ok(new { Message = "Analisis registrado" });
     }
 }

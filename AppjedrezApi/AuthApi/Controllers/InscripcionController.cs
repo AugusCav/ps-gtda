@@ -247,6 +247,20 @@ public class InscripcionController : ControllerBase
         return Ok(new { Message = "Solicitud aprobada" });
     }
 
+    [HttpPut("rechazarInscripcionOrg")]
+    public async Task<IActionResult> RechazarInscripcionOrg([FromBody] InscripcionOrganizador inscripcion)
+    {
+        var ins = await _context.InscripcionOrganizadors.Where((i) => i.EstadoPedido == "espera" && i.Id == inscripcion.Id).FirstOrDefaultAsync();
+
+        if (ins == null)
+            return BadRequest(new { Message = "Inscripción no encontrada" });
+
+        ins.EstadoPedido = "rechazado";
+        _context.SaveChanges();
+
+        return Ok(new { Message = "Solicitud rechazada" });
+    }
+
     [HttpGet("getInscripcionesOrg")]
     public async Task<ActionResult<IEnumerable<InscripcionOrganizador>>> GetInscripcionesOrg()
     {

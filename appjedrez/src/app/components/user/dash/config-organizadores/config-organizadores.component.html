@@ -10,12 +10,38 @@
       </div>
       <div class="col-md-8">
         <div class="row mx-1 gx-1 gy-1">
-          <div
-            *ngFor="let ins of [1, 23, 46, 46, 757, 2, 35, 35, 3, 53]"
-            class="col-12"
-          >
+          <div class="col-12">
+            <div class="bg-light rounded py-2">
+              <h3>Solicitudes de organizadores</h3>
+            </div>
+          </div>
+          <div *ngFor="let ins of inscripciones" class="col-12">
             <div class="alert alert-secondary" role="alert">
-              
+              <div class="row">
+                <div class="col-8">
+                  {{ ins.idUsuarioNavigation.nombres }}
+                  {{ ins.idUsuarioNavigation.apellido }}
+                </div>
+                <div class="col-1">
+                  <button class="btn btn-primary btn-sm rounded-circle" (click)="irAPerfil(ins.idUsuario)">
+                    <i class="bi bi-caret-right-fill"></i>
+                  </button>
+                </div>
+                <div class="col-1">
+                  <button
+                    class="btn btn-success btn-sm rounded-circle text-light" (click)="aprobarInscripcion(ins)"
+                  >
+                    <i class="bi bi-check"></i>
+                  </button>
+                </div>
+                <div class="col-1">
+                  <button
+                    class="btn btn-danger btn-sm rounded-circle text-light" (click)="rechazarInscripcion(ins)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

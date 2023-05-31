@@ -8,6 +8,7 @@ import { ResumenComponent } from './dash/resumen/resumen.component';
 import { PartidasComponent } from './dash/partidas/partidas.component';
 import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
 import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
+import { PerfilComponent } from './usuario/perfil/perfil.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
       { path: 'config-organizadores', component: ConfigOrganizadoresComponent },
       { path: '', redirectTo: 'configuracion', pathMatch: 'full' },
     ],
+  },
+  {
+    path: 'perfil/:idUsuario',
+    component: PerfilComponent,
+    canActivate: [() => inject(AuthGuard).canActivate()],
   },
   {
     path: '',
