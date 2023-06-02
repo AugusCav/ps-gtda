@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Analisis } from 'src/app/models/analisis';
+import { Movimiento } from 'src/app/models/movimiento';
 import { GameService } from 'src/app/services/game.service';
 import { TorneoService } from 'src/app/services/torneo.service';
 
@@ -15,6 +16,8 @@ export class VerComponent implements OnInit {
   cargado: string = '';
   idPartida: string | null = '';
   analisis: Analisis = {} as Analisis;
+  analisisExiste: boolean = false;
+  analizado: boolean = false;
 
   constructor(
     private gameService: GameService,
@@ -36,25 +39,12 @@ export class VerComponent implements OnInit {
           this.torneoService.getAnalisis(this.idPartida!).subscribe({
             next: (res) => {
               this.analisis = res;
+              this.analisisExiste = true;
+              console.log(this.analisis);
             },
-            error: (err) => {
-              this.toastr.error(err.error.message);
-              var analisis: Analisis = {
-                idPartida: this.idPartida,
-              } as Analisis;
-
-              this.torneoService.registrarAnalisis(analisis).subscribe({
-                next: (res) => {
-                  this.torneoService.getAnalisis(this.idPartida!).subscribe({
-                    next: (res) => {
-                      this.gameService.generarMoves(res.id);
-                    },
-                  });
-                },
-                error: (err) => {
-                  this.toastr.error(err.error.message, 'Error');
-                },
-              });
+            error: (res) => {
+              this.toastr.error('Errror');
+              this.analisisExiste = false;
             },
           });
         }
@@ -67,5 +57,25 @@ export class VerComponent implements OnInit {
 
   moveChange(move: string) {
     this.move = move;
+  }
+
+  analizar() {
+    var analisis: Analisis = {
+      idPartida: this.idPartida,
+    } as Analisis;
+
+    this.torneoService.registrarAnalisis(analisis).subscribe({
+      next: (res) => {
+        var movimientos: Movimiento[] = this.gameService.generarMoves(res);
+        this.torneoService.registrarMovimientos(movimientos, res).subscribe({
+          next: (res) => {
+            this.toastr.success('Movimientos registrados');
+          },
+          error: (err) => {
+            this.toastr.error(err.error.message, 'Error');
+          },
+        });
+      },
+    });
   }
 }

@@ -13,6 +13,7 @@ import { Movimiento } from '../models/movimiento';
 })
 export class TorneoService {
   private baseUrl: string = 'https://localhost:7274/api/Torneo/';
+  private chessUrl: string = 'https://localhost:7274/api/Chess/';
   torneoId: string = '';
   partidas: Partida[] = [];
   idPartida: string | null = '';
@@ -74,11 +75,11 @@ export class TorneoService {
   }
 
   registrarAnalisis(analisis: Analisis) {
-    return this.http.post(`${this.baseUrl}registrarAnalisis`, analisis);
+    return this.http.post<number>(`${this.baseUrl}registrarAnalisis`, analisis);
   }
 
   registrarMovimientos(movimientos: Movimiento[], idAnalisis: number) {
-    this.http.patch(`${this.baseUrl}RegistrarMovimientos`, {
+    return this.http.post(`${this.chessUrl}RegistrarMovimientos`, {
       idAnalisis: idAnalisis,
       movimientos: movimientos,
     });

@@ -311,6 +311,9 @@ public class TorneoController : ControllerBase
             })
             .FirstOrDefaultAsync();
 
+        if (partida == null)
+            BadRequest(new { Message = "Partida no encontrada" });
+
         return Ok(partida);
     }
 
@@ -372,7 +375,7 @@ public class TorneoController : ControllerBase
     }
 
     [HttpPost("registrarAnalisis")]
-    public async Task<IActionResult> RegistrarAnalisis([FromBody] Analisi analisisObj)
+    public async Task<ActionResult<int>> RegistrarAnalisis([FromBody] Analisi analisisObj)
     {
         if (analisisObj == null)
             return BadRequest();
@@ -381,14 +384,17 @@ public class TorneoController : ControllerBase
 
         if (analisis == null)
         {
-            await _context.Analises.AddAsync(analisisObj);
+            analisis = analisisObj;
+            await _context.Analises.AddAsync(analisis);
             await _context.SaveChangesAsync();
+
+
         }
         else
         {
             return BadRequest(new { Message = "Analisis ya existe" });
         }
 
-        return Ok(new { Message = "Analisis registrado" });
+        return Ok(analisis.Id);
     }
 }
