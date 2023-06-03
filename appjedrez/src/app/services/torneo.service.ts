@@ -79,7 +79,7 @@ export class TorneoService {
   }
 
   registrarMovimientos(movimientos: Movimiento[], idAnalisis: number) {
-    return this.http.post(`${this.chessUrl}RegistrarMovimientos`, {
+    return this.http.patch(`${this.chessUrl}RegistrarMovimientos`, {
       idAnalisis: idAnalisis,
       movimientos: movimientos,
     });

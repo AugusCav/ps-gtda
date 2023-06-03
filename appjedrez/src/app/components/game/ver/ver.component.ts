@@ -43,7 +43,6 @@ export class VerComponent implements OnInit {
               console.log(this.analisis);
             },
             error: (res) => {
-              this.toastr.error('Errror');
               this.analisisExiste = false;
             },
           });
@@ -66,15 +65,18 @@ export class VerComponent implements OnInit {
 
     this.torneoService.registrarAnalisis(analisis).subscribe({
       next: (res) => {
+        console.log(res);
         var movimientos: Movimiento[] = this.gameService.generarMoves(res);
-        this.torneoService.registrarMovimientos(movimientos, res).subscribe({
-          next: (res) => {
-            this.toastr.success('Movimientos registrados');
-          },
-          error: (err) => {
-            this.toastr.error(err.error.message, 'Error');
-          },
-        });
+        console.log(movimientos);
+        // this.torneoService.registrarMovimientos(movimientos, res).subscribe({
+        //   next: (res) => {
+        //     this.toastr.success('Movimientos registrados');
+        //   },
+        //   error: (err) => {
+        //     this.toastr.error(err.error.message, 'Error');
+        //   },
+        // });
+        
       },
     });
   }

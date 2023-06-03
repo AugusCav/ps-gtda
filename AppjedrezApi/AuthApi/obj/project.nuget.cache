@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UnrL21uZ49pmhcIMx3d7WWhoA9z6rT+I36QA3SYQ6HUiKDvJzEa7I9/TQPwEFs0qsojPPsExEAaFbR9BY9v74A==",
+  "dgSpecHash": "sAUwlxnJIiFifsNa7COBnHFHDoUW17x11iMA3lRaqQoJmtnLvuMwXnquYotBqzY2uIC6qn1XNQeDOvSoXtFyJA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+  "projectFilePath": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\larap\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\larap\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

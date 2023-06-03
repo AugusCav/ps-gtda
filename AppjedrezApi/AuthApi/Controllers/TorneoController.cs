@@ -365,11 +365,13 @@ public class TorneoController : ControllerBase
                     Evaluacion = m.Evaluacion,
                     BestMove = m.BestMove,
                 })
+
             })
             .FirstOrDefaultAsync();
 
         if (analisis == null)
-            NotFound(new { Message = "Partida no encontrada" });
+            return NotFound();
+
 
         return Ok(analisis);
     }

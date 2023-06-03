@@ -7,7 +7,7 @@ public class Chess
 {
     private string stockfishPath = "Engine/stockfish-windows-2022-x86-64-avx2.exe";
 
-    public async Task<List<Movimiento>> AnalizarMovimientos(ICollection<Movimiento> moves)
+    public async Task<List<Movimiento>> AnalizarMovimientos(List<Movimiento> moves)
     {
         List<Movimiento> newMoves = new List<Movimiento>();
         string bestMove = "e2e4";
@@ -19,9 +19,15 @@ public class Chess
         {
             newMoves.Add(move);
             newMoves[i].BestMove = bestMove;
-            moveString += moveString + " " + move.MoveFrom + move.MoveTo;
+            moveString += " " + move.MoveFrom + move.MoveTo;
 
-            (eval, bestMove) = await EvaluarMovimientos(moveString);
+            bestMove = await EncontrarBestMove(moveString);
+
+            Console.WriteLine(bestMove);
+
+            eval = await EvaluarPosicion(moveString);
+
+            Console.WriteLine(eval);
 
             newMoves[i].Evaluacion = eval;
 
@@ -30,7 +36,7 @@ public class Chess
 
         return newMoves;
     }
-    public async Task<(decimal, string)> EvaluarMovimientos(string moveString)
+    public async Task<string> EncontrarBestMove(string moveString)
     {
         using (var stockfishProcess = new Process())
         {
@@ -44,22 +50,39 @@ public class Chess
             await SendCommandAsync(stockfishProcess.StandardInput, $"position startpos {moveString}");
             await SendCommandAsync(stockfishProcess.StandardInput, "go depth 10");
 
-            await Task.Delay(500);
-
-            string bestMove = GetBestMove(stockfishProcess.StandardOutput);
-
-            await SendCommandAsync(stockfishProcess.StandardInput, "eval");
-
-            await Task.Delay(500);
-
-            decimal eval = GetEval(stockfishProcess.StandardOutput);
-
-            if (!stockfishProcess.WaitForExit(500))
+            if (!stockfishProcess.WaitForExit(200))
             {
                 stockfishProcess.Kill();
             }
 
-            return (eval, bestMove);
+            string bestMove = GetBestMove(stockfishProcess.StandardOutput);
+
+            return bestMove;
+        }
+    }
+
+    public async Task<decimal> EvaluarPosicion(string moveString)
+    {
+        using (var stockfishProcess = new Process())
+        {
+            stockfishProcess.StartInfo.FileName = stockfishPath;
+            stockfishProcess.StartInfo.UseShellExecute = false;
+            stockfishProcess.StartInfo.RedirectStandardInput = true;
+            stockfishProcess.StartInfo.RedirectStandardOutput = true;
+
+            stockfishProcess.Start();
+
+            await SendCommandAsync(stockfishProcess.StandardInput, $"position startpos {moveString}");
+            await SendCommandAsync(stockfishProcess.StandardInput, "eval");
+
+            if (!stockfishProcess.WaitForExit(200))
+            {
+                stockfishProcess.Kill();
+            }
+
+            decimal eval = GetEval(stockfishProcess.StandardOutput);
+
+            return eval;
         }
     }
 

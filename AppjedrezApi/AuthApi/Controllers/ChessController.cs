@@ -17,7 +17,7 @@ public class ChessController : ControllerBase
         _context = context;
     }
 
-    [HttpPost("RegistrarMovimientos")]
+    [HttpPatch("RegistrarMovimientos")]
     public async Task<IActionResult> RegistrarMovimientos([FromBody] MovimientosRequest movimientosRequest)
     {
         if (movimientosRequest == null || movimientosRequest.Movimientos == null)
@@ -36,7 +36,7 @@ public class ChessController : ControllerBase
                 var analisis = _context.Analises.FirstOrDefault(a => a.Id == movimientos.IdAnalisis);
 
                 if (analisis == null)
-                    throw new Exception();
+                    throw new Exception("No se encuentra el analisis");
 
                 decimal? evaluacionTotal = 0;
                 var i = 0;
