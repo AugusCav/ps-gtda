@@ -1,37 +1,6 @@
-<div class="container-fluid py-2">
-  <div class="container px-5">
-    <div class="row">
-      <div class="col-md-2">
-        <button
-          class="btn btn-info text-light w-100"
-          (click)="analizar()"
-          *ngIf="!analisisExiste"
-        >
-          Analizar
-        </button>
-      </div>
-      <div class="col-md-10" *ngIf="analizado">
-        <div class="alert alert-info" role="alert">
-          El análisis puede tardar algunos minutos, podés volver más tarde para
-          ver si está listo.
-        </div>
-      </div>
-    </div>
-  </div>
+<div *ngIf="pgn == ''">
+  <app-pgn-viewer></app-pgn-viewer>
 </div>
-<div class="container-fluid py-4">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div *ngIf="pgn != ''" class="col-md-4 bg-dark">
-        <app-chess-board [cargado]="cargado" [move]="move"></app-chess-board>
-      </div>
-      <div *ngIf="pgn == ''" class="col-md-6">
-        <app-pgn-viewer></app-pgn-viewer>
-      </div>
-    </div>
-    <app-chess-game
-      *ngIf="pgn != ''"
-      (moveChange)="moveChange($event)"
-    ></app-chess-game>
-  </div>
+<div *ngIf="pgn != ''">
+  <app-chess-game></app-chess-game>
 </div>

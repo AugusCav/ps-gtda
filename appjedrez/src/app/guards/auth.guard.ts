@@ -43,7 +43,7 @@ export class AuthGuard {
         let roleFromToken = this.auth.getRoleFromToken();
         this.role = val || roleFromToken;
       });
-      console.log(this.role);
+
       if (this.role == 'Organizador') {
         return true;
       } else {

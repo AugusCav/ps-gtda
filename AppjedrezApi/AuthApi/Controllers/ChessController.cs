@@ -47,7 +47,7 @@ public class ChessController : ControllerBase
                 }
 
                 decimal? promedioEval = evaluacionTotal / i;
-
+                analisis.PromedioEvaluacion = promedioEval;
                 await _context.Movimientos.AddRangeAsync(nuevosMovimientos);
                 await _context.SaveChangesAsync();
                 transaction.Commit();

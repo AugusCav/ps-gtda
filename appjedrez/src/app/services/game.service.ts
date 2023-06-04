@@ -6,47 +6,19 @@ import { Movimiento } from '../models/movimiento';
   providedIn: 'root',
 })
 export class GameService {
-  private _game: Chess = {} as Chess;
-  private _status: string = '';
-  private _fen: string = '';
-  private _pgn: string = '';
-  private _moves: Array<string> = new Array();
-  private _indexMoves: Array<number> = [-1, -1, -1];
-  private _idPartida: string | null = '';
+  game: Chess = {} as Chess;
+  status: string = '';
+  fen: string = '';
+  pgn: string = '';
+  moves: Array<string> = new Array();
+  indexMoves: Array<number> = [-1, -1, -1];
+  idPartida: string | null = '';
   movimientos: any[] = [];
-
-  public get game() {
-    return this._game;
-  }
-  public get status() {
-    return this._status;
-  }
-  public get fen() {
-    return this._fen;
-  }
-  public get pgn() {
-    return this._pgn;
-  }
-  public set pgn(pgn: string) {
-    this._pgn = pgn;
-  }
-  public get moves() {
-    return this._moves;
-  }
-  public get indexMoves() {
-    return this._indexMoves;
-  }
-  public get idPartida() {
-    return this._idPartida;
-  }
-  public set idPartida(id: string | null) {
-    this._idPartida = id;
-  }
 
   constructor() {}
 
   iniciar() {
-    this._game = new Chess();
+    this.game = new Chess();
   }
 
   updateStatus() {
@@ -77,8 +49,8 @@ export class GameService {
       }
     }
 
-    this._status = status;
-    this._fen = this.game.fen();
+    this.status = status;
+    this.fen = this.game.fen();
   }
 
   position() {
@@ -122,6 +94,7 @@ export class GameService {
   cargarPgn(pgn: string) {
     this.game.loadPgn(pgn);
     this.movimientos = this.game.history({ verbose: true });
+    
     do {
       this.moves.push(this.game.fen());
     } while (this.game.undo() != null);

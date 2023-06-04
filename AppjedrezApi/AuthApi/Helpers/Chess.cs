@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using AuthApi.Models;
 
 namespace AuthApi.Helpers;
@@ -128,7 +129,7 @@ public class Chess
             {
                 string move = lastLine.Substring(startIndex, endIndex - startIndex).Trim();
                 decimal result;
-                Decimal.TryParse(move, out result);
+                Decimal.TryParse(move, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result);
                 return result;
             }
         }

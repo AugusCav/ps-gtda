@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {}
+    "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {
+    "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "projectUniqueName": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
         "projectName": "AuthApi",
-        "projectPath": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+        "projectPath": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
         "packagesPath": "C:\\Users\\larap\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
+        "outputPath": "c:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\larap\\AppData\\Roaming\\NuGet\\NuGet.Config"
