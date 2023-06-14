@@ -15,6 +15,8 @@ public partial class Inscripcion
 
     public string Estado { get; set; }
 
+    public DateTime? Fecha { get; set; }
+
     public virtual Usuario IdParticipanteNavigation { get; set; }
 
     public virtual Torneo IdTorneoNavigation { get; set; }

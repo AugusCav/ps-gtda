@@ -70,6 +70,7 @@ public class InscripcionController : ControllerBase
                 IdTorneo = i.IdTorneo,
                 IdParticipante = i.IdParticipante,
                 HoraInscripcion = i.HoraInscripcion,
+                Estado = i.Estado,
                 Participante = new
                 {
                     Id = i.IdParticipanteNavigation.Id,
@@ -152,12 +153,15 @@ public class InscripcionController : ControllerBase
     [HttpGet("inscripto")]
     public async Task<ActionResult> IsInscripto([FromQuery] Guid idParticipante, [FromQuery] Guid idTorneo)
     {
-        var inscripto = await _context.Inscripcions
+        var inscripto = true;
+        var incsripcion = await _context.Inscripcions
             .FirstOrDefaultAsync(i => i.IdParticipante == idParticipante && i.IdTorneo == idTorneo);
-        if (inscripto == null)
-            return NotFound(new { Message = "Participante no encontrado" });
 
-        return Ok(new { Inscripto = true });
+        if (incsripcion == null)
+            inscripto = false;
+
+
+        return Ok(new { Inscripto = inscripto });
     }
 
     [HttpPut("aprobar")]
@@ -198,7 +202,12 @@ public class InscripcionController : ControllerBase
                     TipoTorneo = i.IdTorneoNavigation.IdTipoTorneoNavigation.Nombre,
                     CantidadParticipantes = i.IdTorneoNavigation.CantidadParticipantes,
                     IdOrganizador = i.IdTorneoNavigation.IdOrganizador,
-                    Organizador = i.IdTorneoNavigation.IdOrganizadorNavigation.NombreUsuario
+                    IdOrganizadorNavigation = new
+                    {
+                        Nombres = i.IdTorneoNavigation.IdOrganizadorNavigation.Nombres,
+                        Apellido = i.IdTorneoNavigation.IdOrganizadorNavigation.Apellido,
+                        NombreUsuario = i.IdTorneoNavigation.IdOrganizadorNavigation.NombreUsuario
+                    }
 
                 }
             })

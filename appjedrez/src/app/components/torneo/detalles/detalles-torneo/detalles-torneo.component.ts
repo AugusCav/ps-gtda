@@ -168,6 +168,8 @@ export class DetallesTorneoComponent implements OnInit {
   idUser: string = '';
   usuario: Usuario = {} as Usuario;
   inscripto: boolean = false;
+  estado: string = '';
+  eloUsuario: number | null = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -194,13 +196,19 @@ export class DetallesTorneoComponent implements OnInit {
     if (this.id !== null) {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
-          console.log(res);
           this.torneo = res;
+          this.estado = res.estado;
           if (this.torneo.idOrganizador === this.idUser) {
             this.esOrganizador = true;
           } else {
             this.esOrganizador = false;
           }
+
+          this.auth.getById(this.idUser).subscribe({
+            next: (res) => {
+              this.eloUsuario = res.elo;
+            },
+          });
         },
         error: () => {
           alert('Error al intentar cargar el torneo');
@@ -209,8 +217,9 @@ export class DetallesTorneoComponent implements OnInit {
 
       this.inscripcionService.isInscripto(this.idUser, this.id).subscribe({
         next: (res) => {
-          this.inscripto = res;
+          this.inscripto = res.inscripto;
         },
+        error: (res) => {},
       });
     }
   }
@@ -237,31 +246,84 @@ export class DetallesTorneoComponent implements OnInit {
   }
 
   inscribirse() {
-    var inscripcion: Inscripcion = {} as Inscripcion;
-    inscripcion.idParticipante = this.idUser;
-    inscripcion.horaInscripcion = this.datePipe.transform(
-      new Date(),
-      'HH:mm:ss'
-    )!;
-    inscripcion.idTorneo = this.id!;
-    this.inscripcionService.registerInscripcion(inscripcion).subscribe({
-      next: () => {
-        var notificacion = {
-          usuarioId: this.torneo.idOrganizador,
-          mensaje: 'Nueva solicitud de inscripción',
-        } as Notificacion;
-        this.notificacionService.register(notificacion).subscribe({
-          next: (res) => {
-            window.location.reload();
-            this.toastr.success('Inscripción realizada con éxito');
-          },
-          error: (err) => {
-            this.toastr.error(err.error.message, 'Error');
-          },
-        });
+    if (this.checkElo(this.idUser)) {
+      var inscripcion: Inscripcion = {} as Inscripcion;
+      inscripcion.idParticipante = this.idUser;
+      inscripcion.horaInscripcion = this.datePipe.transform(
+        new Date(),
+        'HH:mm:ss'
+      )!;
+      inscripcion.idTorneo = this.id!;
+
+      this.inscripcionService.registerInscripcion(inscripcion).subscribe({
+        next: () => {
+          var notificacion = {
+            usuarioId: this.torneo.idOrganizador,
+            mensaje: 'Nueva solicitud de inscripción',
+          } as Notificacion;
+          this.notificacionService.register(notificacion).subscribe({
+            next: (res) => {
+              window.location.reload();
+              this.toastr.success('Inscripción realizada con éxito');
+            },
+            error: (err) => {
+              this.toastr.error(err.error.message, 'Error');
+            },
+          });
+        },
+        error: () => {
+          this.toastr.error('Ocurrió un error inesperado');
+        },
+      });
+    }
+  }
+
+  checkElo(idUser: string) {
+    if (this.eloUsuario != 0 && this.eloUsuario != null) {
+      if (
+        this.eloUsuario >= this.torneo.eloMinimo &&
+        this.eloUsuario <= this.torneo.eloMaximo
+      ) {
+        return true;
+      } else {
+        this.toastr.warning('Elo fuera de los límites del torneo');
+        return false;
+      }
+    } else {
+      this.toastr.warning('Elo no definido');
+      return false;
+    }
+  }
+
+  iniciar() {
+    this.inscripcionService.getByTorneo(this.id).subscribe({
+      next: (res) => {
+        console.log(res);
+        if (res.length > 0) {
+          if (res.some((inscripto) => inscripto.estado == 'aprobado')) {
+            var torneo = { id: this.id } as Torneo;
+            this.torneoService.empezarTorneo(torneo).subscribe({
+              next: () => {
+                window.location.reload();
+              },
+            });
+          } else {
+            this.toastr.warning(
+              'El torneo debe tener al menos un participante'
+            );
+          }
+        } else {
+          this.toastr.warning('El torneo debe tener al menos un participante');
+        }
       },
-      error: () => {
-        this.toastr.error('Ocurrió un error inesperado');
+    });
+  }
+
+  terminar() {
+    var torneo = { id: this.id } as Torneo;
+    this.torneoService.terminarTorneo(torneo).subscribe({
+      next: () => {
+        window.location.reload();
       },
     });
   }

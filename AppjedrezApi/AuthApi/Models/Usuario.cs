@@ -25,6 +25,8 @@ public partial class Usuario
 
     public byte[] FotoPerfil { get; set; }
 
+    public int? Elo { get; set; }
+
     public virtual RolUsuario IdRolUsuarioNavigation { get; set; }
 
     public virtual ICollection<InscripcionOrganizador> InscripcionOrganizadors { get; } = new List<InscripcionOrganizador>();

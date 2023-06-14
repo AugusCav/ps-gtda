@@ -21,5 +21,7 @@ public partial class Movimiento
 
     public int? IdAnalisis { get; set; }
 
+    public string Fen { get; set; }
+
     public virtual Analisi IdAnalisisNavigation { get; set; }
 }

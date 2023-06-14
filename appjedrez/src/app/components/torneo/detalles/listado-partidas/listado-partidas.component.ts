@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Partida } from 'src/app/models/partida';
 import { TorneoService } from 'src/app/services/torneo.service';
 
@@ -10,9 +11,13 @@ import { TorneoService } from 'src/app/services/torneo.service';
 export class ListadoPartidasComponent implements OnInit {
   partidas: Partida[] = [];
 
-  constructor(private torneoService: TorneoService) {}
+  constructor(private torneoService: TorneoService, private router: Router) {}
 
   ngOnInit(): void {
     this.partidas = this.torneoService.partidas;
+  }
+
+  irPartida(idPartida: string) {
+    this.router.navigate(['/app/game', idPartida]);
   }
 }

@@ -14,3 +14,12 @@
 .toast-warning {
   background-color: #febc5d !important;
 }
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+.link-light:hover {
+  cursor: pointer;
+}

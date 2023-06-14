@@ -17,7 +17,8 @@ export interface Torneo {
   eloMaximo: number;
   horaInicio: string;
   borrado: boolean;
-  organizador: Usuario;
+  estado: string;
+  idOrganizadorNavigation: Usuario;
   tipoTorneo: TipoTorneo;
   inscripciones: Inscripcion[];
   rondas: Ronda[];

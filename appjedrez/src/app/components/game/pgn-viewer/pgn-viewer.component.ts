@@ -18,6 +18,7 @@ export class PgnViewerComponent implements OnInit {
   pgn: string = '';
   esOrganizador: boolean = false;
   idUser: string = '';
+  ganador: number | null = null;
 
   constructor(
     private torneoService: TorneoService,
@@ -48,15 +49,25 @@ export class PgnViewerComponent implements OnInit {
   }
 
   cargarPgn() {
-    this.torneoService.cargarPgn(this.idPartida, this.pgn).subscribe({
-      next: (res) => {
-        this.cargarPgnFlag = true;
-        window.location.reload();
-      },
-      error: (err) => {
-        this.toastr.error(err.error.message, 'Error');
-      },
-    });
+    if (this.pgn != null && this.ganador != null) {
+      if (this.ganador >= -1 && this.ganador <= 1) {
+        this.torneoService
+          .cargarPgn(this.idPartida, this.pgn, this.ganador)
+          .subscribe({
+            next: (res) => {
+              this.cargarPgnFlag = true;
+              window.location.reload();
+            },
+            error: (err) => {
+              this.toastr.error(err.error.message, 'Error');
+            },
+          });
+      } else {
+        this.toastr.error('Escoja un ganador válido');
+      }
+    } else {
+      this.toastr.error('Pgn o ganador inválidos');
+    }
   }
 
   abrirModal() {

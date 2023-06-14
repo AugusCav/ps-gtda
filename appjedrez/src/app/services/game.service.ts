@@ -10,7 +10,6 @@ export class GameService {
   status: string = '';
   fen: string = '';
   pgn: string = '';
-  moves: Array<string> = new Array();
   indexMoves: Array<number> = [-1, -1, -1];
   idPartida: string | null = '';
   movimientos: any[] = [];
@@ -24,9 +23,9 @@ export class GameService {
   updateStatus() {
     var status = '';
 
-    var moveColor = 'White';
+    var moveColor = 'Blancas';
     if (this.game.turn() === 'b') {
-      moveColor = 'Black';
+      moveColor = 'Negras';
     }
 
     // checkmate?
@@ -41,7 +40,7 @@ export class GameService {
 
     // game still on
     else {
-      status = moveColor + ' to move';
+      status = 'Mueven ' + moveColor;
 
       // check?
       if (this.game.inCheck()) {
@@ -59,8 +58,8 @@ export class GameService {
 
   getNextMove() {
     var nextMove = null;
-    if (this.moves[this.indexMoves[2]] !== undefined) {
-      nextMove = this.moves[this.indexMoves[2]];
+    if (this.movimientos[this.indexMoves[2]] !== undefined) {
+      nextMove = this.movimientos[this.indexMoves[2]].fen;
       this.setIndexMoves(
         this.indexMoves[1],
         this.indexMoves[2],
@@ -73,8 +72,8 @@ export class GameService {
 
   getPrevMove() {
     var prevMove = null;
-    if (this.moves[this.indexMoves[0]] !== undefined) {
-      prevMove = this.moves[this.indexMoves[0]];
+    if (this.movimientos[this.indexMoves[0]] !== undefined) {
+      prevMove = this.movimientos[this.indexMoves[0]].fen;
       this.setIndexMoves(
         this.indexMoves[0] - 1,
         this.indexMoves[0],
@@ -94,14 +93,14 @@ export class GameService {
   cargarPgn(pgn: string) {
     this.game.loadPgn(pgn);
     this.movimientos = this.game.history({ verbose: true });
-    
-    do {
-      this.moves.push(this.game.fen());
-    } while (this.game.undo() != null);
-    this.moves.reverse();
-    this.game.load(this.moves[this.moves.length - 1]);
 
-    this.setIndexMoves(this.moves.length - 2, this.moves.length - 1, -1);
+    this.game.load(this.movimientos[this.movimientos.length - 1].fen);
+
+    this.setIndexMoves(
+      this.movimientos.length - 2,
+      this.movimientos.length - 1,
+      -1
+    );
     this.updateStatus();
   }
 
@@ -115,10 +114,21 @@ export class GameService {
         moveFrom: currentMove.from,
         moveTo: currentMove.to,
         pieza: currentMove.piece,
+        fen: currentMove.fen,
       } as Movimiento;
       currentMoves.push(move);
     });
 
     return currentMoves;
+  }
+
+  mover(n: number) {
+    var currentMove = this.movimientos[n].fen;
+    console.log(currentMove);
+    var prevMove = n - 1;
+    var nextMove = n + 1;
+    this.setIndexMoves(prevMove, n, nextMove);
+    this.game.load(currentMove);
+    this.updateStatus();
   }
 }

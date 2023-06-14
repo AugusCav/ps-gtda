@@ -7,6 +7,8 @@ import { Ronda } from '../models/ronda';
 import { Partida } from '../models/partida';
 import { Analisis } from '../models/analisis';
 import { Movimiento } from '../models/movimiento';
+import { TorneoReportResponse } from '../models/responses/torneoReportResponse';
+import { PartidaReportResponse } from '../models/responses/partidaReportResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -63,10 +65,11 @@ export class TorneoService {
     return this.http.get<Partida>(`${this.baseUrl}getPartida/${idPartida}`);
   }
 
-  cargarPgn(idPartida: string | null, pgn: string) {
+  cargarPgn(idPartida: string | null, pgn: string, resultado: number) {
     return this.http.put(`${this.baseUrl}cargarPgn`, {
       pgn: pgn,
       idPartida: idPartida,
+      resultado: resultado,
     });
   }
 
@@ -83,5 +86,25 @@ export class TorneoService {
       idAnalisis: idAnalisis,
       movimientos: movimientos,
     });
+  }
+
+  empezarTorneo(torneo: Torneo) {
+    return this.http.put(`${this.baseUrl}empezar`, torneo);
+  }
+
+  terminarTorneo(torneo: Torneo) {
+    return this.http.put(`${this.baseUrl}terminar`, torneo);
+  }
+
+  reporteTorneoUser(idUser: string) {
+    return this.http.get<TorneoReportResponse>(
+      `${this.baseUrl}reporteTorneoUser/${idUser}`
+    );
+  }
+
+  reportePartidasUser(idUser: string) {
+    return this.http.get<PartidaReportResponse>(
+      `${this.baseUrl}reportePartidasUser/${idUser}`
+    );
   }
 }

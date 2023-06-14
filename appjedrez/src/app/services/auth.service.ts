@@ -63,4 +63,8 @@ export class AuthService {
   getIdFromToken() {
     if (this.userPayload) return this.userPayload.nameid;
   }
+
+  getById(idUser: string) {
+    return this.http.get<Usuario>(`${this.baseUrl}${idUser}`);
+  }
 }

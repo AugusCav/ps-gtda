@@ -13,6 +13,7 @@ export interface Usuario {
   telefono: string;
   idRolUsuario: number;
   token: string;
+  elo: number;
   rolUsuario: RolUsuario;
   inscripciones: Inscripcion[];
   notificaciones: Notification[];

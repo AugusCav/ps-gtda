@@ -10,4 +10,5 @@ export interface Movimiento {
   bestMove: string;
   idAnalisis: number;
   idAnalisisNavigation: Analisis[];
+  fen: string;
 }

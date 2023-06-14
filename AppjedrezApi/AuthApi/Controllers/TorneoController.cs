@@ -1,5 +1,8 @@
 using AuthApi.Context;
+using AuthApi.Helpers;
 using AuthApi.Models;
+using AuthApi.Request;
+using AuthApi.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +18,8 @@ public class TorneoController : ControllerBase
         _context = dbContext;
     }
 
+    // ENDPOINTS DE TORNEO
+    // Registrar un torneo
     [HttpPost("registrar")]
     public async Task<IActionResult> RegisterTorneo([FromBody] Torneo torneoObj)
     {
@@ -22,11 +27,13 @@ public class TorneoController : ControllerBase
             return BadRequest();
 
         torneoObj.Id = Guid.NewGuid();
+        torneoObj.Estado = "espera";
         await _context.Torneos.AddAsync(torneoObj);
         await _context.SaveChangesAsync();
         return Ok(new { Message = "Torneo Register Success" });
     }
 
+    // Actualizar un torneo
     [HttpPut("actualizar")]
     public async Task<IActionResult> ActualizarTorneo([FromBody] Torneo torneoObj)
     {
@@ -56,6 +63,7 @@ public class TorneoController : ControllerBase
         });
     }
 
+    // Eliminar un torneo
     [HttpPut("eliminar")]
     public async Task<IActionResult> EliminarTorneo([FromBody] Torneo torneoObj)
     {
@@ -68,6 +76,7 @@ public class TorneoController : ControllerBase
             return BadRequest();
 
         torneo.Borrado = true;
+        torneo.Estado = "eliminado";
         _context.SaveChanges();
         return Ok(new
         {
@@ -75,12 +84,78 @@ public class TorneoController : ControllerBase
         });
     }
 
+    // Cambiar estado de torneo cuando empiece
+    [HttpPut("empezar")]
+    public async Task<IActionResult> EmpezarTorneo([FromBody] Torneo torneoObj)
+    {
+        if (torneoObj == null)
+            return BadRequest();
+
+        var torneo = await _context.Torneos
+            .FindAsync(torneoObj.Id);
+
+        if (torneo == null)
+            return BadRequest();
+
+        var inscripciones = await _context.Inscripcions.Include(i => i.IdParticipanteNavigation)
+            .Where(i => i.IdTorneo == torneo.Id)
+            .Select(i => new
+            {
+                IdParticipanteNavigation = new
+                {
+                    Elo = i.IdParticipanteNavigation.Elo
+                }
+            }
+            ).ToListAsync();
+
+
+        int? promedioElo = 0;
+        if (inscripciones != null)
+        {
+            int? sumaElo = 0;
+            foreach (var inscripcion in inscripciones)
+            {
+                sumaElo += inscripcion.IdParticipanteNavigation.Elo;
+            }
+            promedioElo = sumaElo / inscripciones.Count;
+        }
+
+        torneo.EloPromedio = promedioElo;
+        torneo.Estado = "empezado";
+        _context.SaveChanges();
+        return Ok(new
+        {
+            Message = "Torneo Estado Updated"
+        });
+    }
+
+    // Cambiar estado de un torneo cuando termine
+    [HttpPut("terminar")]
+    public async Task<IActionResult> TerminarTorneo([FromBody] Torneo torneoObj)
+    {
+        if (torneoObj == null)
+            return BadRequest();
+
+        var torneo = await _context.Torneos.FindAsync(torneoObj.Id);
+
+        if (torneo == null)
+            return BadRequest();
+
+        torneo.Estado = "terminado";
+        _context.SaveChanges();
+        return Ok(new
+        {
+            Message = "Torneo Estado Updated"
+        });
+    }
+
+    // Devolver todos los torneos
     [HttpGet("get")]
     public async Task<ActionResult<IEnumerable<Torneo>>> GetAllTorneos()
     {
         var torneos = await _context.Torneos
             .Include(t => t.IdTipoTorneoNavigation)
-            .Where(t => t.Borrado != true)
+            .Where(t => t.Borrado != true && t.Estado == "espera")
             .Select(t => new
             {
                 Id = t.Id,
@@ -97,6 +172,7 @@ public class TorneoController : ControllerBase
         return Ok(torneos);
     }
 
+    // Devolver un torneo por ID
     [HttpGet("{id}")]
     public async Task<ActionResult<Torneo>> GetTorneo(Guid id)
     {
@@ -120,7 +196,8 @@ public class TorneoController : ControllerBase
             Borrado = t.Borrado,
             CantidadParticipantes = t.CantidadParticipantes,
             Portada = t.Portada,
-            Organizador = new
+            Estado = t.Estado,
+            IdOrganizadorNavigation = new
             {
                 Nombres = t.IdOrganizadorNavigation.Nombres,
                 Apellido = t.IdOrganizadorNavigation.Apellido,
@@ -139,6 +216,7 @@ public class TorneoController : ControllerBase
         return Ok(torneo);
     }
 
+    // Devolver los tipos de torneos existentes
     [HttpGet("getTipos")]
     public async Task<ActionResult<IEnumerable<Torneo>>> GetAllTipos()
     {
@@ -148,6 +226,7 @@ public class TorneoController : ControllerBase
         return Ok(tipos);
     }
 
+    // Eliminar un torneo por completo (Ver antes el eliminado lógico)
     [HttpDelete("delete/{id}")]
     public async Task<ActionResult> DeleteTorneo(Guid id)
     {
@@ -162,6 +241,8 @@ public class TorneoController : ControllerBase
         return Ok(result);
     }
 
+    // ENDPOINTS DE RONDAS Y PARTIDAS
+    // Devolver todas las rondas de un torneo
     [HttpGet("getRondas/{idTorneo}")]
     public async Task<ActionResult<IEnumerable<Rondum>>> GetRondas(Guid idTorneo)
     {
@@ -194,12 +275,7 @@ public class TorneoController : ControllerBase
         return Ok(rondas);
     }
 
-    public class RegisterPartidasRequest
-    {
-        public Rondum RondaObj { get; set; }
-        public List<Partidum> Partidas { get; set; }
-    }
-
+    // Registrar las partidas de un torneo junto con su ronda
     [HttpPost("registerPartidas")]
     public async Task<IActionResult> RegisterPartidas([FromBody] RegisterPartidasRequest request)
     {
@@ -214,6 +290,7 @@ public class TorneoController : ControllerBase
                 foreach (var partida in request.Partidas)
                 {
                     partida.Id = Guid.NewGuid();
+                    partida.Estado = "no jugada";
                     request.RondaObj.Partida.Add(partida);
                 }
 
@@ -231,6 +308,7 @@ public class TorneoController : ControllerBase
         }
     }
 
+    // Devolver todas las partidas de un usuario específico
     [HttpGet("getPartidas/{idUsuario}")]
     public async Task<ActionResult<IEnumerable<Partidum>>> GetPartidas(Guid idUsuario)
     {
@@ -268,6 +346,7 @@ public class TorneoController : ControllerBase
         return Ok(partidas);
     }
 
+    // Devolver una partida por su ID
     [HttpGet("getPartida/{idPartida}")]
     public async Task<ActionResult<Partidum>> GetPartida(Guid idPartida)
     {
@@ -317,12 +396,7 @@ public class TorneoController : ControllerBase
         return Ok(partida);
     }
 
-    public class CargarPgnRequest
-    {
-        public String pgn { get; set; }
-        public Guid IdPartida { get; set; }
-    }
-
+    // Cargar un PGN a una partida
     [HttpPut("cargarPgn")]
     public async Task<IActionResult> CargarPgn([FromBody] CargarPgnRequest pgn)
     {
@@ -333,7 +407,9 @@ public class TorneoController : ControllerBase
         if (partida == null)
             return BadRequest();
 
+        partida.Resultado = pgn.Resultado;
         partida.Pgn = pgn.pgn;
+        partida.Estado = "jugada";
         _context.SaveChanges();
         return Ok(new
         {
@@ -341,11 +417,10 @@ public class TorneoController : ControllerBase
         });
     }
 
+    // Devolver el análisis de una partida
     [HttpGet("getAnalisis/{idPartida}")]
     public async Task<ActionResult<Analisi>> GetAnalisis(Guid idPartida)
     {
-        if (idPartida == null)
-            BadRequest(new { Message = "No IdPartida" });
 
         var analisis = await _context.Analises
             .Include(a => a.Movimientos)
@@ -376,6 +451,7 @@ public class TorneoController : ControllerBase
         return Ok(analisis);
     }
 
+    // Registrar un análisis de una partida
     [HttpPost("registrarAnalisis")]
     public async Task<ActionResult<int>> RegistrarAnalisis([FromBody] Analisi analisisObj)
     {
@@ -398,5 +474,282 @@ public class TorneoController : ControllerBase
         }
 
         return Ok(analisis.Id);
+    }
+
+
+    // ENDPOINTS DE REPORTES
+    // Devolver reporte de torneos para usuario
+    [HttpGet("reporteTorneoUser/{idUser}")]
+    public async Task<ActionResult<TorneoReportResponse>> ReporteTorneoUser(Guid idUser)
+    {
+        var torneos = await _context.Inscripcions.Include(i => i.IdTorneoNavigation)
+            .ThenInclude(t => t.Inscripcions)
+            .Where(i => i.IdParticipante == idUser && i.Estado == "aprobado")
+            .Select(i => new
+            {
+                IdTorneoNavigation = new
+                {
+                    Id = i.IdTorneoNavigation.Id,
+                    Estado = i.IdTorneoNavigation.Estado,
+                    EloPromedio = i.IdTorneoNavigation.EloPromedio,
+                    FechaInicio = i.IdTorneoNavigation.FechaInicio
+                }
+            })
+            .ToListAsync();
+
+        if (torneos == null)
+            NotFound(new { Message = "No se encontraron torneos" });
+
+        int? total = 0;
+        int? totalPromedios = 0;
+        int? promedioElo = 0;
+
+        List<int> jugadosPorMes = new int[12].ToList();
+
+        foreach (var torneo in torneos)
+        {
+            if (torneo.IdTorneoNavigation.Estado == "empezado" || torneo.IdTorneoNavigation.Estado == "terminado")
+            {
+                totalPromedios += torneo.IdTorneoNavigation.EloPromedio;
+                total++;
+
+                if (torneo.IdTorneoNavigation.FechaInicio != null)
+                {
+                    var fecha = (DateTime)torneo.IdTorneoNavigation.FechaInicio;
+                    if (Fechas.IsSameYear(fecha, DateTime.Now))
+                    {
+                        var mes = fecha.Month - 1;
+                        jugadosPorMes[mes]++;
+                    }
+                }
+            }
+        }
+
+        promedioElo = totalPromedios / total;
+
+        var result = new { CantidadTorneos = total, EloPromedio = promedioElo, TorneosParticipadosMes = jugadosPorMes };
+
+        return Ok(result);
+    }
+
+    // Devolver reporte torneos de organizador
+    [HttpGet("reporteTorneoOrg/{idOrganizador}")]
+    public async Task<ActionResult<OrgReportResponse>> ReporteTorneoOrg(Guid idOrganizador)
+    {
+
+        var torneos = await _context.Torneos
+            .Where(t => t.IdOrganizador == idOrganizador)
+            .Select(t => new
+            {
+                Id = t.Id,
+                Estado = t.Estado,
+                EloPromedio = t.EloPromedio,
+                FechaInicio = t.FechaInicio
+            })
+            .ToListAsync();
+
+        if (torneos == null)
+            NotFound(new { Message = "No se encontraron torneos" });
+
+        int? total = 0;
+        int? totalConPromedio = 0;
+        int? totalPromedios = 0;
+        int? promedioElo = 0;
+        int? torneosTerminados = 0;
+        int? torneosDisputandose = 0;
+        int? torneosEliminados = 0;
+
+        foreach (var torneo in torneos)
+        {
+            if (torneo.Estado == "empezado" || torneo.Estado == "terminado" || torneo.Estado == "espera")
+            {
+                total++;
+                if (torneo.EloPromedio != null)
+                {
+                    totalPromedios += torneo.EloPromedio;
+                    totalConPromedio++;
+                }
+
+                switch (torneo.Estado)
+                {
+                    case "terminado":
+                        torneosTerminados++;
+                        break;
+                    case "empezado":
+                        torneosDisputandose++;
+                        break;
+                    case "eliminado":
+                        torneosEliminados++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        promedioElo = totalPromedios / totalConPromedio;
+
+        var result = new
+        {
+            CantidadTorneos = total,
+            EloPromedio = promedioElo,
+            TorneosTerminados = torneosTerminados,
+            TorneosDisputandose = torneosDisputandose,
+            TorneosEliminados = torneosEliminados
+        };
+
+        return Ok(result);
+    }
+
+    // Devolver reporte de partidas de un usuario
+    [HttpGet("reportePartidasUser/{idUser}")]
+    public async Task<ActionResult<PartidaReportResponse>> ReportePartidasUser(Guid idUser)
+    {
+
+        var partidas = await _context.Partida
+            .Include(p => p.Analisis)
+            .Where(p => (p.JugadorBlancas == idUser || p.JugadorNegras == idUser) && p.Estado == "jugada")
+            .Select(p => new
+            {
+                Id = p.Id,
+                JugadorBlancas = p.JugadorBlancas,
+                JugadorNegras = p.JugadorNegras,
+                Estado = p.Estado,
+                Pgn = p.Pgn,
+                Resultado = p.Resultado,
+                Analisis = p.Analisis.FirstOrDefault(),
+                Fecha = p.Fecha
+            })
+            .ToListAsync();
+
+        if (partidas == null)
+            NotFound(new { Message = "No se encontraron torneos" });
+
+
+
+        int jugadas = 0;
+        int perdidas = 0;
+        int ganadas = 0;
+        int empatadas = 0;
+        decimal promedioEvalTotal = 0;
+        int porcentajePerdidas = 0;
+        int porcentajeGanadas = 0;
+        int porcentajeEmpatadas = 0;
+        List<int> jugadasPorMes = new int[12].ToList();
+        List<int> ganadasPorMes = new int[12].ToList();
+        List<int> perdidasPorMes = new int[12].ToList();
+        List<int> empatadasPorMes = new int[12].ToList();
+
+        foreach (var partida in partidas)
+        {
+            jugadas++;
+            if (idUser == partida.JugadorBlancas)
+            {
+                switch (partida.Resultado)
+                {
+                    case -1:
+                        perdidas++;
+                        break;
+                    case 1:
+                        ganadas++;
+                        break;
+                    case 0:
+                        empatadas++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (idUser == partida.JugadorNegras)
+            {
+                switch (partida.Resultado)
+                {
+                    case -1:
+                        ganadas++;
+                        break;
+                    case 1:
+                        perdidas++;
+                        break;
+                    case 0:
+                        empatadas++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (partida.Analisis.PromedioEvaluacion != null)
+            {
+                promedioEvalTotal += (decimal)partida.Analisis.PromedioEvaluacion;
+            }
+
+            if (partida.Fecha != null)
+            {
+                var fecha = (DateTime)partida.Fecha;
+                if (Fechas.IsSameYear(fecha, DateTime.Now))
+                {
+                    var mes = fecha.Month - 1;
+                    jugadasPorMes[mes]++;
+
+                    if (idUser == partida.JugadorBlancas)
+                    {
+                        switch (partida.Resultado)
+                        {
+                            case -1:
+                                perdidasPorMes[mes]++;
+                                break;
+                            case 1:
+                                ganadasPorMes[mes]++;
+                                break;
+                            case 0:
+                                empatadasPorMes[mes]++;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (idUser == partida.JugadorNegras)
+                    {
+                        switch (partida.Resultado)
+                        {
+                            case -1:
+                                ganadasPorMes[mes]++;
+                                break;
+                            case 1:
+                                perdidasPorMes[mes]++;
+                                break;
+                            case 0:
+                                empatadasPorMes[mes]++;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (jugadas != 0)
+        {
+            porcentajePerdidas = (perdidas * 100) / jugadas;
+            porcentajeGanadas = (ganadas * 100) / jugadas;
+            porcentajeEmpatadas = (empatadas * 100) / jugadas;
+        }
+
+        var result = new
+        {
+            Jugadas = jugadas,
+            Perdidas = perdidas,
+            Ganadas = ganadas,
+            Empatadas = empatadas,
+            PorcentajePerdidas = porcentajePerdidas,
+            PorcentajeGanadas = porcentajeGanadas,
+            PorcentajeEmpatadas = porcentajeEmpatadas,
+            JugadasPorMes = jugadasPorMes,
+            GanadasPorMes = ganadasPorMes,
+            PerdidasPorMes = perdidasPorMes,
+            EmpatadasPorMes = empatadasPorMes
+        };
+        return Ok(result);
     }
 }

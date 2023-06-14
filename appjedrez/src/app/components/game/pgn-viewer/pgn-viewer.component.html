@@ -42,6 +42,20 @@
               [(ngModel)]="pgn"
             ></textarea>
           </div>
+          <div class="col-12 my-1">
+            <label for="ganador"
+              >Introduzca ganador (-1): negras. (1): blancas (0): tablas</label
+            >
+            <input
+              max="1"
+              min="-1"
+              type="number"
+              class="form-control w-100"
+              id="ganador"
+              name="numberGanador"
+              [(ngModel)]="ganador"
+            />
+          </div>
           <div class="col-md-6">
             <button class="btn btn-dark w-100 my-1" (click)="cargarPgn()">
               Cargar

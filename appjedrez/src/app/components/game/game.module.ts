@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { DetallesGameComponent } from './detalles-game/detalles-game.component';
 import { VerComponent } from './ver/ver.component';
 import { SharedModule } from 'src/app/shared/shared-module/shared.module';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,12 @@ import { SharedModule } from 'src/app/shared/shared-module/shared.module';
     DetallesGameComponent,
     VerComponent,
   ],
-  imports: [CommonModule, GameRoutingModule, FormsModule, SharedModule],
+  imports: [
+    CommonModule,
+    GameRoutingModule,
+    FormsModule,
+    SharedModule,
+    NgChartsModule,
+  ],
 })
 export class GameModule {}

@@ -33,6 +33,10 @@ public partial class Torneo
 
     public DateTime? FechaFinal { get; set; }
 
+    public int? EloPromedio { get; set; }
+
+    public string Estado { get; set; }
+
     public virtual Usuario IdOrganizadorNavigation { get; set; }
 
     public virtual TipoTorneo IdTipoTorneoNavigation { get; set; }

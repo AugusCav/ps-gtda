@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartOptions } from 'chart.js';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import { Inscripcion } from 'src/app/models/inscripcion';
+import { TorneoReportResponse } from 'src/app/models/responses/torneoReportResponse';
 import { Torneo } from 'src/app/models/torneo';
 import { AuthService } from 'src/app/services/auth.service';
 import { InscripcionService } from 'src/app/services/inscripcion.service';
+import { TorneoService } from 'src/app/services/torneo.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
@@ -14,28 +17,62 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 export class ResumenComponent implements OnInit {
   torneos: Inscripcion[] = [];
   idUser: string = '';
+  torneoReport: TorneoReportResponse = {} as TorneoReportResponse;
+  loaded: boolean = false;
+  torneosPorMes: number[] = [];
 
-  // Pie
-  public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: false,
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  // Line
+  public lineChartOptions: ChartOptions<'line'> = {
+    responsive: true,
   };
-  public pieChartDatasets = [
-    {
-      data: [2, 8],
-    },
-  ];
-  public pieChartLegend = true;
-  public pieChartPlugins = [];
+  public lineChartData: ChartConfiguration<'line'>['data'] = {
+    labels: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Ocubre',
+      'Noviembre',
+      'Diciembre',
+    ],
+    datasets: [
+      {
+        data: [0, 25, 12, 35, 20],
+        label: 'Torneos jugados',
+        fill: true,
+      },
+    ],
+  };
+  public lineChartLegend = true;
+  public lineChartPlugins = [];
 
   constructor(
     private inscripcionService: InscripcionService,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private torneoService: TorneoService
   ) {}
 
   ngOnInit(): void {
     this.getDatos();
     this.getTorneos();
+
+    this.torneoService.reporteTorneoUser(this.idUser).subscribe({
+      next: (res) => {
+        this.torneoReport = res;
+        this.lineChartData.datasets[0].data =
+          this.torneoReport.torneosParticipadosMes.map((item) => item);
+
+        this.loaded = true;
+      },
+    });
   }
 
   getDatos() {

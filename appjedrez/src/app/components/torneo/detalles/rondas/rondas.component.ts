@@ -1,6 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -28,6 +33,7 @@ export class RondasComponent implements OnInit {
   partidaForm!: FormGroup;
   usuariosBlancas: Usuario[] = [];
   usuariosNegras: Usuario[] = [];
+  estado: string = '';
 
   constructor(
     private inscripcionService: InscripcionService,
@@ -48,6 +54,7 @@ export class RondasComponent implements OnInit {
         next: (res) => {
           if (res.idOrganizador === this.idUser) {
             this.esOrganizador = true;
+            this.estado = res.estado;
           } else {
             this.esOrganizador = false;
           }
@@ -75,8 +82,8 @@ export class RondasComponent implements OnInit {
     });
 
     this.partidaForm = this.fb.group({
-      jugadorBlancas: [, Validators.required],
-      jugadorNegras: [, Validators.required],
+      jugadorBlancas: [,],
+      jugadorNegras: [,],
       fecha: ['', Validators.required],
       horaInicio: ['', Validators.required],
     });
@@ -104,43 +111,56 @@ export class RondasComponent implements OnInit {
 
   agregar() {
     if (this.partidaForm.valid) {
-      if (!this.jugadoresIguales()) {
-        const time = this.partidaForm.get('horaInicio')?.value;
-        const formattedTime = time + ':00';
-        const partida: Partida = {
-          fecha: this.partidaForm.get('fecha')?.value,
-          horaInicio: formattedTime,
-          jugadorBlancas: this.partidaForm.get('jugadorBlancas')?.value.id,
-          jugadorBlancasNavigation:
-            this.partidaForm.get('jugadorBlancas')?.value,
-          jugadorNegrasNavigation: this.partidaForm.get('jugadorNegras')?.value,
-          jugadorNegras: this.partidaForm.get('jugadorNegras')?.value.id,
-        } as Partida;
-        const usuariosAEliminar = [
-          this.partidaForm.get('jugadorBlancas')?.value,
-          this.partidaForm.get('jugadorNegras')?.value,
-        ];
-        this.partidas.push(partida);
-        this.usuariosBlancas = this.usuariosBlancas.filter(
-          (usuario: Usuario) =>
-            !usuariosAEliminar.some(
-              (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
-            )
-        );
-        this.usuariosNegras = this.usuariosNegras.filter(
-          (usuario: Usuario) =>
-            !usuariosAEliminar.some(
-              (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
-            )
-        );
+      if (this.validateSelects()) {
+        if (!this.jugadoresIguales()) {
+          const time = this.partidaForm.get('horaInicio')?.value;
+          const formattedTime = time + ':00';
+          var partida: Partida;
+          if (this.partidaForm.get('jugadorNegras')?.value == null) {
+            partida = {
+              fecha: this.partidaForm.get('fecha')?.value,
+              horaInicio: formattedTime,
+              jugadorBlancas: this.partidaForm.get('jugadorBlancas')?.value.id,
+              jugadorBlancasNavigation:
+                this.partidaForm.get('jugadorBlancas')?.value,
+              jugadorNegrasNavigation:
+                this.partidaForm.get('jugadorNegras')?.value,
+              jugadorNegras: null,
+            } as Partida;
+          } else if (this.partidaForm.get('jugadorBlancas')?.value == null) {
+            partida = {
+              fecha: this.partidaForm.get('fecha')?.value,
+              horaInicio: formattedTime,
+              jugadorBlancas: null,
+              jugadorBlancasNavigation:
+                this.partidaForm.get('jugadorBlancas')?.value,
+              jugadorNegrasNavigation:
+                this.partidaForm.get('jugadorNegras')?.value,
+              jugadorNegras: this.partidaForm.get('jugadorNegras')?.value.id,
+            } as Partida;
+          } else {
+            partida = {
+              fecha: this.partidaForm.get('fecha')?.value,
+              horaInicio: formattedTime,
+              jugadorBlancas: this.partidaForm.get('jugadorBlancas')?.value.id,
+              jugadorBlancasNavigation:
+                this.partidaForm.get('jugadorBlancas')?.value,
+              jugadorNegrasNavigation:
+                this.partidaForm.get('jugadorNegras')?.value,
+              jugadorNegras: this.partidaForm.get('jugadorNegras')?.value.id,
+            } as Partida;
+          }
 
-        this.partidaForm.reset();
-        this.partidaForm.controls['jugadorBlancas'].setValue(
-          this.usuariosNegras[0]
-        );
-        this.partidaForm.controls['jugadorNegras'].setValue(
-          this.usuariosBlancas[0]
-        );
+          this.eliminarUsuariosArray(partida);
+
+          this.partidaForm.reset();
+          this.partidaForm.controls['jugadorBlancas'].setValue(
+            this.usuariosNegras[0]
+          );
+          this.partidaForm.controls['jugadorNegras'].setValue(
+            this.usuariosBlancas[0]
+          );
+        }
       }
     } else {
       ValidateForm.validateAllFormFields(this.partidaForm);
@@ -173,31 +193,92 @@ export class RondasComponent implements OnInit {
 
   aceptar() {
     if (this.rondaForm.valid) {
-      if (this.usuariosBlancas.length < 1 && this.usuariosNegras.length < 1) {
-        var ronda = this.rondaForm.value as Ronda;
-        for (let i = 0; i < this.partidas.length; i++) {
-          this.partidas[i].jugadorBlancasNavigation = null;
-          this.partidas[i].jugadorNegrasNavigation = null;
-        }
-        this.torneoService.registrarPartidas(ronda, this.partidas).subscribe({
-          next: () => {
-            this.toastr.success('Ronda registrada con éxito', 'Éxito');
-            this.rondaForm.reset();
-            this.partidas.forEach((p) => {
-              this.eliminar(p);
-            });
-            this.partidaForm.reset();
-          },
-          error: () => {
-            this.toastr.error('Error', 'Error');
-          },
-        });
-      } else {
-        this.toastr.error('Quedan usuarios sin asignar', 'Error');
+      var ronda = this.rondaForm.value as Ronda;
+      for (let i = 0; i < this.partidas.length; i++) {
+        this.partidas[i].jugadorBlancasNavigation = null;
+        this.partidas[i].jugadorNegrasNavigation = null;
       }
+      this.torneoService.registrarPartidas(ronda, this.partidas).subscribe({
+        next: () => {
+          this.toastr.success('Ronda registrada con éxito', 'Éxito');
+          this.rondaForm.reset();
+          this.partidas.forEach((p) => {
+            this.eliminar(p);
+          });
+          this.partidaForm.reset();
+        },
+        error: () => {
+          this.toastr.error('Error', 'Error');
+        },
+      });
     } else {
       ValidateForm.validateAllFormFields(this.rondaForm);
       this.toastr.error('Tu form es inválido', 'Error');
+    }
+  }
+
+  validateSelects() {
+    var jugadorBlancas = this.partidaForm.controls['jugadorBlancas'].value;
+    var jugadorNegras = this.partidaForm.controls['jugadorNegras'].value;
+    var isvalid;
+
+    if (!jugadorBlancas && !jugadorNegras) {
+      isvalid = false;
+    } else {
+      isvalid = true;
+    }
+    return isvalid;
+  }
+
+  eliminarUsuariosArray(partida: Partida) {
+    if (this.partidaForm.get('jugadorNegras')?.value == null) {
+      const usuariosAEliminar = [this.partidaForm.get('jugadorBlancas')?.value];
+      this.partidas.push(partida);
+      this.usuariosBlancas = this.usuariosBlancas.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
+      this.usuariosNegras = this.usuariosNegras.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
+    } else if (this.partidaForm.get('jugadorBlancas')?.value == null) {
+      const usuariosAEliminar = [this.partidaForm.get('jugadorNegras')?.value];
+      this.partidas.push(partida);
+      this.usuariosBlancas = this.usuariosBlancas.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
+      this.usuariosNegras = this.usuariosNegras.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
+    } else {
+      const usuariosAEliminar = [
+        this.partidaForm.get('jugadorBlancas')?.value,
+        this.partidaForm.get('jugadorNegras')?.value,
+      ];
+      this.partidas.push(partida);
+      this.usuariosBlancas = this.usuariosBlancas.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
+      this.usuariosNegras = this.usuariosNegras.filter(
+        (usuario: Usuario) =>
+          !usuariosAEliminar.some(
+            (usuarioAEliminar: Usuario) => usuarioAEliminar.id === usuario.id
+          )
+      );
     }
   }
 }

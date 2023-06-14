@@ -58,7 +58,7 @@ export class InscripcionService {
     const params = new HttpParams()
       .set('idParticipante', idParticipante)
       .set('idTorneo', idTorneo);
-    return this.http.get<boolean>(`${this.baseUrl}inscripto`, { params });
+    return this.http.get<any>(`${this.baseUrl}inscripto`, { params });
   }
 
   aprobar(inscripcion: any) {
@@ -87,5 +87,9 @@ export class InscripcionService {
 
   aprobarOrg(usuario: Usuario) {
     return this.http.put(`${this.baseUrl}aprobarOrg`, usuario);
+  }
+
+  getByTorneo(idTorneo: string | null) {
+    return this.http.get<Inscripcion[]>(`${this.baseUrl}get/${idTorneo}`);
   }
 }

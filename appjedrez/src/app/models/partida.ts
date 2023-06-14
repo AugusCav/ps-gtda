@@ -3,8 +3,8 @@ import { Usuario } from './usuario';
 
 export interface Partida {
   id: string;
-  jugadorBlancas: string;
-  jugadorNegras: string;
+  jugadorBlancas: string | null;
+  jugadorNegras: string | null;
   fecha: string;
   horaInicio: string;
   horaFinal: string;

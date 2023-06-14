@@ -1,13 +1,27 @@
-<div class="container">
+<div class="container mt-1">
   <div *ngIf="esOrganizador" class="row">
     <div class="col-12">
       <div class="row">
+        <div class="col-12" *ngIf="estado == 'espera'">
+          <div class="alert alert-warning" role="alert">
+            Para comenzar a agregar rondas, necesitás INICIAR el torneo
+          </div>
+        </div>
+        <div class="col-12" *ngIf="estado == 'terminado'">
+          <div class="alert alert-warning" role="alert">
+            El torneo ha terminado, ya no puedes agregar rondas
+          </div>
+        </div>
         <div class="col-12">
           <h4>Agregar ronda</h4>
         </div>
       </div>
       <!-- FORM PARTIDA -->
-      <form class="container mt-3" [formGroup]="partidaForm">
+      <form
+        class="container mt-3"
+        [formGroup]="partidaForm"
+        *ngIf="estado != 'espera' && estado != 'terminado'"
+      >
         <h5>Partida</h5>
         <div
           class="alert alert-danger"
@@ -26,7 +40,7 @@
             <select
               id="jugadorBlancas"
               class="form-select"
-              aria-label="Default select example"
+              aria-label="Default"
               formControlName="jugadorBlancas"
             >
               <option
@@ -38,12 +52,13 @@
             </select>
             <small
               *ngIf="
+                !validateSelects() &&
                 partidaForm.controls['jugadorBlancas'].dirty &&
-                partidaForm.hasError('required', 'jugadorBlancas')
+                partidaForm.controls['jugadorNegras'].dirty
               "
               class="text-danger"
             >
-              *Jugador de piezas blancas no seleccionado
+              *Selecciona al menos un jugador de piezas blancas o negras
             </small>
           </div>
           <div class="col-6">
@@ -63,12 +78,13 @@
             </select>
             <small
               *ngIf="
-                partidaForm.controls['jugadorNegras'].dirty &&
-                partidaForm.hasError('required', 'jugadorNegras')
+                !validateSelects() &&
+                partidaForm.controls['jugadorBlancas'].dirty &&
+                partidaForm.controls['jugadorNegras'].dirty
               "
               class="text-danger"
             >
-              *Jugador de piezas negras no seleccionado
+              *Selecciona al menos un jugador de piezas blancas o negras
             </small>
           </div>
         </div>
@@ -158,7 +174,11 @@
         </div>
       </form>
       <!-- FORM Ronda -->
-      <form class="container mt-3 border-top" [formGroup]="rondaForm">
+      <form
+        class="container mt-3 border-top"
+        [formGroup]="rondaForm"
+        *ngIf="estado != 'espera' && estado != 'terminado'"
+      >
         <h5>Ronda</h5>
         <div class="row my-3 justify-content-around">
           <div class="col-4">

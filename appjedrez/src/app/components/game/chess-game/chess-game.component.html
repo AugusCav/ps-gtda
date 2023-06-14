@@ -20,40 +20,83 @@
   </div>
 </div>
 <div class="container-fluid py-4">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-4 bg-dark">
-        <div id="board"></div>
-      </div>
+  <div class="row justify-content-center gy-1 gx-1">
+    <div class="col-md-5">
+      <div class="p-2 border border-light rounded" id="board" style=""></div>
     </div>
-    <div class="row">
-      <div class="col-md-4 offset-md-4">
+    <div class="col-md-4">
+      <div class="p-2 my-1 border border-light rounded">
         <div class="row">
-          <div
-            class="col-12 bg-dark text-white d-flex justify-content-evenly p-2"
-          >
-            <button class="btn btn-light" (click)="prevMove()">←</button>
-            <button class="btn btn-light" (click)="nextMove()">→</button>
+          <div class="col-12">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link link-light" #botones (click)="menuMov()"
+                  >Movimientos</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link link-light" #resumen (click)="menuAnalisis()"
+                  >Análisis</a
+                >
+              </li>
+            </ul>
           </div>
-          <div class="col-12 form-floating my-1">
-            <input
-              class="form-control w-100"
-              id="statusInput"
-              type="text"
-              [value]="status"
-              readonly
-            />
-            <label class="mx-1" for="statusInput">Status:</label>
+        </div>
+        <div class="row" *ngIf="!menu">
+          <div class="col-12 mt-1">
+            <div class="container rounded" style="background-color: #495057">
+              <div class="row py-2">
+                <div class="col-2" *ngFor="let move of moves">
+                  <button
+                    class="btn btn-sm m-1 text-center w-100"
+                    [ngClass]="{
+                      'btn-light': move.move.color == 'w',
+                      'btn-dark': move.move.color == 'b'
+                    }"
+                    (click)="mover(move.n)"
+                  >
+                    {{ move.move.from }}{{ move.move.to }}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-12 form-floating my-1">
-            <input
-              class="form-control w-100"
-              id="fenInput"
-              type="text"
-              [value]="fen"
-              readonly
-            />
-            <label class="mx-1" for="fenInput">FEN:</label>
+        </div>
+        <div class="row text-light px-2" *ngIf="menu">
+          <div class="col-12 mt-1">
+            <canvas
+              class="rounded"
+              *ngIf="loaded"
+              baseChart
+              [type]="'line'"
+              [data]="lineChartData"
+              [options]="lineChartOptions"
+              [legend]="lineChartLegend"
+              style="max-height: 250px; background-color: #495057"
+            >
+            </canvas>
+          </div>
+          <div class="col-12 mt-3">
+            <p class="border border-light rounded p-2">
+              Mejor movimiento: {{ bestMove.bestMove }}
+            </p>
+            <p class="border border-light rounded p-2">
+              Evaluacion: {{ eval.evaluacion }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 border border-light rounded">
+        <div class="row justify-content-evenly gx-1">
+          <div class="col-1 text-center">
+            <button class="btn btn-light" (click)="prevMove()">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          </div>
+          <div class="col-1 text-center">
+            <button class="btn btn-light" (click)="nextMove()">
+              <i class="bi bi-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>

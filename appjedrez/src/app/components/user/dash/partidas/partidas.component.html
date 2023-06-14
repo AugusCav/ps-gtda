@@ -1,37 +1,74 @@
-<div class="container-fluid mt-2">
-  <div class="container px-5">
-    <div class="row gx-0">
-      <div class="col-md-4">
-        <div class="row mx-1 gx-1 gy-2">
-          <div class="col-12">
-            <div class="rounded bg-light p-5"></div>
+<div class="container-fluid py-2">
+  <div class="row gx-0">
+    <!-- Columna izquierda -->
+    <div class="col-lg-8">
+      <div class="row mx-1 gx-1 gy-2">
+        <div class="col">
+          <div class="rounded bg-light px-4 py-2">
+            <div class="row">
+              <div class="col-md-6 border py-2 my-2">
+                <canvas
+                  *ngIf="loaded"
+                  baseChart
+                  [type]="'pie'"
+                  [data]="pieChartData1"
+                  [options]="pieChartOptions"
+                  style="min-height: 200px; max-height: 200px"
+                >
+                </canvas>
+              </div>
+              <div class="col-md-6 border py-2 my-2">
+                <canvas
+                  *ngIf="loaded"
+                  baseChart
+                  [type]="'pie'"
+                  [data]="pieChartData2"
+                  [options]="pieChartOptions"
+                  style="min-height: 200px; max-height: 200px"
+                >
+                </canvas>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 border py-2 my-2 overflow-auto">
+                <canvas
+                  *ngIf="loaded"
+                  baseChart
+                  [type]="'line'"
+                  [data]="lineChartData"
+                  [options]="lineChartOptions"
+                  [legend]="lineChartLegend"
+                  style="max-height: 250px;"
+                >
+                </canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="row mx-1 gx-1 gy-1">
-          <div class="col-12"><div class="rounded bg-light p-5"></div></div>
-          <div class="col-12" *ngFor="let partida of partidas">
-            <div class="rounded bg-secondary p-3">
-              <div class="row align-items-center text-light">
-                <div class="col-7 border-end">
-                  <strong class="badge rounded-pill text-bg-light">{{
-                    partida.jugadorBlancasNavigation?.nombreUsuario
-                  }}</strong>
-                  VS.
-                  <strong class="badge rounded-pill text-bg-dark">{{
-                    partida.jugadorNegrasNavigation?.nombreUsuario
-                  }}</strong>
-                </div>
-                <div class="col-3"></div>
-                <div class="col-2 text-end">
-                  <button
-                    class="btn btn-outline-primary rounded-circle"
-                    (click)="irGame(partida.id)"
-                  >
-                    <i class="bi bi-chevron-right"></i>
-                  </button>
-                </div>
+    </div>
+    <div class="col-md-4">
+      <div class="row mx-1 gx-1 gy-1">
+        <div class="col-12" *ngFor="let partida of partidas">
+          <div class="rounded bg-light p-3">
+            <div class="row align-items-center text-dark">
+              <div class="col-7 border-end">
+                <strong class="badge rounded-pill text-bg-light">{{
+                  partida.jugadorBlancasNavigation?.nombreUsuario
+                }}</strong>
+                VS.
+                <strong class="badge rounded-pill text-bg-dark">{{
+                  partida.jugadorNegrasNavigation?.nombreUsuario
+                }}</strong>
+              </div>
+              <div class="col-3"></div>
+              <div class="col-2 text-end">
+                <button
+                  class="btn btn-info rounded-circle"
+                  (click)="irGame(partida.id)"
+                >
+                  <i class="bi bi-chevron-right"></i>
+                </button>
               </div>
             </div>
           </div>

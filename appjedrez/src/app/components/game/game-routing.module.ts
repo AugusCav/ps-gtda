@@ -9,7 +9,7 @@ const routes: Routes = [
   {
     path: ':idPartida',
     component: GameComponent,
-    canActivate: [() => inject(AuthGuard).canActivateOrg()],
+    canActivate: [() => inject(AuthGuard).canActivate()],
     children: [
       {
         path: 'detalles',

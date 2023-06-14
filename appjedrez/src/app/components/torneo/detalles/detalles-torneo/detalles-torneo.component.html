@@ -16,8 +16,22 @@
           ></div>
           <div *ngIf="esOrganizador" class="container-fluid">
             <div
-              class="offset-md-9 col-md-3 text-center d-flex flex-row justify-content-end"
+              class="offset-md-8 col-md-4 text-center d-flex flex-row justify-content-end"
             >
+              <button
+                class="btn btn-warning m-1"
+                *ngIf="estado == 'empezado'"
+                (click)="terminar()"
+              >
+                <i class="bi bi-check2-circle"></i> Terminar
+              </button>
+              <button
+                class="btn btn-success text-white m-1"
+                *ngIf="estado == 'espera'"
+                (click)="iniciar()"
+              >
+                <i class="bi bi-check2-circle"></i> Iniciar
+              </button>
               <button
                 class="btn btn-danger text-white m-1"
                 (click)="openBorrar()"
@@ -27,6 +41,7 @@
               <button
                 class="btn btn-secondary text-white m-1"
                 (click)="editar()"
+                *ngIf="estado != 'terminado'"
               >
                 <i class="bi bi-pencil"></i> Editar
               </button>

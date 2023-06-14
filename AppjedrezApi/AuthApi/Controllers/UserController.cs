@@ -95,6 +95,7 @@ public class UserController : ControllerBase
                 Email = u.Email,
                 Telefono = u.Telefono,
                 IdRolUsuario = u.IdRolUsuario,
+                Elo = u.Elo,
                 Rol = new
                 {
                     Rol = u.IdRolUsuarioNavigation.Rol

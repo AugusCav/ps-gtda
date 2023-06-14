@@ -15,13 +15,13 @@ public partial class Partidum
 
     public TimeSpan? HoraInicio { get; set; }
 
-    public TimeSpan? HoraFinal { get; set; }
-
     public int? Resultado { get; set; }
 
     public string Pgn { get; set; }
 
     public int? IdRonda { get; set; }
+
+    public string Estado { get; set; }
 
     public virtual ICollection<Analisi> Analisis { get; } = new List<Analisi>();
 

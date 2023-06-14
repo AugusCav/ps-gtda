@@ -39,8 +39,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=GTDA;User Id=sa;Password=***REMOVED***;TrustServerCertificate=true;");
+        => optionsBuilder.UseSqlServer("Name=SqlServerConnStr");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,6 +66,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Estado)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.Fecha).HasColumnType("date");
 
             entity.HasOne(d => d.IdParticipanteNavigation).WithMany(p => p.Inscripcions)
                 .HasForeignKey(d => d.IdParticipante)
@@ -107,6 +107,9 @@ public partial class AppDbContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength();
             entity.Property(e => e.Evaluacion).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.Fen)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.MoveFrom)
                 .HasMaxLength(10)
                 .IsUnicode(false);
@@ -150,6 +153,9 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PkPartida_Id");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Estado)
+                .HasMaxLength(20)
+                .IsUnicode(false);
             entity.Property(e => e.Fecha).HasColumnType("datetime");
 
             entity.HasOne(d => d.IdRondaNavigation).WithMany(p => p.Partida)
@@ -212,6 +218,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Estado)
+                .HasMaxLength(25)
                 .IsUnicode(false);
             entity.Property(e => e.FechaFinal).HasColumnType("date");
             entity.Property(e => e.FechaInicio).HasColumnType("date");
