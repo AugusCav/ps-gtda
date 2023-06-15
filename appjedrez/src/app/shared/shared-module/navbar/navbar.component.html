@@ -1,3 +1,12 @@
+<div class="container-fluid bg-warning" *ngIf="existe">
+  <div class="row">
+    <div class="col-12">
+      Tu solicitud para ser organizador ha sido aprobada.
+      <a class="link-light" [routerLink]="['/app/pagos']">Click aquí</a> para
+      acceder
+    </div>
+  </div>
+</div>
 <nav class="navbar navbar-dark navbar-expand-lg bg-secondary shadow-sm">
   <div class="container-fluid">
     <button

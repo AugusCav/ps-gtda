@@ -14,7 +14,8 @@ export interface Usuario {
   idRolUsuario: number;
   token: string;
   elo: number;
-  rolUsuario: RolUsuario;
+  rol: RolUsuario;
+  fotoPerfil: File;
   inscripciones: Inscripcion[];
   notificaciones: Notification[];
   partidasJugadorBlancas: Partida[];

@@ -65,7 +65,7 @@ export class InscripcionService {
     return this.http.put<any>(`${this.baseUrl}aprobar`, inscripcion);
   }
 
-  getInscripciones(idUser: string) {
+  getInscripciones(idUser: string | null) {
     return this.http.get<any>(`${this.baseUrl}getInscripciones/${idUser}`);
   }
 
@@ -91,5 +91,11 @@ export class InscripcionService {
 
   getByTorneo(idTorneo: string | null) {
     return this.http.get<Inscripcion[]>(`${this.baseUrl}get/${idTorneo}`);
+  }
+
+  getInscripcion(idUser: string) {
+    return this.http.get<InscripcionOrganizador>(
+      `${this.baseUrl}getInscripcion/${idUser}`
+    );
   }
 }

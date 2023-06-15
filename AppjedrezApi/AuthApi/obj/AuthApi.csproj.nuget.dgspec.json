@@ -56,6 +56,10 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
@@ -63,6 +67,10 @@
             "System.Diagnostics.Process": {
               "target": "Package",
               "version": "[4.3.0, )"
+            },
+            "mercadopago-sdk": {
+              "target": "Package",
+              "version": "[2.3.2, )"
             }
           },
           "imports": [

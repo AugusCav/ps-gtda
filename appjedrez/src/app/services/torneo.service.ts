@@ -9,6 +9,7 @@ import { Analisis } from '../models/analisis';
 import { Movimiento } from '../models/movimiento';
 import { TorneoReportResponse } from '../models/responses/torneoReportResponse';
 import { PartidaReportResponse } from '../models/responses/partidaReportResponse';
+import { OrgReportResponse } from '../models/responses/orgReportResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +43,7 @@ export class TorneoService {
     return this.http.post<any>(`${this.baseUrl}registrar`, torneo);
   }
 
-  updateTorneo(torneo: Torneo) {
+  updateTorneo(torneo: any) {
     return this.http.put<any>(`${this.baseUrl}actualizar`, torneo);
   }
 
@@ -57,7 +58,7 @@ export class TorneoService {
     });
   }
 
-  getPartidasJugador(idUsuario: string) {
+  getPartidasJugador(idUsuario: string | null) {
     return this.http.get<Partida[]>(`${this.baseUrl}getPartidas/${idUsuario}`);
   }
 
@@ -96,15 +97,31 @@ export class TorneoService {
     return this.http.put(`${this.baseUrl}terminar`, torneo);
   }
 
-  reporteTorneoUser(idUser: string) {
+  reporteTorneoUser(idUser: string | null) {
     return this.http.get<TorneoReportResponse>(
       `${this.baseUrl}reporteTorneoUser/${idUser}`
     );
   }
 
-  reportePartidasUser(idUser: string) {
+  reportePartidasUser(idUser: string | null) {
     return this.http.get<PartidaReportResponse>(
       `${this.baseUrl}reportePartidasUser/${idUser}`
     );
+  }
+
+  getTorneoOrganizador(idUser: string | null) {
+    return this.http.get<Torneo[]>(
+      `${this.baseUrl}GetTorneoOrganizador/${idUser}`
+    );
+  }
+
+  reporteTorneoOrg(idUser: string | null) {
+    return this.http.get<OrgReportResponse>(
+      `${this.baseUrl}reporteTorneoOrg/${idUser}`
+    );
+  }
+
+  getPortada(id: string | null) {
+    return this.http.get<string>(`${this.baseUrl}getPortada/${id}`);
   }
 }

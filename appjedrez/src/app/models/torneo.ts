@@ -18,6 +18,7 @@ export interface Torneo {
   horaInicio: string;
   borrado: boolean;
   estado: string;
+  portada: File;
   idOrganizadorNavigation: Usuario;
   tipoTorneo: TipoTorneo;
   inscripciones: Inscripcion[];

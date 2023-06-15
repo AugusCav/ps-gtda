@@ -12,7 +12,8 @@ import { PartidasComponent } from './dash/partidas/partidas.component';
 import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
-import { PerfilComponent } from './usuario/perfil/perfil.component';
+import { PerfilComponent } from './perfiles/perfil/perfil.component';
+import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-organizador.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PerfilComponent } from './usuario/perfil/perfil.component';
     ConfiguracionComponent,
     ConfigOrganizadoresComponent,
     PerfilComponent,
+    TorneosOrganizadorComponent,
   ],
   imports: [
     CommonModule,

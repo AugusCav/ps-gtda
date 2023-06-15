@@ -4,7 +4,7 @@ import { Analisis } from 'src/app/models/analisis';
 import { Movimiento } from 'src/app/models/movimiento';
 import { TorneoService } from 'src/app/services/torneo.service';
 import { ToastrService } from 'ngx-toastr';
-import { Chart, ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
+import { ChartConfiguration, ChartOptions } from 'chart.js';
 
 declare var Chessboard: any;
 @Component({
@@ -178,7 +178,7 @@ export class ChessGameComponent implements OnInit {
         this.torneoService.registrarMovimientos(movimientos, res).subscribe({
           next: (res) => {},
           error: (err) => {
-            this.toastr.error(err.error.messañge, 'Error');
+            this.toastr.error(err.error.message, 'Error');
           },
         });
       },

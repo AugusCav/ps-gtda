@@ -11,6 +11,8 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private baseUrl: string = 'https://localhost:7274/api/User/';
   private userPayload: any;
+  id: string | null = '';
+  role: string = '';
 
   constructor(private http: HttpClient, private router: Router) {
     this.userPayload = this.decodedToken();
@@ -64,7 +66,15 @@ export class AuthService {
     if (this.userPayload) return this.userPayload.nameid;
   }
 
-  getById(idUser: string) {
+  getById(idUser: string | null) {
     return this.http.get<Usuario>(`${this.baseUrl}${idUser}`);
+  }
+
+  getFotoPerfil(idUser: string) {
+    return this.http.get(`${this.baseUrl}getFotoPerfil/${idUser}`);
+  }
+
+  updateUser(user: any) {
+    return this.http.put(`${this.baseUrl}updateUser`, user);
   }
 }

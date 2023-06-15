@@ -1,0 +1,104 @@
+<div class="container-fluid py-2">
+  <div class="row gx-0">
+    <!-- Columna izquierda -->
+    <div class="col-lg-8">
+      <div class="row mx-1 gx-1 gy-2">
+        <div class="col">
+          <div class="rounded bg-light px-4 py-2">
+            <div class="row">
+              <div class="col-12 border py-2 my-2">
+                <strong>Torneos:</strong>
+                {{ torneoReport.cantidadTorneos }}
+              </div>
+              <div class="col-12 border py-2 my-2">
+                <strong>Elo promedio:</strong>
+                {{ torneoReport.eloPromedio }}
+              </div>
+              <div class="col-12 border my-2">
+                <canvas
+                  *ngIf="loaded"
+                  baseChart
+                  [type]="'pie'"
+                  [data]="pieChartData"
+                  [options]="pieChartOptions"
+                  [legend]="pieChartLegend"
+                  style="min-height: 200px; max-height: 200px"
+                >
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Columna Derecha -->
+    <div class="col-lg-4">
+      <div class="row mx-1 gx-1 gy-2">
+        <div class="col-12" *ngFor="let torneo of torneos">
+          <div class="rounded bg-light p-3">
+            <div class="row">
+              <div class="col-7 border-end">
+                <div class="row">
+                  <div class="col-5 border-end">
+                    <h5>{{ torneo.nombre }}</h5>
+
+                    <span>{{ torneo.localidad }}</span> -
+                    <span>
+                      {{ torneo.fechaInicio | date : "shortDate" }}
+                    </span>
+                  </div>
+                  <div class="col-7 position-relative">
+                    <span class="position-absolute bottom-0"
+                      >Organizador:
+                      <a
+                        class="text-link"
+                        [routerLink]="['/user/perfil', torneo.idOrganizador]"
+                        >{{ torneo.idOrganizadorNavigation.nombreUsuario }}</a
+                      >
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <span>Estado torneo: </span>
+                <span
+                  *ngIf="torneo.estado === 'empezado'"
+                  class="badge bg-success"
+                  >Empezado</span
+                >
+                <span
+                  *ngIf="torneo.estado === 'espera'"
+                  class="badge bg-warning"
+                  >Sin empezar</span
+                >
+                <span
+                  *ngIf="torneo.estado === 'terminado'"
+                  class="badge bg-info"
+                  >Terminado</span
+                >
+                <span
+                  *ngIf="torneo.estado === 'eliminado'"
+                  class="badge bg-danger"
+                  >Eliminado</span
+                >
+              </div>
+              <div class="col-1">
+                <a
+                  [routerLink]="['/app/torneo/detalles', torneo.id]"
+                  class="btn btn-info rounded-circle"
+                >
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" *ngIf="torneos.length == 0">
+          <div class="rounded bg-danger p-3">
+            <h3 class="text-light">No hay torneos que mostrar</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

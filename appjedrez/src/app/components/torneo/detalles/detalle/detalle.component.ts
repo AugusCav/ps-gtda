@@ -14,6 +14,7 @@ export class DetalleComponent implements OnInit {
   id: any = '';
   idUser: string = '';
   esOrganizador: boolean = false;
+  cargado: boolean = false;
 
   constructor(
     private torneoService: TorneoService,
@@ -33,6 +34,7 @@ export class DetalleComponent implements OnInit {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
           this.torneo = res;
+          this.cargado = true;
           if (this.torneo.idOrganizador === this.idUser) {
             this.esOrganizador = true;
           } else {

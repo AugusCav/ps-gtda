@@ -7,7 +7,7 @@
     <hr />
     <div class="row m-2">
       <span>Detalles:</span>
-      <div class="col-md-6 p-2">
+      <div class="col-md-6 p-2" *ngIf="cargado">
         <ul class="list-group">
           <li class="list-group-item">
             Empieza: {{ torneo.fechaInicio | date : "shortDate" }}
@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-md-6 p-2">
+      <div class="col-md-6 p-2" *ngIf="cargado">
         <ul class="list-group">
           <li class="list-group-item">
             Tipo de torneo: {{ torneo.tipoTorneo.nombre }}

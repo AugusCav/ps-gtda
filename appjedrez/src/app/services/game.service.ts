@@ -59,7 +59,7 @@ export class GameService {
   getNextMove() {
     var nextMove = null;
     if (this.movimientos[this.indexMoves[2]] !== undefined) {
-      nextMove = this.movimientos[this.indexMoves[2]].fen;
+      nextMove = this.movimientos[this.indexMoves[2]].after;
       this.setIndexMoves(
         this.indexMoves[1],
         this.indexMoves[2],
@@ -73,7 +73,7 @@ export class GameService {
   getPrevMove() {
     var prevMove = null;
     if (this.movimientos[this.indexMoves[0]] !== undefined) {
-      prevMove = this.movimientos[this.indexMoves[0]].fen;
+      prevMove = this.movimientos[this.indexMoves[0]].after;
       this.setIndexMoves(
         this.indexMoves[0] - 1,
         this.indexMoves[0],
@@ -93,8 +93,9 @@ export class GameService {
   cargarPgn(pgn: string) {
     this.game.loadPgn(pgn);
     this.movimientos = this.game.history({ verbose: true });
+    console.log(this.game.history({ verbose: true }));
 
-    this.game.load(this.movimientos[this.movimientos.length - 1].fen);
+    this.game.load(this.movimientos[this.movimientos.length - 1].after);
 
     this.setIndexMoves(
       this.movimientos.length - 2,
@@ -114,7 +115,7 @@ export class GameService {
         moveFrom: currentMove.from,
         moveTo: currentMove.to,
         pieza: currentMove.piece,
-        fen: currentMove.fen,
+        fen: currentMove.after,
       } as Movimiento;
       currentMoves.push(move);
     });
@@ -123,7 +124,7 @@ export class GameService {
   }
 
   mover(n: number) {
-    var currentMove = this.movimientos[n].fen;
+    var currentMove = this.movimientos[n].after;
     console.log(currentMove);
     var prevMove = n - 1;
     var nextMove = n + 1;

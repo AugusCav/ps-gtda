@@ -50,9 +50,16 @@
                   <div class="col-7 position-relative">
                     <span class="position-absolute bottom-0"
                       >Organizador:
-                      <a class="text-link">{{
-                        torneo.torneo.idOrganizadorNavigation.nombreUsuario
-                      }}</a>
+                      <a
+                        class="text-link"
+                        [routerLink]="[
+                          '/user/perfil',
+                          torneo.torneo.idOrganizador
+                        ]"
+                        >{{
+                          torneo.torneo.idOrganizadorNavigation.nombreUsuario
+                        }}</a
+                      >
                     </span>
                   </div>
                 </div>

@@ -3,7 +3,6 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Inscripcion } from 'src/app/models/inscripcion';
 import { TorneoReportResponse } from 'src/app/models/responses/torneoReportResponse';
-import { Torneo } from 'src/app/models/torneo';
 import { AuthService } from 'src/app/services/auth.service';
 import { InscripcionService } from 'src/app/services/inscripcion.service';
 import { TorneoService } from 'src/app/services/torneo.service';
@@ -16,7 +15,7 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 export class ResumenComponent implements OnInit {
   torneos: Inscripcion[] = [];
-  idUser: string = '';
+  idUser: string | null = '';
   torneoReport: TorneoReportResponse = {} as TorneoReportResponse;
   loaded: boolean = false;
   torneosPorMes: number[] = [];
@@ -76,10 +75,7 @@ export class ResumenComponent implements OnInit {
   }
 
   getDatos() {
-    this.userStore.getIdFromStore().subscribe((val) => {
-      let idFromToken = this.auth.getIdFromToken();
-      this.idUser = val || idFromToken;
-    });
+    this.idUser = this.auth.id;
   }
 
   getTorneos() {

@@ -1,0 +1,57 @@
+<body class="bg-dark" style="min-height: 100vh">
+  <app-navbar></app-navbar>
+  <div class="container-fluid bg-secondary p-5">
+    <div class="container px-5">
+      <div class="row justify-content-between">
+        <div class="col-sm-2">
+          <img
+            class="rounded img-fluid"
+            src="https://via.placeholder.com/100x100"
+          />
+        </div>
+        <div class="d-flex col-sm-3 align-items-center text-light">
+          <h4>{{ fullName }}</h4>
+        </div>
+        <div class="col-sm-2 offset-sm-5 d-flex align-items-center">
+          <button class="btn btn-danger text-light" (click)="logout()">
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid bg-secondary p-2 border-top border-dark">
+    <div class="container px-5">
+      <div class="row">
+        <ul class="nav">
+          <li class="nav-item">
+            <a
+              class="btn btn-secondary"
+              [routerLink]="['/user/perfil', idUser, 'resumen']"
+              routerLinkActive="active"
+              >Resumen</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="btn btn-secondary"
+              [routerLink]="['/user/perfil', idUser, 'partidas']"
+              routerLinkActive="active"
+              >Partidas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="btn btn-secondary"
+              [routerLink]="['/user/perfil', idUser, 'torneos']"
+              routerLinkActive="active"
+              *ngIf="role == 'Organizador'"
+              >Torneos</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</body>

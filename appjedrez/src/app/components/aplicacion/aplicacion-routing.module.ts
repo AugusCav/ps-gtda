@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AplicacionComponent } from './aplicacion/aplicacion.component';
 import { InscripcionOrgComponent } from './inscripcion-org/inscripcion-org.component';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { PagosComponent } from './pagos/pagos.component';
+import { SuccessComponent } from './back-urls/success/success.component';
+import { FailureComponent } from './back-urls/failure/failure.component';
 
 const routes: Routes = [
   {
@@ -24,6 +27,9 @@ const routes: Routes = [
         component: InscripcionOrgComponent,
         canActivate: [() => inject(AuthGuard).canActivate()],
       },
+      { path: 'pagos', component: PagosComponent },
+      { path: 'success', component: SuccessComponent },
+      { path: 'failure', component: FailureComponent },
       {
         path: '',
         redirectTo: 'torneo',

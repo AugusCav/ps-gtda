@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { Partida } from 'src/app/models/partida';
 import { Ronda } from 'src/app/models/ronda';
+import { Torneo } from 'src/app/models/torneo';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { InscripcionService } from 'src/app/services/inscripcion.service';
@@ -34,6 +35,7 @@ export class RondasComponent implements OnInit {
   usuariosBlancas: Usuario[] = [];
   usuariosNegras: Usuario[] = [];
   estado: string = '';
+  torneo: Torneo = {} as Torneo;
 
   constructor(
     private inscripcionService: InscripcionService,
@@ -52,6 +54,7 @@ export class RondasComponent implements OnInit {
     if (this.id !== null) {
       this.torneoService.getById(this.id).subscribe({
         next: (res) => {
+          this.torneo = res;
           if (res.idOrganizador === this.idUser) {
             this.esOrganizador = true;
             this.estado = res.estado;

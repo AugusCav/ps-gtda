@@ -134,8 +134,7 @@ export class ListadoParticipantesComponent implements OnInit {
   }
 
   abrirParticipante(idParticipante: string) {
-    this.inscripcionService.idParticipante = idParticipante;
-    this.router.navigate(['/app/torneo/detalles', this.id, 'participante']);
+    this.router.navigate(['/user/perfil', idParticipante]);
   }
 
   openBorrar(inscripcion: any) {

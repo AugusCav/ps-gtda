@@ -1,0 +1,24 @@
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container bg-light mt-2 rounded">
+    <div class="row justify-content-center">
+      <div class="col-md-10 p-2">
+        <h4 class="display-5">Pagar</h4>
+        <p class="lead">
+          Podés proceder a pagar con MercadoPago para efectuar tu pago con
+          diferentes métodos. Una vez efectuado esperá a ser redirigido para
+          terminar el flujo de pago y que nuestro sitio pueda corroborar la
+          operación.
+        </p>
+        <p class="lead">
+          Si todo sale bien, una vez realizada la operación con éxito vas a
+          pasar a tener el rol "organizador".
+        </p>
+      </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="existe">
+      <div class="col-md-4">
+        <div id="wallet_container"></div>
+      </div>
+    </div>
+  </div>
+</body>

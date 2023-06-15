@@ -16,7 +16,7 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 export class PartidasComponent implements OnInit {
   partidas: Partida[] = [];
-  idUser: string = '';
+  idUser: string | null = '';
   loaded: boolean = false;
   partidaReport: PartidaReportResponse = {} as PartidaReportResponse;
 
@@ -152,10 +152,7 @@ export class PartidasComponent implements OnInit {
   }
 
   getDatos() {
-    this.userStore.getIdFromStore().subscribe((val) => {
-      let idFromToken = this.auth.getIdFromToken();
-      this.idUser = val || idFromToken;
-    });
+    this.idUser = this.auth.id;
   }
 
   irGame(partidaId: string) {

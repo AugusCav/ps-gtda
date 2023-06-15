@@ -23,6 +23,7 @@ export class ModificarTorneoComponent {
   horaFinal: NgbTime = { hour: 12, minute: 0, second: 0 } as NgbTime;
   id: string | null = '';
   organizadorId: string = '';
+  archivoSeleccionado: File = {} as File;
 
   constructor(
     private fb: FormBuilder,
@@ -91,9 +92,31 @@ export class ModificarTorneoComponent {
         this.torneoForm.controls['horaInicio'].setValue(formattedTime);
       }
 
-      var torneo = this.torneoForm.value;
+      const formData: FormData = new FormData();
+      formData.append('id', this.torneoForm.get('id')?.value);
+      formData.append('nombre', this.torneoForm.get('nombre')?.value);
+      formData.append('fechaInicio', this.torneoForm.get('fechaInicio')?.value);
+      formData.append('fechaFinal', this.torneoForm.get('fechaFinal')?.value);
+      formData.append('horaInicio', this.torneoForm.get('horaInicio')?.value);
+      formData.append('descripcion', this.torneoForm.get('descripcion')?.value);
+      formData.append('localidad', this.torneoForm.get('localidad')?.value);
+      formData.append(
+        'idTipoTorneo',
+        this.torneoForm.get('idTipoTorneo')?.value
+      );
+      formData.append(
+        'cantidadParticipantes',
+        this.torneoForm.get('cantidadParticipantes')?.value
+      );
+      formData.append(
+        'idOrganizador',
+        this.torneoForm.get('idOrganizador')?.value
+      );
+      formData.append('eloMinimo', this.torneoForm.get('eloMinimo')?.value);
+      formData.append('eloMaximo', this.torneoForm.get('eloMaximo')?.value);
+      formData.append('portada', this.archivoSeleccionado);
 
-      this.torneoService.updateTorneo(torneo).subscribe({
+      this.torneoService.updateTorneo(formData).subscribe({
         next: (res) => {
           alert(res.message);
           this.torneoForm.reset();
@@ -110,5 +133,9 @@ export class ModificarTorneoComponent {
       ValidateForm.validateAllFormFields(this.torneoForm);
       alert('Tu form es inválido');
     }
+  }
+
+  onArchivoSeleccionado(event: any) {
+    this.archivoSeleccionado = event.target.files[0];
   }
 }

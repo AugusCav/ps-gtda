@@ -65,21 +65,33 @@ export class NgbModalInscripcion {
     @Inject('DATA') public data: any,
     private router: Router,
     private inscripcionService: InscripcionService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private notificacionService: NotificacionService
   ) {}
 
   borrar() {
-    this.inscripcionService.deleteInscripcion(this.data.id).subscribe({
-      next: () => {
-        this.modal.close('Ok click');
-        window.location.reload();
-        this.toastr.success('Inscripción eliminada con éxito');
-      },
-      error: () => {
-        console.log('error');
-        this.modal.close('Ok click');
-      },
-    });
+    this.inscripcionService
+      .deleteInscripcion(this.data.inscripcion.id)
+      .subscribe({
+        next: () => {
+          var notificacion = {
+            usuarioId: this.data.inscripcion.participante.id,
+            mensaje: `Su solicitud de inscripción a ${this.data.torneo.nombre} ha sido rechazada`,
+          } as Notificacion;
+
+          this.notificacionService.register(notificacion).subscribe({
+            next: (res) => {
+              this.modal.close('Ok click');
+              this.toastr.success('Inscripción eliminada con éxito');
+              window.location.reload();
+            },
+          });
+        },
+        error: () => {
+          console.log('error');
+          this.modal.close('Ok click');
+        },
+      });
   }
 }
 
@@ -139,12 +151,11 @@ export class ListadoInscripcionesComponent implements OnInit {
   }
 
   abrirParticipante(idParticipante: string) {
-    this.inscripcionService.idParticipante = idParticipante;
-    this.router.navigate(['/app/torneo/detalles', this.id, 'participante']);
+    this.router.navigate(['/user/perfil',idParticipante]);
   }
 
   openRechazar(inscripcion: any) {
-    const data = inscripcion;
+    const data = { inscripcion: inscripcion, torneo: this.torneo };
     const injector = Injector.create({
       providers: [{ provide: 'DATA', useValue: data }],
     });

@@ -35,7 +35,7 @@ public class TorneoController : ControllerBase
 
     // Actualizar un torneo
     [HttpPut("actualizar")]
-    public async Task<IActionResult> ActualizarTorneo([FromBody] Torneo torneoObj)
+    public async Task<IActionResult> ActualizarTorneo([FromForm] TorneoRequest torneoObj)
     {
         if (torneoObj == null)
             return BadRequest();
@@ -44,6 +44,15 @@ public class TorneoController : ControllerBase
 
         if (torneo == null)
             return BadRequest();
+
+        if (torneoObj.Portada != null && torneoObj.Portada.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                torneoObj.Portada.CopyTo(memoryStream);
+                torneo.Portada = memoryStream.ToArray();
+            }
+        }
 
         torneo.Nombre = torneoObj.Nombre;
         torneo.Descripcion = torneoObj.Descripcion;
@@ -156,6 +165,7 @@ public class TorneoController : ControllerBase
         var torneos = await _context.Torneos
             .Include(t => t.IdTipoTorneoNavigation)
             .Where(t => t.Borrado != true && t.Estado == "espera")
+            .OrderByDescending(i => i.FechaInicio)
             .Select(t => new
             {
                 Id = t.Id,
@@ -216,6 +226,71 @@ public class TorneoController : ControllerBase
         return Ok(torneo);
     }
 
+    // Devolver portada de torneo
+    [HttpGet("getPortada/{id}")]
+    public async Task<ActionResult> GetPortada(Guid id)
+    {
+        var torneo = await _context.Torneos.FirstOrDefaultAsync(t => t.Id == id);
+
+        if (torneo == null || torneo.Portada == null)
+            return BadRequest();
+
+        byte[] bytes = null;
+        string sBase64String = Convert.ToBase64String(torneo.Portada);
+        if (!string.IsNullOrEmpty(sBase64String))
+        {
+            bytes = Convert.FromBase64String(sBase64String);
+        }
+
+        return Ok(bytes);
+    }
+
+
+    // Devolver un torneo por ID de organizador
+    [HttpGet("GetTorneoOrganizador/{id}")]
+    public async Task<ActionResult<IEnumerable<Torneo>>> GetTorneoOrganizador(Guid id)
+    {
+        var torneos = await _context.Torneos
+        .Include(t => t.IdTipoTorneoNavigation)
+        .Include(t => t.IdOrganizadorNavigation)
+        .Where(t => t.IdOrganizador == id)
+        .OrderByDescending(t => t.FechaInicio)
+        .Select(t => new
+        {
+            Id = t.Id,
+            Nombre = t.Nombre,
+            FechaInicio = t.FechaInicio,
+            FechaFinal = t.FechaFinal,
+            Descripcion = t.Descripcion,
+            Localidad = t.Localidad,
+            IdTIpoTorneo = t.IdTipoTorneo,
+            IdOrganizador = t.IdOrganizador,
+            EloMinimo = t.EloMinimo,
+            EloMaximo = t.EloMaximo,
+            HoraInicio = t.HoraInicio,
+            Borrado = t.Borrado,
+            CantidadParticipantes = t.CantidadParticipantes,
+            Portada = t.Portada,
+            Estado = t.Estado,
+            IdOrganizadorNavigation = new
+            {
+                Nombres = t.IdOrganizadorNavigation.Nombres,
+                Apellido = t.IdOrganizadorNavigation.Apellido,
+                NombreUsuario = t.IdOrganizadorNavigation.NombreUsuario
+            },
+            TipoTorneo = new
+            {
+                Nombre = t.IdTipoTorneoNavigation.Nombre
+            }
+        })
+        .ToListAsync();
+
+        if (torneos == null)
+            return BadRequest();
+
+        return Ok(torneos);
+    }
+
     // Devolver los tipos de torneos existentes
     [HttpGet("getTipos")]
     public async Task<ActionResult<IEnumerable<Torneo>>> GetAllTipos()
@@ -250,6 +325,7 @@ public class TorneoController : ControllerBase
             .Include(i => i.Partida).ThenInclude(p => p.JugadorBlancasNavigation)
             .Include(i => i.Partida).ThenInclude(p => p.JugadorNegrasNavigation)
             .Where(i => i.IdTorneo == idTorneo)
+            .OrderBy(i => i.Id)
             .Select(i => new
             {
                 Id = i.Id,
@@ -316,6 +392,7 @@ public class TorneoController : ControllerBase
             .Include(p => p.JugadorBlancasNavigation)
             .Include(p => p.JugadorNegrasNavigation)
             .Where(p => p.JugadorBlancas == idUsuario || p.JugadorNegras == idUsuario)
+            .OrderByDescending(p => p.Fecha)
             .Select(p => new
             {
                 Id = p.Id,
@@ -525,7 +602,10 @@ public class TorneoController : ControllerBase
             }
         }
 
-        promedioElo = totalPromedios / total;
+        if (totalPromedios != 0)
+        {
+            promedioElo = totalPromedios / total;
+        }
 
         var result = new { CantidadTorneos = total, EloPromedio = promedioElo, TorneosParticipadosMes = jugadosPorMes };
 
@@ -631,7 +711,6 @@ public class TorneoController : ControllerBase
         int perdidas = 0;
         int ganadas = 0;
         int empatadas = 0;
-        decimal promedioEvalTotal = 0;
         int porcentajePerdidas = 0;
         int porcentajeGanadas = 0;
         int porcentajeEmpatadas = 0;
@@ -676,11 +755,6 @@ public class TorneoController : ControllerBase
                     default:
                         break;
                 }
-            }
-
-            if (partida.Analisis.PromedioEvaluacion != null)
-            {
-                promedioEvalTotal += (decimal)partida.Analisis.PromedioEvaluacion;
             }
 
             if (partida.Fecha != null)

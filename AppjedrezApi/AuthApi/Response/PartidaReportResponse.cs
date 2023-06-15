@@ -9,7 +9,6 @@ public class PartidaReportResponse
     public int PorcentajePerdidas { get; set; }
     public int PorcentajeGanadas { get; set; }
     public int PorcentajeEmpatadas { get; set; }
-    public decimal PromedioEvalTotal { get; set; }
     public List<int> JugadasPorMes { get; set; }
     public List<int> GanadasPorMes {get; set;}
     public List<int> PerdidasPorMes {get; set;}

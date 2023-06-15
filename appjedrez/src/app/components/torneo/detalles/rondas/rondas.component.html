@@ -96,6 +96,8 @@
               class="form-select"
               type="date"
               formControlName="fecha"
+              [min]="torneo.fechaInicio"
+              [max]="torneo.fechaFinal"
             />
             <small
               *ngIf="

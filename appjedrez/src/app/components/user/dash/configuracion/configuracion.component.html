@@ -1,1 +1,163 @@
-<p>configuracion works!</p>
+<div class="container-fluid py-2">
+  <div class="container bg-light mt-2 rounded px-5 py-2">
+    <div class="row justify-content-center">
+      <div class="col-4 text-center">
+        <h3 class="display-5">Configuración</h3>
+      </div>
+    </div>
+    <div class="row">
+      <form class="container" [formGroup]="userForm">
+        <div class="row pt-3">
+          <div class="col-12 input-group">
+            <span class="input-group-text">
+              <i class="bi bi-pencil-fill text-primary"> </i
+            ></span>
+            <input
+              formControlName="nombres"
+              class="form-control text-dark"
+              type="text"
+              placeholder="Nombre"
+            />
+          </div>
+        </div>
+        <small
+          *ngIf="
+            userForm.controls['nombres'].dirty &&
+            userForm.hasError('required', 'nombres')
+          "
+          class="text-danger"
+        >
+          *Nombre requerido
+        </small>
+
+        <div class="row pt-3">
+          <div class="col-12 input-group">
+            <span class="input-group-text">
+              <i class="bi bi-pencil-fill text-primary"> </i
+            ></span>
+            <input
+              formControlName="apellido"
+              class="form-control text-dark"
+              type="text"
+              placeholder="Apellido"
+            />
+          </div>
+        </div>
+        <small
+          *ngIf="
+            userForm.controls['apellido'].dirty &&
+            userForm.hasError('required', 'apellido')
+          "
+          class="text-danger"
+        >
+          *Apellido requerido
+        </small>
+
+        <div class="row pt-3">
+          <div class="col-12 input-group">
+            <span class="input-group-text">
+              <i class="bi bi-person-fill text-primary"> </i
+            ></span>
+            <input
+              formControlName="nombreUsuario"
+              class="form-control text-dark"
+              type="text"
+              placeholder="Usuario"
+            />
+          </div>
+        </div>
+        <small
+          *ngIf="
+            userForm.controls['nombreUsuario'].dirty &&
+            userForm.hasError('required', 'nombreUsuario')
+          "
+          class="text-danger"
+        >
+          *Usuario requerido
+        </small>
+
+        <div class="row pt-3">
+          <div class="col-12 input-group">
+            <span class="input-group-text">
+              <i class="bi bi-at text-primary"> </i
+            ></span>
+            <input
+              formControlName="email"
+              class="form-control text-dark"
+              type="email"
+              placeholder="Email"
+            />
+          </div>
+        </div>
+        <small
+          *ngIf="
+            userForm.controls['email'].dirty &&
+            userForm.hasError('required', 'email')
+          "
+          class="text-danger"
+        >
+          *Email requerido
+        </small>
+
+        <div class="row pt-3">
+          <div class="col-12 input-group">
+            <span class="input-group-text">
+              <i class="bi bi-telephone-fill text-primary"> </i
+            ></span>
+            <input
+              formControlName="telefono"
+              class="form-control text-dark"
+              type="text"
+              placeholder="Telefono"
+            />
+          </div>
+        </div>
+        <small
+          *ngIf="
+            userForm.controls['telefono'].dirty &&
+            userForm.hasError('required', 'telefono')
+          "
+          class="text-danger"
+        >
+          *Telefono requerido
+        </small>
+
+        <div class="row pt-3">
+          <div class="col-12">
+            <label for="elo" class="form-label">Elo:</label>
+            <input
+              id="elo"
+              formControlName="elo"
+              class="form-control text-dark"
+              type="number"
+            />
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="col-12">
+            <label for="fileInput" class="form-label">Foto de perfil:</label>
+            <input
+              id="fileInput"
+              type="file"
+              class="form-control"
+              (change)="onArchivoSeleccionado($event)"
+            />
+          </div>
+        </div>
+
+        <div class="row pt-3 justify-content-center">
+          <div class="col-4">
+            <button
+              (click)="actualizar()"
+              type="submit"
+              class="btn btn-primary btn-block mt-4 w-100"
+            >
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

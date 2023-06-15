@@ -8,7 +8,8 @@ import { ResumenComponent } from './dash/resumen/resumen.component';
 import { PartidasComponent } from './dash/partidas/partidas.component';
 import { ConfiguracionComponent } from './dash/configuracion/configuracion.component';
 import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
-import { PerfilComponent } from './usuario/perfil/perfil.component';
+import { PerfilComponent } from './perfiles/perfil/perfil.component';
+import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-organizador.component';
 
 const routes: Routes = [
   {
@@ -29,14 +30,21 @@ const routes: Routes = [
       { path: 'resumen', component: ResumenComponent },
       { path: 'partidas', component: PartidasComponent },
       { path: 'configuracion', component: ConfiguracionComponent },
+      { path: 'torneos', component: TorneosOrganizadorComponent },
       { path: 'config-organizadores', component: ConfigOrganizadoresComponent },
-      { path: '', redirectTo: 'configuracion', pathMatch: 'full' },
+      { path: '', redirectTo: 'resumen', pathMatch: 'full' },
     ],
   },
   {
     path: 'perfil/:idUsuario',
     component: PerfilComponent,
     canActivate: [() => inject(AuthGuard).canActivate()],
+    children: [
+      { path: 'resumen', component: ResumenComponent },
+      { path: 'partidas', component: PartidasComponent },
+      { path: 'torneos', component: TorneosOrganizadorComponent },
+      { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+    ],
   },
   {
     path: '',

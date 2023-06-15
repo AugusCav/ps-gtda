@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "XFg2DnumgCz/SGGgLBa4l+Da4DrJ+GyTDwMsDjGxodoeOXyMMbSLmvb8l8lYG/GcnftLg2xONJV6iZd+nc9p1A==",
+  "dgSpecHash": "504vBzCyrlWWtMXFferbuUxRB7Ji4G2zy7YKPUqIS1z1oeReqB51QiZ7Vv1Syhf7YbAXvrAX+UgEjwrblZYyGg==",
   "success": true,
   "projectFilePath": "d:\\Archivos\\Proyectos Programación\\Facultad\\PS\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
   "expectedPackageFiles": [
     "D:\\Users\\augus\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "D:\\Users\\augus\\.nuget\\packages\\mercadopago-sdk\\2.3.2\\mercadopago-sdk.2.3.2.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.15\\microsoft.aspnetcore.authentication.jwtbearer.6.0.15.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
@@ -46,6 +47,7 @@
     "D:\\Users\\augus\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "D:\\Users\\augus\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "D:\\Users\\augus\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",

@@ -1,8 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { InscripcionOrganizador } from 'src/app/models/inscripcion-organizador';
 import { Notificacion } from 'src/app/models/notificacion';
 import { AuthService } from 'src/app/services/auth.service';
+import { InscripcionService } from 'src/app/services/inscripcion.service';
 import { NotificacionService } from 'src/app/services/notificacion.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
@@ -15,12 +17,15 @@ export class NavbarComponent implements OnInit {
   cantidadNotif: number = 0;
   idUser: string = '';
   notificaciones: Notificacion[] = [];
+  existe: boolean = false;
+  inscripcion: InscripcionOrganizador = {} as InscripcionOrganizador;
 
   constructor(
     private notificacionService: NotificacionService,
     private toastr: ToastrService,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private inscripcionService: InscripcionService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +35,13 @@ export class NavbarComponent implements OnInit {
     });
 
     this.getAllNotificaciones();
+
+    this.inscripcionService.getInscripcion(this.idUser).subscribe({
+      next: (res) => {
+        this.inscripcion = res;
+        this.existe = true;
+      },
+    });
   }
 
   marcarLeida(notificacion: Notificacion) {

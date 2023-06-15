@@ -330,3 +330,5 @@ C:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\obj\D
 C:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\AuthApi.pdb
 C:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\AuthApi.genruntimeconfig.cache
 C:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\ref\AuthApi.dll
+D:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\MercadoPago.dll

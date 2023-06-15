@@ -161,7 +161,7 @@ export class NgbModalInscripcion {
 export class DetallesTorneoComponent implements OnInit {
   torneo: Torneo = {} as Torneo;
   id: string | null = '';
-  imgUrl: string = 'https://via.placeholder.com/1450x500';
+  imgUrl: string = 'url("https://via.placeholder.com/1450x500")';
   withAutofocus = `<button type="button" ngbAutofocus class="btn btn-danger"
       (click)="modal.close('Ok click')">Ok</button>`;
   esOrganizador: boolean = false;
@@ -209,6 +209,15 @@ export class DetallesTorneoComponent implements OnInit {
               this.eloUsuario = res.elo;
             },
           });
+
+          this.torneoService.getPortada(this.id).subscribe({
+            next: (res) => {
+              this.imgUrl = res;
+            },
+            error: (err) => {
+              console.error('Error al obtener la foto de perfil');
+            },
+          });
         },
         error: () => {
           alert('Error al intentar cargar el torneo');
@@ -253,13 +262,14 @@ export class DetallesTorneoComponent implements OnInit {
         new Date(),
         'HH:mm:ss'
       )!;
+      inscripcion.fecha = this.datePipe.transform(new Date(), 'yyyy/MM/dd')!;
       inscripcion.idTorneo = this.id!;
 
       this.inscripcionService.registerInscripcion(inscripcion).subscribe({
         next: () => {
           var notificacion = {
             usuarioId: this.torneo.idOrganizador,
-            mensaje: 'Nueva solicitud de inscripción',
+            mensaje: `${this.torneo.nombre}: Nueva solicitud de inscripción`,
           } as Notificacion;
           this.notificacionService.register(notificacion).subscribe({
             next: (res) => {

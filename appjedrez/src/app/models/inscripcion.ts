@@ -6,6 +6,7 @@ export interface Inscripcion {
   idTorneo: string;
   idParticipante: string;
   horaInscripcion: string;
+  fecha: string;
   estado: string;
   participante: Usuario;
   torneo: Torneo;

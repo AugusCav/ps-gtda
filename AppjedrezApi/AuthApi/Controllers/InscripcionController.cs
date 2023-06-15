@@ -41,12 +41,14 @@ public class InscripcionController : ControllerBase
     {
         var inscripcion = await _context.Inscripcions
             .Include(i => i.IdParticipanteNavigation)
+            .OrderByDescending(i => i.Fecha)
             .Select(i => new
             {
                 Id = i.Id,
                 IdTorneo = i.IdTorneo,
                 IdParticipante = i.IdParticipante,
                 HoraInscripcion = i.HoraInscripcion,
+                Fecha = i.Fecha,
                 Participante = new
                 {
                     Nombres = i.IdParticipanteNavigation.Nombres,
@@ -64,12 +66,14 @@ public class InscripcionController : ControllerBase
         var inscripcion = await _context.Inscripcions
             .Include(i => i.IdParticipanteNavigation)
             .Where(i => i.IdTorneo == idTorneo && i.Estado == "aprobado")
+            .OrderByDescending(i => i.Fecha)
             .Select(i => new
             {
                 Id = i.Id,
                 IdTorneo = i.IdTorneo,
                 IdParticipante = i.IdParticipante,
                 HoraInscripcion = i.HoraInscripcion,
+                Fecha = i.Fecha,
                 Estado = i.Estado,
                 Participante = new
                 {
@@ -90,12 +94,14 @@ public class InscripcionController : ControllerBase
         var inscripcion = await _context.Inscripcions
             .Include(i => i.IdParticipanteNavigation)
             .Where(i => i.IdTorneo == idTorneo && i.Estado != "aprobado")
+            .OrderByDescending(i => i.Fecha)
             .Select(i => new
             {
                 Id = i.Id,
                 IdTorneo = i.IdTorneo,
                 IdParticipante = i.IdParticipante,
                 HoraInscripcion = i.HoraInscripcion,
+                Fecha = i.Fecha,
                 Estado = i.Estado,
                 Participante = new
                 {
@@ -185,11 +191,13 @@ public class InscripcionController : ControllerBase
             .Include(i => i.IdTorneoNavigation).ThenInclude(t => t.IdTipoTorneoNavigation)
             .Include(i => i.IdTorneoNavigation).ThenInclude(t => t.IdOrganizadorNavigation)
             .Where(i => i.IdParticipante == idUser)
+            .OrderByDescending(i => i.Fecha)
             .Select(i => new
             {
                 Id = i.Id,
                 IdTorneo = i.IdTorneo,
                 HoraInscripcion = i.HoraInscripcion,
+                Fecha = i.Fecha,
                 Estado = i.Estado,
                 Torneo = new
                 {
@@ -215,6 +223,8 @@ public class InscripcionController : ControllerBase
 
         return Ok(inscripciones);
     }
+
+    //ENDPOINTS ORGANIZADORES
 
     [HttpPost("inscribirOrg")]
     public async Task<IActionResult> InscribirOrganizador([FromBody] InscripcionOrganizador inscripcionObj)
@@ -276,6 +286,7 @@ public class InscripcionController : ControllerBase
         var inscripciones = await _context.InscripcionOrganizadors
             .Include(i => i.IdUsuarioNavigation)
             .Where(i => i.EstadoPedido == "espera" || i.EstadoPedido == "aprobado")
+            .OrderByDescending(i => i.FechaPedido)
             .Select(i => new
             {
                 Id = i.Id,
@@ -294,14 +305,46 @@ public class InscripcionController : ControllerBase
         return Ok(inscripciones);
     }
 
+    [HttpGet("getInscripcion/{idUser}")]
+    public async Task<ActionResult<IEnumerable<InscripcionOrganizador>>> GetInscripcionesOrg(Guid idUser)
+    {
+        var inscripcion = await _context.InscripcionOrganizadors
+            .Include(i => i.IdUsuarioNavigation)
+            .Where(i => i.EstadoPedido == "aprobado" && i.IdUsuario == idUser)
+            .OrderByDescending(i => i.FechaPedido)
+            .Select(i => new
+            {
+                Id = i.Id,
+                IdUsuario = i.IdUsuario,
+                EstadoPedido = i.EstadoPedido,
+                FechaPedido = i.FechaPedido,
+                IdUsuarioNavigation = new
+                {
+                    Nombres = i.IdUsuarioNavigation.Nombres,
+                    Apellido = i.IdUsuarioNavigation.Apellido,
+                    NombreUsuario = i.IdUsuarioNavigation.NombreUsuario
+                }
+            })
+            .FirstOrDefaultAsync();
+
+        if (inscripcion == null)
+            return NotFound();
+
+        return Ok(inscripcion);
+    }
+
     [HttpPut("aprobarOrg")]
     public async Task<IActionResult> AprobarOrg([FromBody] Usuario usuario)
     {
         var org = await _context.Usuarios.FindAsync(usuario.Id);
 
-        if (org == null)
+        var inscripcion = await _context.InscripcionOrganizadors.Where(i => i.IdUsuario == usuario.Id && i.EstadoPedido == "aprobado")
+            .FirstOrDefaultAsync();
+
+        if (org == null || inscripcion == null)
             return BadRequest(new { Message = "Usuario no encontrado" });
 
+        inscripcion.EstadoPedido = "terminado";
         org.IdRolUsuario = 2;
         _context.SaveChanges();
 

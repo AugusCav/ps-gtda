@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
-
+using AuthApi.Request;
 
 namespace AuthApi.Controllers;
 
@@ -104,6 +104,74 @@ public class UserController : ControllerBase
             .FirstOrDefaultAsync();
 
         return Ok(usuario);
+    }
+
+    // Devolver portada de torneo
+    [HttpGet("getFotoPerfil/{id}")]
+    public async Task<ActionResult> GetFotoPerfil(Guid id)
+    {
+        var usuario = await _authContext.Usuarios.FirstOrDefaultAsync(t => t.Id == id);
+
+        if (usuario == null || usuario.FotoPerfil == null)
+            return BadRequest();
+
+        byte[] bytes = null;
+        string sBase64String = Convert.ToBase64String(usuario.FotoPerfil);
+        if (!string.IsNullOrEmpty(sBase64String))
+        {
+            bytes = Convert.FromBase64String(sBase64String);
+        }
+
+        return Ok(bytes);
+    }
+
+    [HttpPut("updateUser")]
+    public async Task<IActionResult> UpdateUser([FromForm] UserRequest userObj)
+    {
+        if (userObj == null)
+            return BadRequest();
+
+        var user = await _authContext.Usuarios.FindAsync(userObj.Id);
+
+        if (user == null)
+            return BadRequest();
+
+        if (userObj.FotoPerfil != null && userObj.FotoPerfil.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                userObj.FotoPerfil.CopyTo(memoryStream);
+                user.FotoPerfil = memoryStream.ToArray();
+            }
+        }
+
+        if (user.NombreUsuario != userObj.NombreUsuario)
+        {
+            //Check nombre usuario
+            if (await CheckUsernameExistAsync(userObj.NombreUsuario))
+            {
+                return BadRequest(new { Message = "El nombre de usuario ya existe" });
+            }
+        }
+        if (user.Email != userObj.Email)
+        {
+            //Check email
+            if (await CheckEmailExistAsync(userObj.Email))
+                return BadRequest(new { Message = "El email ya está registrado" });
+        }
+
+        user.NombreUsuario = userObj.NombreUsuario;
+        user.Nombres = userObj.Nombres;
+        user.Apellido = userObj.Apellido;
+        user.Email = userObj.Email;
+        user.Telefono = userObj.Telefono;
+        user.Elo = userObj.Elo;
+
+        _authContext.SaveChanges();
+        return Ok(new
+        {
+            Message = "Torneo Update Success"
+        });
     }
 
     private Task<bool> CheckUsernameExistAsync(string nombreUsuario)

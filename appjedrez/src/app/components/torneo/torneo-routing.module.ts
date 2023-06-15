@@ -66,11 +66,7 @@ const routes: Routes = [
     component: ModificarTorneoComponent,
     canActivate: [() => inject(AuthGuard).canActivateOrg()],
   },
-  {
-    path: '',
-    redirectTo: 'listado',
-    pathMatch: 'full',
-  },
+  
 ];
 
 @NgModule({
