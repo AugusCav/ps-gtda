@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
   { path: 'faq', component: FaqComponent },
- 
+  { path: '**', redirectTo: 'inicio', pathMatch: 'full' },
 ];
 
 @NgModule({

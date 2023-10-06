@@ -70,21 +70,25 @@ export class PartidasComponent implements OnInit {
         data: [],
         label: 'Jugadas',
         fill: false,
+        tension: 0.4,
       },
       {
         data: [],
         label: 'Ganadas',
         fill: false,
+        tension: 0.4,
       },
       {
         data: [],
         label: 'Perdidas',
         fill: false,
+        tension: 0.4,
       },
       {
         data: [],
         label: 'Empatadas',
         fill: false,
+        tension: 0.4,
       },
     ],
   };

@@ -46,6 +46,7 @@ export class ResumenComponent implements OnInit {
         data: [0, 25, 12, 35, 20],
         label: 'Torneos jugados',
         fill: true,
+        tension: 0.4,
       },
     ],
   };

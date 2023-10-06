@@ -77,7 +77,7 @@ export class NgbdModalConfirmAutofocus {
         this.router.navigate(['torneo/listado']);
       },
       error: () => {
-        console.log('error');
+
         this.modal.close('Ok click');
       },
     });
@@ -144,7 +144,6 @@ export class NgbModalInscripcion {
         window.location.reload();
       },
       error: () => {
-        console.log('error');
         this.modal.close('Ok click');
       },
     });
@@ -242,7 +241,7 @@ export class DetallesTorneoComponent implements OnInit {
   }
 
   borrarInscripcion() {
-    console.log(this.idUser);
+
     const data = this.idUser;
     const injector = Injector.create({
       providers: [{ provide: 'DATA', useValue: data }],
@@ -262,7 +261,7 @@ export class DetallesTorneoComponent implements OnInit {
         new Date(),
         'HH:mm:ss'
       )!;
-      inscripcion.fecha = this.datePipe.transform(new Date(), 'yyyy/MM/dd')!;
+      inscripcion.fecha = this.datePipe.transform(new Date(), 'yyyy-MM-dd')!;
       inscripcion.idTorneo = this.id!;
 
       this.inscripcionService.registerInscripcion(inscripcion).subscribe({
@@ -281,7 +280,7 @@ export class DetallesTorneoComponent implements OnInit {
             },
           });
         },
-        error: () => {
+        error: (err) => {
           this.toastr.error('Ocurrió un error inesperado');
         },
       });
@@ -308,7 +307,6 @@ export class DetallesTorneoComponent implements OnInit {
   iniciar() {
     this.inscripcionService.getByTorneo(this.id).subscribe({
       next: (res) => {
-        console.log(res);
         if (res.length > 0) {
           if (res.some((inscripto) => inscripto.estado == 'aprobado')) {
             var torneo = { id: this.id } as Torneo;

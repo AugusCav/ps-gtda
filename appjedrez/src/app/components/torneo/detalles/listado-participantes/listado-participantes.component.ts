@@ -72,7 +72,6 @@ export class NgbModalInscripcion {
         this.toastr.success('Inscripción eliminada con éxito');
       },
       error: () => {
-        console.log('error');
         this.modal.close('Ok click');
       },
     });

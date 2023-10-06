@@ -88,7 +88,6 @@ export class NgbModalInscripcion {
           });
         },
         error: () => {
-          console.log('error');
           this.modal.close('Ok click');
         },
       });

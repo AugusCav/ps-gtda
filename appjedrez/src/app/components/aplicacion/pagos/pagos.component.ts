@@ -39,7 +39,7 @@ export class PagosComponent implements OnInit {
       },
     });
 
-    this.mp = new MercadoPago('', {
+    this.mp = new MercadoPago(***REMOVED***, {
       locale: 'es-AR',
     });
     this.bricksBuilder = this.mp.bricks();
@@ -51,7 +51,7 @@ export class PagosComponent implements OnInit {
         this.mp.bricks().create('wallet', 'wallet_container', {
           initialization: {
             preferenceId: this.preference.id,
-            redirectMode: 'blank',
+            redirectMode: 'self',
           },
         });
       },

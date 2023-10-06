@@ -118,7 +118,7 @@ public class InscripcionController : ControllerBase
     [HttpDelete("delete/{id}")]
     public async Task<ActionResult> DeleteInscripcion(Guid id)
     {
-        var inscripcion = await _context.Inscripcions.FindAsync(id);
+        var inscripcion = await _context.Inscripcions.FirstOrDefaultAsync(i => i.Id == id);
         if (inscripcion == null)
         {
             return NotFound();
@@ -161,7 +161,7 @@ public class InscripcionController : ControllerBase
     {
         var inscripto = true;
         var incsripcion = await _context.Inscripcions
-            .FirstOrDefaultAsync(i => i.IdParticipante == idParticipante && i.IdTorneo == idTorneo);
+            .FirstOrDefaultAsync(i => i.IdParticipante == idParticipante && i.IdTorneo == idTorneo && (i.Estado == "espera" || i.Estado == "aprobado"));
 
         if (incsripcion == null)
             inscripto = false;

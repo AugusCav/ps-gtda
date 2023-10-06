@@ -23,7 +23,7 @@ export class DetallesGameComponent implements OnInit {
 
   ngOnInit(): void {
     this.idPartida = this.torneoService.idPartida;
-    console.log(this.idPartida);
+
     if (this.idPartida !== '') {
       this.torneoService.getPartida(this.idPartida!).subscribe({
         next: (res) => {

@@ -30,8 +30,8 @@
                 <tr *ngFor="let torneo of torneos">
                   <td>{{ torneo.nombre }}</td>
                   <td>{{ torneo.tipoTorneo.nombre }}</td>
-                  <td>{{ torneo.fechaInicio | date : "short" }}</td>
-                  <td>{{ torneo.fechaFinal | date : "short" }}</td>
+                  <td>{{ torneo.fechaInicio | date : "shortDate" }}</td>
+                  <td>{{ torneo.fechaFinal | date : "shortDate" }}</td>
                   <td>
                     <a
                       class="btn btn-sm btn-primary rounded-pill"

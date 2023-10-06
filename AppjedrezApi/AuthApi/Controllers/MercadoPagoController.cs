@@ -15,7 +15,7 @@ public class MercadoPagoController : ControllerBase
     [HttpGet("getPreferencia")]
     public async Task<ActionResult> CrearPreferencia()
     {
-        MercadoPagoConfig.AccessToken = "";
+        MercadoPagoConfig.AccessToken = ***REMOVED***;
 
         var request = new PreferenceRequest
         {

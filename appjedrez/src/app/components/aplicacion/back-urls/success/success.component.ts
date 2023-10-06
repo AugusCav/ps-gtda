@@ -34,9 +34,7 @@ export class SuccessComponent implements OnInit {
           this.router.navigate(['/user/dashboard']);
         }, 5000);
       },
-      error: (err) => {
-        console.log(err.error.message);
-      },
+      error: (err) => {},
     });
   }
 
