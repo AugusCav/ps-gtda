@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { TipoTorneo } from 'src/app/models/tipo-torneo';
 import { AuthService } from 'src/app/services/auth.service';
@@ -27,7 +28,8 @@ export class RegistroTorneoComponent implements OnInit {
     private router: Router,
     private calendar: NgbCalendar,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -86,7 +88,7 @@ export class RegistroTorneoComponent implements OnInit {
 
       //tirar error
       ValidateForm.validateAllFormFields(this.torneoForm);
-      alert('Tu form es inválido');
+      this.toastr.error('Tu form es inválido', 'Error');
     }
   }
 
@@ -96,5 +98,9 @@ export class RegistroTorneoComponent implements OnInit {
     const year = model.year;
 
     return `${year}-${month}-${day}`;
+  }
+
+  getToday() {
+    return this.formatearFecha(this.calendar.getToday());
   }
 }
