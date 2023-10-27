@@ -826,4 +826,5 @@ public class TorneoController : ControllerBase
         };
         return Ok(result);
     }
+
 }

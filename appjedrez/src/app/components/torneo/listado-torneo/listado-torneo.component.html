@@ -13,6 +13,107 @@
   </div>
   <div class="container-fluid">
     <div class="container bg-light mt-2 rounded px-5">
+      <!-- Busqueda simple -->
+      <div class="row" *ngIf="false">
+        <div class="col-12 mt-3">
+          <label for="buscadorInput" class="form-label">Buscar:</label>
+          <input
+            type="text"
+            name="buscador"
+            id="buscadorInput"
+            class="form-control"
+            placeholder="Nombre torneo"
+          />
+        </div>
+        <div class="col-md-4 offset-md-8 mb-2 text-end mb-3">
+          <a href="">Busqueda avanzada</a>
+        </div>
+        <div class="col-md-2 offset-md-10">
+          <button class="btn btn-primary w-100">Buscar</button>
+        </div>
+      </div>
+      <!-- Busqueda avanzada -->
+      <div class="row">
+        <div class="col-12 py-3">
+          <form class="container">
+            <div class="row pt-3">
+              <div class="col-12">
+                <input
+                  class="form-control text-dark"
+                  type="text"
+                  placeholder="Nombre del torneo"
+                  name="nombre"
+                />
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col-12">
+                <label class="label-form" for="fechaInicioInput">
+                  Fecha de inicio
+                </label>
+                <input
+                  class="form-control text-dark"
+                  type="date"
+                  name="fechaInicio"
+                  id="fechaInicioInput"
+                />
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col-12">
+                <label class="label-form" for="fechaFinalInput">
+                  Fecha de finalización
+                </label>
+                <input
+                  class="form-control text-dark"
+                  type="date"
+                  name="fechaFinal"
+                  id="fechaFinalInput"
+                />
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col-12 input-group">
+                <span class="input-group-text">
+                  <i class="text-primary">#</i>
+                </span>
+                <input
+                  class="form-control text-dark"
+                  type="number"
+                  name="eloMinimo"
+                  placeholder="Elo mínimo"
+                />
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col-12 input-group">
+                <span class="input-group-text">
+                  <i class="text-primary">#</i>
+                </span>
+                <input
+                  class="form-control text-dark"
+                  type="number"
+                  name="eloMaximo"
+                  placeholder="Elo máximo"
+                />
+              </div>
+            </div>
+            <div class="row pt-3">
+              <div class="col-12 input-group">
+                <span class="input-group-text"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+                <input
+                  class="form-control text-dark"
+                  type="text"
+                  name="eloMaximo"
+                  id="eloMaximoInput"
+                  placeholder="Localidad"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Resultados -->
       <div class="row">
         <div class="col-12">
           <div class="table-responsive">
