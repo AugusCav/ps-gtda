@@ -1,5 +1,6 @@
 using AuthApi.Context;
 using AuthApi.Models;
+using AuthApi.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,31 @@ public class InscripcionController : ControllerBase
         {
             Message = "Inscripcion Register Success"
         });
+    }
+
+    [HttpPost("registrarMultiple")]
+    public async Task<IActionResult> RegisterInscripciones([FromBody] RegisterInscripcionesRequest request)
+    {
+        if (request.Inscripciones == null)
+            return BadRequest();
+
+        try
+        {
+            foreach (var inscripcion in request.Inscripciones)
+            {
+                inscripcion.Id = Guid.NewGuid();
+                inscripcion.Estado = "aprobado";
+            }
+
+            await _context.Inscripcions.AddRangeAsync(request.Inscripciones);
+            await _context.SaveChangesAsync();
+            return Ok(new { Message = "Inscripciones Register Success" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
     [HttpGet]
@@ -146,9 +172,6 @@ public class InscripcionController : ControllerBase
     [HttpGet("getParticipante/{id}")]
     public async Task<ActionResult> GetParticipante(Guid id)
     {
-        if (id == null)
-            return BadRequest(new { Message = "Ningún participante seleccionado" });
-
         var participante = await _context.Usuarios.FindAsync(id);
         if (participante == null)
             return NotFound(new { Message = "Participante no encontrado" });

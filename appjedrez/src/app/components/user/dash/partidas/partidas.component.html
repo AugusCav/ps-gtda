@@ -38,7 +38,7 @@
                   [data]="lineChartData"
                   [options]="lineChartOptions"
                   [legend]="lineChartLegend"
-                  style="max-height: 250px;"
+                  style="max-height: 250px"
                 >
                 </canvas>
               </div>
@@ -47,9 +47,29 @@
         </div>
       </div>
     </div>
+    <!-- partidas -->
     <div class="col-md-4">
+      <!-- paginacion -->
+      <div class="row my-2">
+        <div class="col-12">
+          <ngb-pagination
+            [collectionSize]="partidas.length"
+            [pageSize]="pageSize"
+            (pageChange)="changeList($event)"
+            [maxSize]="5"
+            [rotate]="true"
+            [boundaryLinks]="false"
+          />
+        </div>
+      </div>
       <div class="row mx-1 gx-1 gy-1">
-        <div class="col-12" *ngFor="let partida of partidas">
+        <div
+          class="col-12"
+          *ngFor="
+            let partida of partidas
+              | slice : (page - 1) * pageSize : page * pageSize
+          "
+        >
           <div class="rounded bg-light p-3">
             <div class="row align-items-center text-dark">
               <div class="col-7 border-end">

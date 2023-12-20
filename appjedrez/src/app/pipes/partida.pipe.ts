@@ -4,11 +4,25 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'partida',
 })
 export class PartidaPipe implements PipeTransform {
-  transform(value: any, ...args: unknown[]): unknown {
-    if (value == null) {
-      return 'No se ha jugado';
+  transform(value: any, resultado: boolean): unknown {
+    if (!resultado) {
+      if (value == null) {
+        return 'No se ha jugado';
+      } else {
+        return value;
+      }
     } else {
-      return value;
+      if (value == -1) {
+        return 'Negras';
+      }
+      if (value == 1) {
+        return 'Blancas';
+      }
+      if (value == 0) {
+        return 'TABLAS';
+      } else {
+        return 'Ninguno';
+      }
     }
   }
 }

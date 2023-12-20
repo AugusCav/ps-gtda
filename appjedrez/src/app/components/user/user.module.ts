@@ -14,6 +14,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
 import { PerfilComponent } from './perfiles/perfil/perfil.component';
 import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-organizador.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-
     FormsModule,
     SharedModule,
     NgChartsModule,
+    NgbModule,
   ],
 })
 export class UserModule {}

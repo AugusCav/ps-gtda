@@ -77,7 +77,6 @@ export class NgbdModalConfirmAutofocus {
         this.router.navigate(['torneo/listado']);
       },
       error: () => {
-
         this.modal.close('Ok click');
       },
     });
@@ -211,7 +210,7 @@ export class DetallesTorneoComponent implements OnInit {
 
           this.torneoService.getPortada(this.id).subscribe({
             next: (res) => {
-              this.imgUrl = res;
+              this.imgUrl = `url(data:image/jpeg;base64,${res})`;
             },
             error: (err) => {
               console.error('Error al obtener la foto de perfil');
@@ -241,7 +240,6 @@ export class DetallesTorneoComponent implements OnInit {
   }
 
   borrarInscripcion() {
-
     const data = this.idUser;
     const injector = Injector.create({
       providers: [{ provide: 'DATA', useValue: data }],
@@ -268,7 +266,8 @@ export class DetallesTorneoComponent implements OnInit {
         next: () => {
           var notificacion = {
             usuarioId: this.torneo.idOrganizador,
-            mensaje: `${this.torneo.nombre}: Nueva solicitud de inscripción`,
+            torneoId: this.id,
+            mensaje: this.torneo.nombre + `: Nueva solicitud de inscripción`,
           } as Notificacion;
           this.notificacionService.register(notificacion).subscribe({
             next: (res) => {

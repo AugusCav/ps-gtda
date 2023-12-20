@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
   selector: 'app-inicio',
@@ -13,9 +12,9 @@ export class InicioComponent {
 
   entrar() {
     if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/user/dashboard']);
+      this.router.navigate(['/home']);
     } else {
-      this.router.navigate(['/user/login']);
+      this.router.navigate(['/home']);
     }
   }
 }

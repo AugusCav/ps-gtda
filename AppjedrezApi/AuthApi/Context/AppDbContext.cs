@@ -143,6 +143,10 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
 
+            entity.HasOne(d => d.Torneo).WithMany(p => p.Notificacions)
+                .HasForeignKey(d => d.TorneoId)
+                .HasConstraintName("FkNotificacion_TorneoId");
+
             entity.HasOne(d => d.Usuario).WithMany(p => p.Notificacions)
                 .HasForeignKey(d => d.UsuarioId)
                 .HasConstraintName("FkNotificacion_UsuarioId");
@@ -217,7 +221,7 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(150)
+                .HasMaxLength(2000)
                 .IsUnicode(false);
             entity.Property(e => e.Estado)
                 .HasMaxLength(25)

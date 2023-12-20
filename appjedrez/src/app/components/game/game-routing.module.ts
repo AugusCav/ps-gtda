@@ -19,6 +19,7 @@ const routes: Routes = [
         path: 'ver',
         component: VerComponent,
       },
+      { path: '', redirectTo: 'detalles', pathMatch: 'full' },
     ],
   },
   { path: '', redirectTo: ':idPartida', pathMatch: 'full' },

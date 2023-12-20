@@ -16,6 +16,7 @@ import { AplicacionModule } from './components/aplicacion/aplicacion.module';
 import { SharedModule } from './shared/shared-module/shared.module';
 import { TerminosCondicionesComponent } from './components/extra/terminos-condiciones/terminos-condiciones.component';
 import { FaqComponent } from './components/extra/faq/faq.component';
+import { HomeComponent } from './components/home/home.component';
 
 registerLocaleData(localeEs);
 @NgModule({
@@ -24,6 +25,7 @@ registerLocaleData(localeEs);
     InicioComponent,
     TerminosCondicionesComponent,
     FaqComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

@@ -4821,19 +4821,19 @@
     ]
   },
   "packageFolders": {
-    "D:\\Users\\Luci\\.nuget\\packages\\": {}
+    "C:\\Users\\larap\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Users\\Luci\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+      "projectUniqueName": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
       "projectName": "AuthApi",
-      "projectPath": "d:\\Users\\Luci\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
-      "packagesPath": "D:\\Users\\Luci\\.nuget\\packages\\",
-      "outputPath": "d:\\Users\\Luci\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
+      "projectPath": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\AuthApi.csproj",
+      "packagesPath": "C:\\Users\\larap\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\larap\\Documents\\Augusto\\Programacion\\ps-gtda\\AppjedrezApi\\AuthApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "D:\\Users\\Luci\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\larap\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -4911,7 +4911,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -29,11 +29,27 @@
           </li>
           <li *ngIf="partida.pgn == null">
             <span class="text-bg-info text-light badge"> Estado: </span>
-            {{ partida.pgn | partida }}
+            {{ partida.pgn | partida : false }}
           </li>
           <li *ngIf="partida.pgn != null">
             <span class="text-bg-info text-light badge"> Estado: </span>
             Terminada
+          </li>
+          <li>
+            <span class="text-bg-info text-light badge"> Resultado: </span>
+            {{ partida.resultado | partida : true }}
+          </li>
+          <li>
+            <span class="text-bg-info text-light badge"> Torneo: </span>
+            <button
+              class="btn btn-link"
+              [routerLink]="[
+                '/app/torneo/detalles',
+                partida.idRondaNavigation.idTorneo
+              ]"
+            >
+              {{ partida.idRondaNavigation.torneo.nombre }}
+            </button>
           </li>
         </ul>
       </div>

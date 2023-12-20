@@ -33,6 +33,32 @@ public class TorneoController : ControllerBase
         return Ok(new { Message = "Torneo Register Success" });
     }
 
+    [HttpPost("registrarMultiples")]
+    public async Task<IActionResult> RegisterTorneos([FromBody] RegisterTorneosRequest request)
+    {
+        if (request.Torneos == null)
+            return BadRequest();
+
+        try
+        {
+            foreach (var torneo in request.Torneos)
+            {
+                torneo.Id = Guid.NewGuid();
+
+            }
+
+            await _context.Torneos.AddRangeAsync(request.Torneos);
+            await _context.SaveChangesAsync();
+            return Ok(new { Message = "Torneos Register Success" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return StatusCode(500, new { error = ex.Message });
+        }
+
+    }
+
     // Actualizar un torneo
     [HttpPut("actualizar")]
     public async Task<IActionResult> ActualizarTorneo([FromForm] TorneoRequest torneoObj)
@@ -164,7 +190,7 @@ public class TorneoController : ControllerBase
     {
         var torneos = await _context.Torneos
             .Include(t => t.IdTipoTorneoNavigation)
-            .Where(t => t.Borrado != true && t.Estado == "espera")
+            .Where(t => t.Borrado != true)
             .OrderByDescending(i => i.FechaInicio)
             .Select(t => new
             {
@@ -172,6 +198,9 @@ public class TorneoController : ControllerBase
                 Nombre = t.Nombre,
                 FechaInicio = t.FechaInicio,
                 FechaFinal = t.FechaFinal,
+                EloMinimo = t.EloMinimo,
+                EloMaximo = t.EloMaximo,
+                Localidad = t.Localidad,
                 TipoTorneo = new
                 {
                     Nombre = t.IdTipoTorneoNavigation.Nombre
@@ -461,7 +490,8 @@ public class TorneoController : ControllerBase
                     IdTorneo = p.IdRondaNavigation.IdTorneo,
                     Torneo = new
                     {
-                        IdOrganizador = p.IdRondaNavigation.IdTorneoNavigation.IdOrganizador
+                        IdOrganizador = p.IdRondaNavigation.IdTorneoNavigation.IdOrganizador,
+                        Nombre = p.IdRondaNavigation.IdTorneoNavigation.Nombre
                     }
                 }
             })

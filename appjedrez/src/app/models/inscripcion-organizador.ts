@@ -1,3 +1,4 @@
+import { Torneo } from './torneo';
 import { Usuario } from './usuario';
 
 export interface InscripcionOrganizador {

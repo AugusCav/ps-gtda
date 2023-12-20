@@ -56,6 +56,7 @@ public class NotificacionController : ControllerBase
         {
             Id = i.Id,
             UsuarioId = i.UsuarioId,
+            TorneoId = i.TorneoId,
             Mensaje = i.Mensaje,
             Estado = i.Estado,
             Fecha = i.Fecha

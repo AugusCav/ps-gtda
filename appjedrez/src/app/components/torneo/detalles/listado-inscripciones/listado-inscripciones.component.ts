@@ -77,6 +77,7 @@ export class NgbModalInscripcion {
           var notificacion = {
             usuarioId: this.data.inscripcion.participante.id,
             mensaje: `Su solicitud de inscripción a ${this.data.torneo.nombre} ha sido rechazada`,
+            torneoId: this.data.torneo.id,
           } as Notificacion;
 
           this.notificacionService.register(notificacion).subscribe({
@@ -150,7 +151,7 @@ export class ListadoInscripcionesComponent implements OnInit {
   }
 
   abrirParticipante(idParticipante: string) {
-    this.router.navigate(['/user/perfil',idParticipante]);
+    this.router.navigate(['/user/perfil', idParticipante]);
   }
 
   openRechazar(inscripcion: any) {
@@ -170,6 +171,7 @@ export class ListadoInscripcionesComponent implements OnInit {
           usuarioId: inscripcion.idParticipante,
           mensaje: mensaje,
           fecha: this.datePipe.transform(new Date(), 'yyyy:MM:dd')!,
+          torneoId: this.id,
         } as Notificacion;
         this.notificacionService.register(notificacion);
         window.location.reload();

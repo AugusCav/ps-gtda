@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { TerminosCondicionesComponent } from './components/extra/terminos-condiciones/terminos-condiciones.component';
 import { FaqComponent } from './components/extra/faq/faq.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
@@ -10,7 +11,8 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/user/user.module').then((m) => m.UserModule),
   },
-  { path: 'inicio', component: InicioComponent },
+  { path: 'portada', component: InicioComponent },
+  { path: 'home', component: HomeComponent },
   {
     path: 'app',
     loadChildren: () =>
@@ -20,7 +22,7 @@ const routes: Routes = [
   },
   { path: 'terminos-condiciones', component: TerminosCondicionesComponent },
   { path: 'faq', component: FaqComponent },
-  { path: '**', redirectTo: 'inicio', pathMatch: 'full' },
+  { path: '**', redirectTo: 'portada', pathMatch: 'full' },
 ];
 
 @NgModule({

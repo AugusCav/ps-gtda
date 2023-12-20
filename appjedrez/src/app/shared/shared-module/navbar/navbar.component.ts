@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { InscripcionOrganizador } from 'src/app/models/inscripcion-organizador';
@@ -25,7 +26,8 @@ export class NavbarComponent implements OnInit {
     private toastr: ToastrService,
     private userStore: UserStoreService,
     private auth: AuthService,
-    private inscripcionService: InscripcionService
+    private inscripcionService: InscripcionService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,6 @@ export class NavbarComponent implements OnInit {
   }
 
   marcarLeida(notificacion: Notificacion) {
-    console.log(notificacion);
     this.notificacionService.actualizar(notificacion).subscribe({
       next: () => {
         this.notificacionService.getAll(this.idUser).subscribe({
@@ -69,10 +70,15 @@ export class NavbarComponent implements OnInit {
         this.notificacionService.notificaciones = res;
         this.cantidadNotif = res.length;
         this.notificaciones = res;
+        console.log(this.notificaciones);
       },
       error: (err) => {
         this.toastr.error(err.error.message, 'Error');
       },
     });
+  }
+
+  irTorneo(notificacion: Notificacion) {
+    this.router.navigate(['/app/torneo/detalles/', notificacion.torneoId]);
   }
 }

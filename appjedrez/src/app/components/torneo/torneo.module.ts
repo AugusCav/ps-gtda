@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TorneoRoutingModule } from './torneo-routing.module';
-import { ListadoTorneoComponent } from './listado-torneo/listado-torneo.component';
+import { ListadoTorneoComponent, NgbdSortableHeader } from './listado-torneo/listado-torneo.component';
 import { DetallesTorneoComponent } from './detalles/detalles-torneo/detalles-torneo.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegistroTorneoComponent } from './registro-torneo/registro-torneo.component';
@@ -30,6 +30,7 @@ import { SharedModule } from 'src/app/shared/shared-module/shared.module';
     RondasComponent,
     PartidasComponent,
     ListadoPartidasComponent,
+    NgbdSortableHeader,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Inscripcion } from 'src/app/models/inscripcion';
@@ -19,6 +20,8 @@ export class ResumenComponent implements OnInit {
   torneoReport: TorneoReportResponse = {} as TorneoReportResponse;
   loaded: boolean = false;
   torneosPorMes: number[] = [];
+  page: number = 1;
+  pageSize: number = 5;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -57,7 +60,8 @@ export class ResumenComponent implements OnInit {
     private inscripcionService: InscripcionService,
     private userStore: UserStoreService,
     private auth: AuthService,
-    private torneoService: TorneoService
+    private torneoService: TorneoService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -88,5 +92,13 @@ export class ResumenComponent implements OnInit {
         console.log('Hubo un error en el get de torneos');
       },
     });
+  }
+
+  changeList(page: number) {
+    this.page = page;
+  }
+
+  irPerfil(idOrganizador: any) {
+    window.location.href = `/user/perfil/${idOrganizador}`;
   }
 }

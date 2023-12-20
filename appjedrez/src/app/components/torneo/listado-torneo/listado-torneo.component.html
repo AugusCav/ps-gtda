@@ -14,47 +14,69 @@
   <div class="container-fluid">
     <div class="container bg-light mt-2 rounded px-5">
       <!-- Busqueda simple -->
-      <div class="row" *ngIf="false">
-        <div class="col-12 mt-3">
-          <label for="buscadorInput" class="form-label">Buscar:</label>
-          <input
-            type="text"
-            name="buscador"
-            id="buscadorInput"
-            class="form-control"
-            placeholder="Nombre torneo"
-          />
-        </div>
-        <div class="col-md-4 offset-md-8 mb-2 text-end mb-3">
-          <a href="">Busqueda avanzada</a>
-        </div>
-        <div class="col-md-2 offset-md-10">
-          <button class="btn btn-primary w-100">Buscar</button>
+      <div class="row" *ngIf="!avanzado">
+        <div class="col-12">
+          <form class="container">
+            <div class="col-12 mt-3">
+              <label for="buscadorInput" class="form-label">Buscar:</label>
+              <input
+                type="text"
+                name="buscador"
+                id="buscadorInput"
+                class="form-control"
+                placeholder="Nombre torneo"
+                [(ngModel)]="busquedaSimple"
+              />
+            </div>
+            <div class="col-md-4 offset-md-8 mb-2 text-end mb-3">
+              <button
+                class="btn btn-link"
+                (click)="cambiarBusqueda()"
+                type="button"
+              >
+                Busqueda avanzada
+              </button>
+            </div>
+            <div class="col-md-2 offset-md-10">
+              <button
+                class="btn btn-primary w-100"
+                type="submit"
+                (click)="busqueda()"
+              >
+                Buscar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
       <!-- Busqueda avanzada -->
-      <div class="row">
-        <div class="col-12 py-3">
-          <form class="container">
+      <div class="row" *ngIf="avanzado">
+        <div class="col-12 mt-3">
+          <button class="btn btn-link" (click)="cambiarBusqueda()">
+            <i class="bi bi-caret-left-fill"></i> Busqueda simple
+          </button>
+        </div>
+        <div class="col-12">
+          <form class="container" [formGroup]="filtroAvanzadoForm">
             <div class="row pt-3">
               <div class="col-12">
                 <input
+                  formControlName="nombre"
                   class="form-control text-dark"
                   type="text"
                   placeholder="Nombre del torneo"
-                  name="nombre"
                 />
               </div>
             </div>
             <div class="row pt-3">
               <div class="col-12">
                 <label class="label-form" for="fechaInicioInput">
-                  Fecha de inicio
+                  Fecha desde
                 </label>
                 <input
+                  formControlName="fechaInicio"
                   class="form-control text-dark"
                   type="date"
-                  name="fechaInicio"
                   id="fechaInicioInput"
                 />
               </div>
@@ -62,52 +84,70 @@
             <div class="row pt-3">
               <div class="col-12">
                 <label class="label-form" for="fechaFinalInput">
-                  Fecha de finalización
+                  Fecha hasta
                 </label>
                 <input
+                  formControlName="fechaFinal"
                   class="form-control text-dark"
                   type="date"
-                  name="fechaFinal"
                   id="fechaFinalInput"
                 />
               </div>
             </div>
             <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="text-primary">#</i>
-                </span>
+              <div class="col-6">
+                <label class="label-form" for="fechaInicioInput">
+                  Elo desde
+                </label>
                 <input
+                  formControlName="eloMinimo"
                   class="form-control text-dark"
                   type="number"
-                  name="eloMinimo"
                   placeholder="Elo mínimo"
                 />
               </div>
-            </div>
-            <div class="row pt-3">
-              <div class="col-12 input-group">
-                <span class="input-group-text">
-                  <i class="text-primary">#</i>
-                </span>
+              <div class="col-6">
+                <label class="label-form" for="fechaInicioInput">
+                  Elo hasta
+                </label>
                 <input
+                  formControlName="eloMaximo"
                   class="form-control text-dark"
                   type="number"
-                  name="eloMaximo"
                   placeholder="Elo máximo"
                 />
               </div>
             </div>
             <div class="row pt-3">
               <div class="col-12 input-group">
-                <span class="input-group-text"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+                <span class="input-group-text"
+                  ><i class="bi bi-geo-alt-fill text-primary"></i
+                ></span>
                 <input
+                  [(ngModel)]="localidad"
+                  [ngbTypeahead]="search"
+                  [ngModelOptions]="{ standalone: true }"
                   class="form-control text-dark"
                   type="text"
-                  name="eloMaximo"
-                  id="eloMaximoInput"
+                  id="localidadInput"
                   placeholder="Localidad"
                 />
+              </div>
+            </div>
+            <div class="row py-2">
+              <div class="col-1">
+                <button
+                  class="btn btn-primary"
+                  (click)="filtroAvanzado()"
+                  type="submit"
+                >
+                  Buscar
+                </button>
+              </div>
+              <div class="col-5 offset-6 text-end">
+                <button class="btn btn-link" (click)="quitarFiltros()">
+                  <i class="bi bi-trash-fill"></i> Quitar filtros
+                </button>
               </div>
             </div>
           </form>
@@ -117,22 +157,51 @@
       <div class="row">
         <div class="col-12">
           <div class="table-responsive">
-            <table class="table text-dark">
+            <table class="table table-striped text-dark">
               <thead>
                 <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Tipo</th>
-                  <th scope="col">Inicia</th>
-                  <th scope="col">Finaliza</th>
+                  <th scope="col" sortable="nombre" (sort)="onSort($event)">
+                    Nombre
+                  </th>
+                  <th scope="col" sortable="tipo" (sort)="onSort($event)">
+                    Tipo
+                  </th>
+                  <th
+                    scope="col"
+                    sortable="fechaInicio"
+                    (sort)="onSort($event)"
+                  >
+                    Inicia
+                  </th>
+                  <th scope="col" sortable="fechaFinal" (sort)="onSort($event)">
+                    Finaliza
+                  </th>
+                  <th scope="col" sortable="eloMinimo" (sort)="onSort($event)">
+                    Elo min.
+                  </th>
+                  <th scope="col" sortable="eloMaximo" (sort)="onSort($event)">
+                    Elo max.
+                  </th>
+                  <th scope="col" sortable="localidad" (sort)="onSort($event)">
+                    Localidad
+                  </th>
                   <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let torneo of torneos">
+                <tr
+                  *ngFor="
+                    let torneo of tabla
+                      | slice : (page - 1) * pageSize : page * pageSize
+                  "
+                >
                   <td>{{ torneo.nombre }}</td>
-                  <td>{{ torneo.tipoTorneo.nombre }}</td>
+                  <td>{{ torneo.tipo }}</td>
                   <td>{{ torneo.fechaInicio | date : "shortDate" }}</td>
                   <td>{{ torneo.fechaFinal | date : "shortDate" }}</td>
+                  <td>{{ torneo.eloMinimo }}</td>
+                  <td>{{ torneo.eloMaximo }}</td>
+                  <td>{{ torneo.localidad }}</td>
                   <td>
                     <a
                       class="btn btn-sm btn-primary rounded-pill"
@@ -145,6 +214,19 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+      <!-- Paginacion -->
+      <div class="row">
+        <div class="col-12">
+          <ngb-pagination
+            [collectionSize]="torneosFiltrados.length"
+            [pageSize]="pageSize"
+            (pageChange)="changeList($event)"
+            [maxSize]="5"
+            [rotate]="true"
+            [boundaryLinks]="false"
+          />
         </div>
       </div>
     </div>

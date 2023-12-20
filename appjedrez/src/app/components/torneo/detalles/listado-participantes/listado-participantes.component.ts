@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Inscripcion } from 'src/app/models/inscripcion';
+import { Notificacion } from 'src/app/models/notificacion';
 import { AuthService } from 'src/app/services/auth.service';
 import { InscripcionService } from 'src/app/services/inscripcion.service';
+import { NotificacionService } from 'src/app/services/notificacion.service';
 import { TorneoService } from 'src/app/services/torneo.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
@@ -61,15 +63,26 @@ export class NgbModalInscripcion {
     @Inject('DATA') public data: any,
     private router: Router,
     private inscripcionService: InscripcionService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private notificacionService: NotificacionService
   ) {}
 
   borrar() {
     this.inscripcionService.deleteInscripcion(this.data.id).subscribe({
       next: () => {
-        this.modal.close('Ok click');
-        window.location.reload();
-        this.toastr.success('Inscripción eliminada con éxito');
+        var notificacion = {
+          usuarioId: this.data.participante.id,
+          mensaje: `Ha sido eliminado de un torneo`,
+          torneoId: this.data.idTorneo,
+        } as Notificacion;
+
+        this.notificacionService.register(notificacion).subscribe({
+          next: (res) => {
+            this.modal.close('Ok click');
+            window.location.reload();
+            this.toastr.success('Participante eliminado con éxito');
+          },
+        });
       },
       error: () => {
         this.modal.close('Ok click');
@@ -124,6 +137,17 @@ export class ListadoParticipantesComponent implements OnInit {
       this.inscripcionService.getAll(this.id).subscribe({
         next: (res) => {
           this.inscripciones = res;
+          this.inscripciones.sort((a, b) => {
+            const nombreA = a.participante.nombres.toUpperCase();
+            const nombreB = b.participante.nombres.toUpperCase();
+            if (nombreA < nombreB) {
+              return -1;
+            }
+            if (nombreA > nombreB) {
+              return 1;
+            }
+            return 0;
+          });
         },
         error: () => {
           alert('Error al intentar cargar los inscriptos');

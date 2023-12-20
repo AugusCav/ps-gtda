@@ -20,6 +20,8 @@ export class TorneosOrganizadorComponent {
   torneoReport: OrgReportResponse = {} as OrgReportResponse;
   loaded: boolean = false;
   torneosPorMes: number[] = [];
+  page: number = 1;
+  pageSize: number = 10;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -76,5 +78,9 @@ export class TorneosOrganizadorComponent {
         console.log('Hubo un error en el get de torneos');
       },
     });
+  }
+
+  changeList(page: number) {
+    this.page = page;
   }
 }

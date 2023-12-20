@@ -19,6 +19,8 @@ export class PartidasComponent implements OnInit {
   idUser: string | null = '';
   loaded: boolean = false;
   partidaReport: PartidaReportResponse = {} as PartidaReportResponse;
+  page: number = 1;
+  pageSize: number = 10;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
@@ -161,5 +163,9 @@ export class PartidasComponent implements OnInit {
 
   irGame(partidaId: string) {
     this.router.navigate(['/app/game', partidaId]);
+  }
+
+  changeList(page: number) {
+    this.page = page;
   }
 }

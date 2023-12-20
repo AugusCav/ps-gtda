@@ -15,5 +15,9 @@ public partial class Notificacion
 
     public DateTime? Fecha { get; set; }
 
+    public Guid? TorneoId { get; set; }
+
+    public virtual Torneo Torneo { get; set; }
+
     public virtual Usuario Usuario { get; set; }
 }
