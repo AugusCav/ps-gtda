@@ -8,7 +8,7 @@
   z-index: 1;
 }
 
-.container-fluid img {
+.portada {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -20,6 +20,10 @@
   mix-blend-mode: screen;
 }
 
-#portada *{
+#portada * {
   z-index: 2;
+}
+
+.logo {
+  background-color: rgba(255, 255, 255, 0.733);
 }

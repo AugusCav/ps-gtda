@@ -23,7 +23,7 @@
             {{ partida.jugadorNegrasNavigation?.nombres }}
             {{ partida.jugadorNegrasNavigation?.apellido }}
           </td>
-          <td>{{ partida.resultado | partida }}</td>
+          <td>{{ partida.resultado | partida : true }}</td>
           <td>
             <button
               class="btn btn-primary badge rounded-pill"

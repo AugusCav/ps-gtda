@@ -1,4 +1,13 @@
 <body class="bg-dark" style="min-height: 100vh">
+  <div class="container-fluid bg-secondary p-5">
+    <div class="container px-5">
+      <div class="row justify-content-center">
+        <div class="col-4 text-center">
+          <h3 class="text-light">Inicio</h3>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container my-2">
     <div class="row">
       <div class="col-md-4 my-1 d-flex align-items-stretch">
@@ -38,7 +47,7 @@
 
             <a
               class="btn btn-primary rounded-circle position-absolute bottom-0 end-0"
-              [routerLink]="['/app/torneo/listado']"
+              [routerLink]="['/user/dashboard/resumen']"
               ><i class="bi bi-caret-right-fill"></i
             ></a>
           </div>
@@ -52,14 +61,14 @@
             class="card-img-top"
           />
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">Ver tu perfil</h5>
+            <h5 class="card-title">Cree un torneo</h5>
             <p class="card-text">
-              Ver tu perfil de usuario y acceder a tu información.
+              Ir a la pantalla de registro de torneo para crear uno nuevo.
             </p>
 
             <a
               class="btn btn-primary rounded-circle position-absolute bottom-0 end-0"
-              [routerLink]="['/app/torneo/listado']"
+              [routerLink]="['/app/torneo/registrar']"
               ><i class="bi bi-caret-right-fill"></i
             ></a>
           </div>
@@ -83,7 +92,7 @@
 
             <a
               class="btn btn-primary rounded-circle position-absolute bottom-0 end-0"
-              [routerLink]="['/app/torneo/listado']"
+              [routerLink]="['/user/dashboard/partidas']"
               ><i class="bi bi-caret-right-fill"></i
             ></a>
           </div>
@@ -105,7 +114,7 @@
 
             <a
               class="btn btn-primary rounded-circle position-absolute bottom-0 end-0"
-              [routerLink]="['/app/torneo/listado']"
+              [routerLink]="['/app/organizadores']"
               ><i class="bi bi-caret-right-fill"></i
             ></a>
           </div>
@@ -124,7 +133,7 @@
 
             <a
               class="btn btn-primary rounded-circle position-absolute bottom-0 end-0"
-              [routerLink]="['/app/torneo/listado']"
+              [routerLink]="['/user/dashboard/configuracion']"
               ><i class="bi bi-caret-right-fill"></i
             ></a>
           </div>
