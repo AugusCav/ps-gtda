@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { AuthService } from 'src/app/services/auth.service';
+import { ResetPasswordService } from 'src/app/services/reset-password.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
 @Component({
@@ -16,13 +17,16 @@ export class LoginComponent implements OnInit {
   isText: boolean = false;
   eyeIcon: string = 'bi bi-eye-slash-fill';
   loginForm!: FormGroup;
+  public resetPasswordEmail!: string;
+  public isValidEmail!: boolean;
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
     private toastr: ToastrService,
-    private userStore: UserStoreService
+    private userStore: UserStoreService,
+    private resetService: ResetPasswordService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +70,31 @@ export class LoginComponent implements OnInit {
       //tirar error usando un toast y con campos requeridos
       ValidateForm.validateAllFormFields(this.loginForm);
       this.toastr.error('Datos inválidos', 'Error');
+    }
+  }
+
+  checkValidEmail(event: string) {
+    const value = event;
+    const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/;
+    this.isValidEmail = pattern.test(value);
+    return this.isValidEmail;
+  }
+
+  confirmToSend() {
+    if (this.checkValidEmail(this.resetPasswordEmail)) {
+      this.resetService
+        .sendResetPasswordLink(this.resetPasswordEmail)
+        .subscribe({
+          next: (res) => {
+            this.toastr.success('Email enviado', 'Éxito');
+            this.resetPasswordEmail = '';
+            const buttonRef = document.getElementById('closeBtn');
+            buttonRef?.click();
+          },
+          error: (err) => {
+            this.toastr.error('Hubo algun error', 'Error');
+          },
+        });
     }
   }
 }

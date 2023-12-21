@@ -167,14 +167,34 @@ export class ListadoInscripcionesComponent implements OnInit {
       next: (res) => {
         this.toastr.success(res.message, 'Éxito');
         const mensaje = `Su solicitud de inscripción al torneo ${this.torneo.nombre} ha sido aprobada`;
+
+        const inscripcionEmailRequest = {
+          nombreTorneo: this.torneo.nombre,
+          email: inscripcion.participante.email,
+        };
+
         const notificacion = {
           usuarioId: inscripcion.idParticipante,
           mensaje: mensaje,
           fecha: this.datePipe.transform(new Date(), 'yyyy:MM:dd')!,
           torneoId: this.id,
         } as Notificacion;
+
         this.notificacionService.register(notificacion);
-        window.location.reload();
+        this.inscripcionService
+          .sendInscripcionEmail(inscripcionEmailRequest)
+          .subscribe({
+            next: (res) => {
+              this.toastr.success(
+                'Comprobacion de inscripcion enviada',
+                'Éxito'
+              );
+              window.location.reload();
+            },
+            error: () => {
+              console.log('error inesperado');
+            },
+          });
       },
       error: (err) => {
         this.toastr.error(err.message, 'Error');

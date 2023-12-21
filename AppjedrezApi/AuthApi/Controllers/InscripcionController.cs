@@ -1,6 +1,9 @@
+using System.Security.Cryptography;
 using AuthApi.Context;
+using AuthApi.Helpers;
 using AuthApi.Models;
 using AuthApi.Request;
+using AuthApi.UtilityService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +14,14 @@ namespace AuthApi.Controllers;
 public class InscripcionController : ControllerBase
 {
     private readonly AppDbContext _context;
-    public InscripcionController(AppDbContext dbContext)
+    private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
+
+    public InscripcionController(AppDbContext dbContext, IConfiguration configuration, IEmailService emailService)
     {
         _context = dbContext;
+        _configuration = configuration;
+        _emailService = emailService;
     }
 
     [HttpPost("registrar")]
@@ -133,7 +141,8 @@ public class InscripcionController : ControllerBase
                 {
                     Id = i.IdParticipanteNavigation.Id,
                     Nombres = i.IdParticipanteNavigation.Nombres,
-                    Apellido = i.IdParticipanteNavigation.Apellido
+                    Apellido = i.IdParticipanteNavigation.Apellido,
+                    Email = i.IdParticipanteNavigation.Email
                 }
             })
             .ToListAsync();
@@ -287,6 +296,35 @@ public class InscripcionController : ControllerBase
         _context.SaveChanges();
 
         return Ok(new { Message = "Solicitud aprobada" });
+    }
+
+    [HttpPost("send-inscripcion-email")]
+    public async Task<IActionResult> SendEmail([FromBody] InscripcionEmailRequest inscripcionEmailRequest)
+    {
+        var user = await _context.Usuarios.FirstOrDefaultAsync(a => a.Email == inscripcionEmailRequest.Email);
+        if (user is null)
+        {
+            return NotFound(new
+            {
+                StatusCode = 404,
+                Message = "Email no existe"
+            });
+        }
+        var tokenBytes = RandomNumberGenerator.GetBytes(64);
+        var emailToken = Convert.ToBase64String(tokenBytes);
+        user.ResetPasswordToken = emailToken;
+        user.ResetPasswordExpiry = DateTime.Now.AddMinutes(1);
+        string from = _configuration["EmailSettings:From"];
+        var emailModel = new EmailModel(inscripcionEmailRequest.Email, "Inscripción Aprobada", EmailBody.EmailStringBodyIns(inscripcionEmailRequest.Email, inscripcionEmailRequest.NombreTorneo));
+        _emailService.SendEmail(emailModel);
+        _context.Entry(user).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return Ok(new
+        {
+            StatusCode = 200,
+            Message = "Email enviado"
+        });
+
     }
 
     [HttpPut("rechazarInscripcionOrg")]

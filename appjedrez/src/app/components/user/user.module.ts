@@ -15,6 +15,7 @@ import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config
 import { PerfilComponent } from './perfiles/perfil/perfil.component';
 import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-organizador.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ResetComponent } from './reset/reset.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ConfigOrganizadoresComponent,
     PerfilComponent,
     TorneosOrganizadorComponent,
+    ResetComponent,
   ],
   imports: [
     CommonModule,

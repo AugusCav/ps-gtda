@@ -98,4 +98,11 @@ export class InscripcionService {
       `${this.baseUrl}getInscripcion/${idUser}`
     );
   }
+
+  sendInscripcionEmail(request: any) {
+    return this.http.post<any>(
+      `${this.baseUrl}send-inscripcion-email`,
+      request
+    );
+  }
 }

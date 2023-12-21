@@ -21,11 +21,17 @@ public partial class Usuario
 
     public int? IdRolUsuario { get; set; }
 
-    public string Token { get; set; }
+    public string RefreshToken { get; set; }
 
     public byte[] FotoPerfil { get; set; }
 
     public int? Elo { get; set; }
+
+    public DateTime? ResetPasswordExpiry { get; set; }
+
+    public string ResetPasswordToken { get; set; }
+
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 
     public virtual RolUsuario IdRolUsuarioNavigation { get; set; }
 

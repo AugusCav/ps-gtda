@@ -9,6 +9,9 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using AuthApi.Request;
+using AuthApi.UtilityService;
+using System.Security.Cryptography;
+using AuthApi.Models.Dto;
 
 namespace AuthApi.Controllers;
 
@@ -17,9 +20,13 @@ namespace AuthApi.Controllers;
 public class UserController : ControllerBase
 {
     private readonly Context.AppDbContext _authContext;
-    public UserController(Context.AppDbContext dbContext)
+    private readonly IConfiguration _configuration;
+    private readonly IEmailService _emailService;
+    public UserController(Context.AppDbContext dbContext, IConfiguration configuration, IEmailService emailService)
     {
         _authContext = dbContext;
+        _configuration = configuration;
+        _emailService = emailService;
     }
 
     [HttpPost("authenticate")]
@@ -39,11 +46,11 @@ public class UserController : ControllerBase
             return BadRequest(new { Message = "La contraseña es incorrecta" });
 
 
-        user.Token = CreateJwt(user);
+        user.RefreshToken = CreateJwt(user);
 
         return Ok(new
         {
-            Token = user.Token,
+            Token = user.RefreshToken,
             Message = "Inicio de sesión exitoso"
         });
     }
@@ -71,7 +78,7 @@ public class UserController : ControllerBase
 
         userObj.Id = Guid.NewGuid();
         userObj.Clave = PasswordHasher.HashPassword(userObj.Clave);
-        userObj.Token = "";
+        userObj.RefreshToken = "";
         await _authContext.Usuarios.AddAsync(userObj);
         await _authContext.SaveChangesAsync();
         return Ok(new
@@ -224,5 +231,67 @@ public class UserController : ControllerBase
     public async Task<ActionResult<Usuario>> GetAllUsers()
     {
         return Ok(await _authContext.Usuarios.ToListAsync());
+    }
+
+    [HttpPost("send-reset-email/{email}")]
+    public async Task<IActionResult> SendEmail(string email)
+    {
+        var user = await _authContext.Usuarios.FirstOrDefaultAsync(a => a.Email == email);
+        if (user is null)
+        {
+            return NotFound(new
+            {
+                StatusCode = 404,
+                Message = "Email no existe"
+            });
+        }
+        var tokenBytes = RandomNumberGenerator.GetBytes(64);
+        var emailToken = Convert.ToBase64String(tokenBytes);
+        user.ResetPasswordToken = emailToken;
+        user.ResetPasswordExpiry = DateTime.Now.AddMinutes(15);
+        string from = _configuration["EmailSettings:From"];
+        var emailModel = new EmailModel(email, "Reiniciar Contraseña", EmailBody.EmailStringBody(email, emailToken));
+        _emailService.SendEmail(emailModel);
+        _authContext.Entry(user).State = EntityState.Modified;
+        await _authContext.SaveChangesAsync();
+        return Ok(new
+        {
+            StatusCode = 200,
+            Message = "Email enviado"
+        });
+
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
+        var user = await _authContext.Usuarios.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPasswordDto.Email);
+        if (user is null)
+        {
+            return NotFound(new
+            {
+                StatusCode = 404,
+                Message = "Usuario no existe"
+            });
+        }
+        var tokenCode = user.ResetPasswordToken;
+        DateTime? emailTokenExpiry = user.ResetPasswordExpiry;
+        if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
+        {
+            return BadRequest(new
+            {
+                StatusCode = 400,
+                Message = "Link de reinicio inválido"
+            });
+        }
+        user.Clave = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
+        _authContext.Entry(user).State = EntityState.Modified;
+        await _authContext.SaveChangesAsync();
+        return Ok(new
+        {
+            StatusCode = 200,
+            Message = "Exito al reiniciar password"
+        });
     }
 }

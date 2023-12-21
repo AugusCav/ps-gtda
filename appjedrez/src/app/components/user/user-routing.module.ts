@@ -10,6 +10,7 @@ import { ConfiguracionComponent } from './dash/configuracion/configuracion.compo
 import { ConfigOrganizadoresComponent } from './dash/config-organizadores/config-organizadores.component';
 import { PerfilComponent } from './perfiles/perfil/perfil.component';
 import { TorneosOrganizadorComponent } from './dash/torneos-organizador/torneos-organizador.component';
+import { ResetComponent } from './reset/reset.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
     ],
   },
+  { path: 'reset', component: ResetComponent },
   {
     path: 'perfil/:idUsuario',
     component: PerfilComponent,

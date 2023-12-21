@@ -266,11 +266,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Nombres)
                 .HasMaxLength(150)
                 .IsUnicode(false);
+            entity.Property(e => e.RefreshToken)
+                .HasMaxLength(4096)
+                .IsUnicode(false);
+            entity.Property(e => e.RefreshTokenExpiryTime).HasColumnType("datetime");
+            entity.Property(e => e.ResetPasswordExpiry).HasColumnType("datetime");
+            entity.Property(e => e.ResetPasswordToken)
+                .HasMaxLength(4096)
+                .IsUnicode(false);
             entity.Property(e => e.Telefono)
                 .HasMaxLength(15)
-                .IsUnicode(false);
-            entity.Property(e => e.Token)
-                .HasMaxLength(4096)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.IdRolUsuarioNavigation).WithMany(p => p.Usuarios)

@@ -1,0 +1,79 @@
+<body class="bg-dark" style="min-height: 100vh">
+  <div class="container">
+    <div class="row">
+      <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-5">
+        <div class="row bg-white rounded">
+          <div class="col-12 p-3">
+            <h3 class="display-6 text-dark">Reiniciar Contraseña</h3>
+          </div>
+          <div class="col-12 p-3">
+            <form class="container" [formGroup]="resetPasswordForm">
+              <div class="row pt-3">
+                <div class="col-12 input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                  </span>
+                  <input
+                    class="form-control text-dark"
+                    type="password"
+                    placeholder="Nueva contraseña"
+                    formControlName="password"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  resetPasswordForm.controls['password'].dirty &&
+                  resetPasswordForm.hasError('required', 'password')
+                "
+                class="text-danger"
+              >
+                *Contraseña requerida
+              </small>
+              <div class="row pt-3">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill text-primary"></i>
+                  </span>
+                  <input
+                    class="form-control text-dark"
+                    type="password"
+                    formControlName="confirmPassword"
+                    placeholder="Confirmar Contraseña"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  resetPasswordForm.controls['confirmPassword'].dirty &&
+                  resetPasswordForm.hasError('required', 'confirmPassword')
+                "
+                class="text-danger"
+              >
+                *Contraseña de confirmación requerida
+              </small>
+              <small
+                *ngIf="
+                  resetPasswordForm.hasError(
+                    'confirmPasswordValidator',
+                    'confirmPassword'
+                  )
+                "
+                class="text-danger"
+              >
+                *Las contraseñas no coinciden
+              </small>
+              <button
+                (click)="resetPassword()"
+                type="submit"
+                class="btn btn-primary mt-4 w-100"
+              >
+                Reiniciar Contraseña
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
