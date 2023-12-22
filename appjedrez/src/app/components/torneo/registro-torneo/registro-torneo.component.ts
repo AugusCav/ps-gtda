@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { TorneoService } from 'src/app/services/torneo.service';
 import { UserStoreService } from 'src/app/services/user-store.service';
 
+declare var autocomplete: any;
 @Component({
   selector: 'app-registro-torneo',
   templateUrl: './registro-torneo.component.html',
@@ -75,17 +76,15 @@ export class RegistroTorneoComponent implements OnInit {
 
       this.torneoService.registerTorneo(torneo).subscribe({
         next: (res) => {
-          alert(res.message);
+          this.toastr.success('Torneo registrado', 'Éxito');
           this.torneoForm.reset();
           this.router.navigate(['/app/torneo/listado']);
         },
         error: (err) => {
-          alert(err.message);
+          this.toastr.error('Ocurrió un error inesperado', 'Error');
         },
       });
     } else {
-      console.log('El form no es válido');
-
       //tirar error
       ValidateForm.validateAllFormFields(this.torneoForm);
       this.toastr.error('Tu form es inválido', 'Error');

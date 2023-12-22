@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Partida } from 'src/app/models/partida';
 import { Ronda } from 'src/app/models/ronda';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,7 +24,8 @@ export class PartidasComponent implements OnInit {
     private torneoService: TorneoService,
     private userStore: UserStoreService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class PartidasComponent implements OnInit {
           }
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
 

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import {
   Observable,
   OperatorFunction,
@@ -125,7 +126,8 @@ export class ListadoTorneoComponent implements OnInit {
   constructor(
     private torneoService: TorneoService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -152,6 +154,7 @@ export class ListadoTorneoComponent implements OnInit {
         })) as TorneoFiltrado[];
 
         this.tabla = this.torneosFiltrados;
+        console.log(this.torneosFiltrados);
 
         res.forEach((torneo) => {
           if (this.localidades.length != 0) {
@@ -167,7 +170,7 @@ export class ListadoTorneoComponent implements OnInit {
         this.localidades.sort();
       },
       error: () => {
-        alert('Ocurrió un error al cargar los torneos');
+        this.toastr.error('Ocurrió un error al cargar los torneos');
       },
     });
   }
@@ -184,7 +187,7 @@ export class ListadoTorneoComponent implements OnInit {
     this.torneosFiltrados = this.torneos
       .filter((torneo) => {
         let aceptado = true;
-        if (this.filtroNombre != '' || this.filtroNombre != null) {
+        if (this.filtroNombre != '' && this.filtroNombre != null) {
           if (
             torneo.nombre
               .toLowerCase()
@@ -247,7 +250,7 @@ export class ListadoTorneoComponent implements OnInit {
       .map((el) => ({
         id: el.id,
         nombre: el.nombre,
-        tipo: el.tipoTorneo.descripcion,
+        tipo: el.tipoTorneo.nombre,
         fechaInicio: el.fechaInicio,
         fechaFinal: el.fechaFinal,
         eloMaximo: el.eloMaximo,
@@ -270,7 +273,7 @@ export class ListadoTorneoComponent implements OnInit {
       .map((el) => ({
         id: el.id,
         nombre: el.nombre,
-        tipo: el.tipoTorneo.descripcion,
+        tipo: el.tipoTorneo.nombre,
         fechaInicio: el.fechaInicio,
         fechaFinal: el.fechaFinal,
         eloMaximo: el.eloMaximo,
@@ -285,7 +288,7 @@ export class ListadoTorneoComponent implements OnInit {
     this.torneosFiltrados = this.torneos.map((el) => ({
       id: el.id,
       nombre: el.nombre,
-      tipo: el.tipoTorneo.descripcion,
+      tipo: el.tipoTorneo.nombre,
       fechaInicio: el.fechaInicio,
       fechaFinal: el.fechaFinal,
       eloMaximo: el.eloMaximo,
@@ -294,6 +297,7 @@ export class ListadoTorneoComponent implements OnInit {
     })) as TorneoFiltrado[];
     this.tabla = this.torneosFiltrados;
     this.filtroAvanzadoForm.reset();
+    this.localidad = null;
   }
 
   get filtroNombre() {

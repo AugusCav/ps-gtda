@@ -30,7 +30,7 @@ export class PartidasComponent implements OnInit {
   };
 
   public pieChartData1: ChartConfiguration<'pie'>['data'] = {
-    labels: ['Jugadas', 'Ganadas', 'Perdidas', 'Empatadas'],
+    labels: ['Ganadas', 'Perdidas', 'Empatadas', 'Jugadas'],
     datasets: [
       {
         data: [],
@@ -63,17 +63,11 @@ export class PartidasComponent implements OnInit {
       'Julio',
       'Agosto',
       'Septiembre',
-      'Ocubre',
+      'Octubre',
       'Noviembre',
       'Diciembre',
     ],
     datasets: [
-      {
-        data: [],
-        label: 'Jugadas',
-        fill: false,
-        tension: 0.4,
-      },
       {
         data: [],
         label: 'Ganadas',
@@ -91,6 +85,14 @@ export class PartidasComponent implements OnInit {
         label: 'Empatadas',
         fill: false,
         tension: 0.4,
+      },
+      {
+        data: [],
+        label: 'Jugadas',
+        fill: false,
+        tension: 0.4,
+        backgroundColor: '#9afc7e',
+        borderColor: '#39fc03',
       },
     ],
   };
@@ -117,10 +119,10 @@ export class PartidasComponent implements OnInit {
               this.partidaReport = res;
 
               const pieChartData1 = [
-                this.partidaReport.jugadas,
                 this.partidaReport.ganadas,
                 this.partidaReport.perdidas,
                 this.partidaReport.empatadas,
+                this.partidaReport.jugadas,
               ];
 
               this.pieChartData1.datasets[0].data = pieChartData1;
@@ -134,13 +136,13 @@ export class PartidasComponent implements OnInit {
               this.pieChartData2.datasets[0].data = pieChartData2;
 
               this.lineChartData.datasets[0].data =
-                this.partidaReport.jugadasPorMes.map((item) => item);
-              this.lineChartData.datasets[1].data =
                 this.partidaReport.ganadasPorMes.map((item) => item);
-              this.lineChartData.datasets[2].data =
+              this.lineChartData.datasets[1].data =
                 this.partidaReport.perdidasPorMes.map((item) => item);
-              this.lineChartData.datasets[3].data =
+              this.lineChartData.datasets[2].data =
                 this.partidaReport.empatadasPorMes.map((item) => item);
+              this.lineChartData.datasets[3].data =
+                this.partidaReport.jugadasPorMes.map((item) => item);
 
               this.loaded = true;
             },

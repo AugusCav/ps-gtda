@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { TipoTorneo } from 'src/app/models/tipo-torneo';
 import { Torneo } from 'src/app/models/torneo';
@@ -32,7 +33,8 @@ export class ModificarTorneoComponent {
     private calendar: NgbCalendar,
     private route: ActivatedRoute,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -67,11 +69,11 @@ export class ModificarTorneoComponent {
           this.torneoForm.patchValue(res);
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
     } else {
-      alert('Ningún torneo seleccionado');
+      this.toastr.error('Ningún torneo seleccionado');
     }
 
     this.torneoService.getTiposTorneo().subscribe({
@@ -118,12 +120,12 @@ export class ModificarTorneoComponent {
 
       this.torneoService.updateTorneo(formData).subscribe({
         next: (res) => {
-          alert(res.message);
+          this.toastr.success(res.message);
           this.torneoForm.reset();
           this.router.navigate(['/app/torneo/detalles', this.id]);
         },
         error: (err) => {
-          alert(err.message);
+          this.toastr.error(err.message);
         },
       });
     } else {
@@ -131,7 +133,7 @@ export class ModificarTorneoComponent {
 
       //tirar error
       ValidateForm.validateAllFormFields(this.torneoForm);
-      alert('Tu form es inválido');
+      this.toastr.error('Tu form es inválido');
     }
   }
 

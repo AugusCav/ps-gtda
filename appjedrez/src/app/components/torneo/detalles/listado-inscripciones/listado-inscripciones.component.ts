@@ -135,7 +135,7 @@ export class ListadoInscripcionesComponent implements OnInit {
           this.inscripciones = res;
         },
         error: () => {
-          alert('Error al intentar cargar los inscriptos');
+          this.toastr.error('Error al intentar cargar los inscriptos');
         },
       });
 
@@ -181,20 +181,21 @@ export class ListadoInscripcionesComponent implements OnInit {
         } as Notificacion;
 
         this.notificacionService.register(notificacion);
-        this.inscripcionService
-          .sendInscripcionEmail(inscripcionEmailRequest)
-          .subscribe({
-            next: (res) => {
-              this.toastr.success(
-                'Comprobacion de inscripcion enviada',
-                'Éxito'
-              );
-              window.location.reload();
-            },
-            error: () => {
-              console.log('error inesperado');
-            },
-          });
+        // this.inscripcionService
+        //   .sendInscripcionEmail(inscripcionEmailRequest)
+        //   .subscribe({
+        //     next: (res) => {
+        //       this.toastr.success(
+        //         'Comprobacion de inscripcion enviada',
+        //         'Éxito'
+        //       );
+        //       window.location.reload();
+        //     },
+        //     error: () => {
+        //       console.log('error inesperado');
+        //     },
+        //   });
+        window.location.reload();
       },
       error: (err) => {
         this.toastr.error(err.message, 'Error');

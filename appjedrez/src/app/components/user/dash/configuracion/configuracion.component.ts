@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import ValidateForm from 'src/app/helpers/validate-form.helper';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,7 +22,8 @@ export class ConfiguracionComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -46,11 +48,11 @@ export class ConfiguracionComponent implements OnInit {
           this.userForm.patchValue(res);
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
     } else {
-      alert('Ningún torneo seleccionado');
+      this.toastr.error('Ningún torneo seleccionado');
     }
   }
 
@@ -78,7 +80,7 @@ export class ConfiguracionComponent implements OnInit {
           window.location.reload();
         },
         error: (err) => {
-          alert(err.message);
+          this.toastr.error(err.message);
         },
       });
     } else {

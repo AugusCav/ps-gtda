@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
           this.toastr.success(res.message, 'Éxito', {
             timeOut: 1500,
           });
-          this.router.navigate(['user/dashboard']);
+          this.router.navigate(['home']);
         },
         error: (err) => {
           this.toastr.error(err.error.message, 'Error');

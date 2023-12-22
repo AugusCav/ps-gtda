@@ -63,7 +63,7 @@ export class RondasComponent implements OnInit {
           }
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
 

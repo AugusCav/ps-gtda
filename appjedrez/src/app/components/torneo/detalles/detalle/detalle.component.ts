@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Torneo } from 'src/app/models/torneo';
 import { AuthService } from 'src/app/services/auth.service';
 import { TorneoService } from 'src/app/services/torneo.service';
@@ -19,7 +20,8 @@ export class DetalleComponent implements OnInit {
   constructor(
     private torneoService: TorneoService,
     private userStore: UserStoreService,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -42,11 +44,11 @@ export class DetalleComponent implements OnInit {
           }
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo', 'Error');
         },
       });
     } else {
-      alert('Ningún torneo seleccionado');
+      this.toastr.error('Ningún torneo seleccionado', 'Error');
     }
   }
 }

@@ -66,13 +66,14 @@ export class NgbdModalConfirmAutofocus {
     public modal: NgbActiveModal,
     @Inject('DATA') public data: any,
     private router: Router,
-    private torneoService: TorneoService
+    private torneoService: TorneoService,
+    private toastr: ToastrService
   ) {}
 
   borrar() {
     this.torneoService.deleteTorneo(this.data.id).subscribe({
       next: () => {
-        alert('Torneo eliminado con éxito');
+        this.toastr.success('Torneo eliminado con éxito');
         this.modal.close('Ok click');
         this.router.navigate(['torneo/listado']);
       },
@@ -218,7 +219,7 @@ export class DetallesTorneoComponent implements OnInit {
           });
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
 

@@ -109,7 +109,8 @@ export class ListadoParticipantesComponent implements OnInit {
     private userStore: UserStoreService,
     private auth: AuthService,
     private router: Router,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -130,7 +131,7 @@ export class ListadoParticipantesComponent implements OnInit {
           }
         },
         error: () => {
-          alert('Error al intentar cargar el torneo');
+          this.toastr.error('Error al intentar cargar el torneo');
         },
       });
 
@@ -150,7 +151,7 @@ export class ListadoParticipantesComponent implements OnInit {
           });
         },
         error: () => {
-          alert('Error al intentar cargar los inscriptos');
+          this.toastr.error('Error al intentar cargar los inscriptos');
         },
       });
     }
