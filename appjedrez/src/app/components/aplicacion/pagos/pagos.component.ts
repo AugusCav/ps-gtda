@@ -39,7 +39,7 @@ export class PagosComponent implements OnInit {
       },
     });
 
-    this.mp = new MercadoPago(***REMOVED***, {
+    this.mp = new MercadoPago('REMOVED', {
       locale: 'es-AR',
     });
     this.bricksBuilder = this.mp.bricks();
