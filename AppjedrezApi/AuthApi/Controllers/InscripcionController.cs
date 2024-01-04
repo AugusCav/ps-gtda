@@ -202,6 +202,17 @@ public class InscripcionController : ControllerBase
         return Ok(new { Inscripto = inscripto });
     }
 
+    [HttpGet("getInscripto/{idUser}/{idTorneo}")]
+    public async Task<ActionResult> getInscripto(Guid idUser, Guid idTorneo)
+    {
+        var ins = await _context.Inscripcions.FirstOrDefaultAsync(i => i.IdParticipante == idUser && i.IdTorneo == idTorneo);
+
+        if (ins == null)
+            return BadRequest(new { Message = "Inscripción no encontrada" });
+
+        return Ok(ins);
+    }
+
     [HttpPut("aprobar")]
     public async Task<IActionResult> AprobarInscripcion([FromBody] Inscripcion inscripcion)
     {

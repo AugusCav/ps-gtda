@@ -340,3 +340,7 @@ D:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\obj
 D:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\AuthApi.pdb
 d:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\AuthApi.genruntimeconfig.cache
 d:\Archivos\Proyectos Programación\Facultad\PS\ps-gtda\AppjedrezApi\AuthApi\obj\Debug\net6.0\ref\AuthApi.dll
+c:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\MailKit.dll
+c:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\MimeKit.dll
+c:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\NETCore.MailKit.dll
+c:\Users\larap\Documents\Augusto\Programacion\ps-gtda\AppjedrezApi\AuthApi\bin\Debug\net6.0\BouncyCastle.Crypto.dll

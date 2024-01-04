@@ -180,7 +180,9 @@ export class ListadoInscripcionesComponent implements OnInit {
           torneoId: this.id,
         } as Notificacion;
 
-        this.notificacionService.register(notificacion);
+        this.toastr.success('Inscripción aceptada');
+        window.location.reload();
+
         // this.inscripcionService
         //   .sendInscripcionEmail(inscripcionEmailRequest)
         //   .subscribe({
@@ -195,7 +197,6 @@ export class ListadoInscripcionesComponent implements OnInit {
         //       console.log('error inesperado');
         //     },
         //   });
-        window.location.reload();
       },
       error: (err) => {
         this.toastr.error(err.message, 'Error');

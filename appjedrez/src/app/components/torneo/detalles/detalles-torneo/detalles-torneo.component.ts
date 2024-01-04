@@ -137,16 +137,18 @@ export class NgbModalInscripcion {
   ) {}
 
   borrar() {
-    this.inscripcionService.deleteInscripto(this.data).subscribe({
-      next: () => {
-        this.toastr.success('Torneo eliminado con éxito');
-        this.modal.close('Ok click');
-        window.location.reload();
-      },
-      error: () => {
-        this.modal.close('Ok click');
-      },
-    });
+    this.inscripcionService
+      .deleteInscripcion(this.data.inscripcion.id)
+      .subscribe({
+        next: () => {
+          this.toastr.success('Torneo eliminado con éxito');
+          this.modal.close('Ok click');
+          window.location.reload();
+        },
+        error: () => {
+          this.modal.close('Ok click');
+        },
+      });
   }
 }
 
@@ -169,6 +171,7 @@ export class DetallesTorneoComponent implements OnInit {
   inscripto: boolean = false;
   estado: string = '';
   eloUsuario: number | null = 0;
+  inscripcion: Inscripcion = {} as Inscripcion;
 
   constructor(
     private route: ActivatedRoute,
@@ -217,6 +220,12 @@ export class DetallesTorneoComponent implements OnInit {
               console.error('Error al obtener la foto de perfil');
             },
           });
+
+          this.inscripcionService.getInscripto(this.idUser, this.id).subscribe({
+            next: (res) => {
+              this.inscripcion = res;
+            },
+          });
         },
         error: () => {
           this.toastr.error('Error al intentar cargar el torneo');
@@ -241,7 +250,8 @@ export class DetallesTorneoComponent implements OnInit {
   }
 
   borrarInscripcion() {
-    const data = this.idUser;
+    const data = { inscripcion: this.inscripcion };
+    console.log(this.idUser);
     const injector = Injector.create({
       providers: [{ provide: 'DATA', useValue: data }],
     });

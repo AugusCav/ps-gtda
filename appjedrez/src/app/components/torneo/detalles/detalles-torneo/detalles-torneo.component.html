@@ -52,14 +52,14 @@
               class="col-sm-2 offset-sm-10 d-flex flex-row justify-content-end"
             >
               <button
-                *ngIf="!inscripto"
+                *ngIf="!inscripto && estado != 'terminado'"
                 class="btn btn-primary"
                 (click)="inscribirse()"
               >
                 Inscribirse
               </button>
               <button
-                *ngIf="inscripto"
+                *ngIf="inscripto && estado != 'terminado'"
                 class="btn btn-primary"
                 (click)="borrarInscripcion()"
               >

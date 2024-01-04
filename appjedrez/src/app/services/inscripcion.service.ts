@@ -99,6 +99,12 @@ export class InscripcionService {
     );
   }
 
+  getInscripto(idUser: string, idTorneo: string | null) {
+    return this.http.get<Inscripcion>(
+      `${this.baseUrl}getInscripto/${idUser}/${idTorneo}`
+    );
+  }
+
   sendInscripcionEmail(request: any) {
     return this.http.post<any>(
       `${this.baseUrl}send-inscripcion-email`,
