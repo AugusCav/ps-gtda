@@ -1,0 +1,19 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "SqlServerConnStr": "Server=localhost;Database=GTDA;User Id=sa;Password=REMOVED;TrustServerCertificate=true;"
+  },
+  "EmailSettings": {
+    "From": "EMAIL",
+    "SmtpServer": "smtp.gmail.com",
+    "Port": 465,
+    "Username": "EMAIL",
+    "Password": "REMOVED"
+  }
+}
