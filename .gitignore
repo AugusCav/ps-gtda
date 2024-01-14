@@ -1,3 +1,4 @@
 # .NET Settings
 /AppjedrezApi/AuthApi/appsettings.json
 /utilidades
+/AppjedrezApi/AuthApi/bin/Debug/net6.0/appsettings.json
